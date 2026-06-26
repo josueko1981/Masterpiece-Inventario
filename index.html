@@ -167,6 +167,8 @@ td.r{text-align:right}
 .flagtag svg{width:11px;height:11px}
 .pct{font-family:'IBM Plex Mono'; font-weight:500}
 .neg{color:var(--faltante)} .pos{color:var(--excedente)}
+.num.norm{color:var(--muted); font-style:italic; text-decoration:underline dotted var(--line-strong)}
+.flagtag.norm{color:var(--flag); background:var(--flag-bg)}
 
 /* risk tab */
 .section-head{display:flex; align-items:baseline; gap:12px; margin:30px 0 14px}
@@ -295,10 +297,11 @@ td.r{text-align:right}
     <h3>Resumen ejecutivo del conteo</h3>
     <p>El conteo físico independiente cubrió las <b>28 partidas</b> del padrón. <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>; el resto sin movimiento o sin saldo registrado. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
     <p>El patrón dominante son los <b>insumos textiles</b> (telas de algodón y lino), que concentran las mayores magnitudes y los faltantes más severos —material que el anexo asume importado temporalmente y que no apareció en piso— junto con un caso inverso de <b>material no registrado</b> (existe físicamente con saldo cero en anexo). Las <b>etiquetas</b> muestran ambos extremos: una agotada por completo y otra con más del doble de lo registrado, señal de cruce de claves o descarga de BOM mal aplicada.</p>
+    <p><b>Impacto financiero.</b> Traduciendo cada diferencia a dinero (columna <i>VALOR DLLS</i>), las partidas con costeo en unidades homogéneas (piezas, galones, ft²) arrojan un <b>impacto neto confiable de <span id="exNetConf" class="num">—</span></b>, concentrado en cartón, etiquetas y MDF. Aparte quedan <b><span id="exNormN">—</span> partidas</b> de tela y madera medidas en <b>pulgada² (IN²)</b> y <b>pie-tabla (BFT)</b> cuyo costo unitario está cargado en una base distinta a la del conteo: al multiplicarlo por cantidades en IN²/BFT el impacto se infla a <b><span id="exNorm" class="num">—</span></b>, una cifra que <b>no es real</b> sino un artefacto de unidad de medida. Esas líneas se aíslan hasta aplicar la conversión de UM; el orden de magnitud verdadero de esa exposición sólo se conocerá una vez normalizada la base de costeo.</p>
     <div class="crit-list" id="critPills"></div>
     <div class="notebox">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <div>La severidad de abajo se calcula por <b>% de variación contra el anexo</b>. El <b>impacto financiero</b> (columna $) se activa automáticamente al cargar el costo unitario de cada parte — el modelo ya está conectado, solo falta el dato de costo.</div>
+      <div>La severidad se calcula por <b>% de variación contra el anexo</b>. El <b>impacto financiero</b> (columna $) ya está cargado desde <code>VALOR DLLS</code> (Hoja 1). Las partidas marcadas <b>“norm. UM”</b> (IN²/BFT) se muestran pero se excluyen del total confiable: su costo viene en otra base y debe normalizarse antes de costear.</div>
     </div>
   </div>
 
@@ -324,7 +327,7 @@ td.r{text-align:right}
 
 <div class="footer">
   <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
-  <div>Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · costo: <code>pendiente</code></div>
+  <div>Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · impacto <code>VALOR DLLS</code> · IN²/BFT pendiente de normalizar UM</div>
 </div>
 
 <script>
@@ -379,6 +382,25 @@ const RAW = [
 ];
 
 /* ============================================================
+   IMPACTO FINANCIERO — VALOR DLLS (última columna, Hoja 1 · INVENTARIOS MASTERPICE)
+   Valor CON signo: negativo = faltante (exposición) · positivo = excedente.
+   ⚠ Las partidas medidas en IN² / BFT traen el costo en una base distinta a la
+   unidad del conteo, lo que infla el impacto a cientos de millones. Se aíslan del
+   total "confiable" hasta aplicar la capa de conversión de UM (mejora #1).
+   ============================================================ */
+const VALOR_DLLS = {
+  "ACRYLICFIX":0, "AlkydPrimer":-32.65, "BOTTLE":300.67, "BOTTLE-A":-505.90, "BOX-CORR":-4093.00,
+  'CARTON TUBE KRAFT 84" (6X3X84)':1471.36, 'CARTON TUBE KRAFT 84" (8X7X84)':0,
+  "CBDTUBE":-1614.30, "CHIPCARD":-7302.47, "COTDCANP":-113093143.88, "COTICANP":0,
+  "COTICANR":8141550.04, "GESSO":-385.15, "LABEL":-1067.98, "LABEL-PAPER":9782.81,
+  "LABELPLASTIC":0, "LINICANP":-83920355.02, "LINICANR":-93816216.90, "LUMBPINE-BF":-67191249.95,
+  "MDFSHEET":0, "MDFVNYL01":-19577.15, "NAIL":0, "PLYWOOD":-1973.47, "POLYBAG":0,
+  "RR-72x6y-N-RMA":0, "SCREW":0, "SPRAYER":-368.22, "STAPLEF":0
+};
+// Unidades cuyo costo unitario viene en base distinta a la del conteo → costeo no confiable hasta normalizar.
+const UM_POR_NORMALIZAR = ["IN2","BFT"];
+
+/* ============================================================
    MODELO — recálculo, severidad, banderas
    ============================================================ */
 const EPS = 1e-6;
@@ -406,9 +428,15 @@ function calc(r){
   // bandera UM: unidad de compra != unidad de sistema (cuando el sistema sí mapea)
   const flagUM = r.umM && r.umM!=="#N/D" && r.umM.toUpperCase()!==r.umC.toUpperCase();
   const noMapeo = r.umM==="#N/D";
-  const costo = (typeof r.costo==="number") ? r.costo : null;
-  const impacto = (costo!==null && diff!==null) ? Math.abs(diff)*costo : null;
-  return {...r, contado, fisico, diff, estatus, pct, tipo, sev, flagEstatus, flagUM, noMapeo, costo, impacto};
+  // impacto financiero CON signo, tomado de VALOR DLLS (Hoja 1)
+  const vd = VALOR_DLLS[r.parte];
+  const valorDlls = (typeof vd==="number") ? vd : null;
+  const impacto = valorDlls;
+  // confiabilidad del costeo: las UM de área/tabla (IN²/BFT) traen base distinta
+  const costeoConfiable = !UM_POR_NORMALIZAR.includes(r.umC);
+  // costo unitario implícito = impacto / diferencia (sirve para evidenciar la distorsión de UM)
+  const costoImplicito = (valorDlls!==null && diff!==null && Math.abs(diff)>EPS) ? valorDlls/diff : null;
+  return {...r, contado, fisico, diff, estatus, pct, tipo, sev, flagEstatus, flagUM, noMapeo, valorDlls, impacto, costeoConfiable, costoImplicito};
 }
 const DATA = RAW.map(calc);
 
@@ -425,6 +453,18 @@ function fmtPct(p){
   if (p===null) return "—";
   if (p===Infinity) return "s/saldo";
   return (p*100).toLocaleString("es-MX",{maximumFractionDigits:0})+"%";
+}
+/* dinero con signo (− glifo), $ y abreviatura M para millones */
+function fmtMoney(v){
+  if (v===null || v===undefined) return null;
+  const a=Math.abs(v);
+  if (a<0.005) return "$0";
+  const sign = v<0 ? "−" : "";
+  let body;
+  if (a>=1e6)      body = (a/1e6).toLocaleString("es-MX",{minimumFractionDigits:1,maximumFractionDigits:1})+" M";
+  else if (a>=1000)body = a.toLocaleString("es-MX",{maximumFractionDigits:0});
+  else             body = a.toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2});
+  return sign+"$"+body;
 }
 const SVG_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>';
 function evHref(r){
@@ -450,7 +490,8 @@ const COLS = [
   {key:"invWip", label:"Inv. WIP",       cls:"r", sens:false, get:r=>r.invWip===null?dash():numCell(r.invWip,''), sort:r=>r.invWip??-1},
   {key:"fisico", label:"Total Físico",   cls:"r", sens:false, get:r=>r.fisico===null?dash('sin conteo'):`<b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span>`, sort:r=>r.fisico??-1},
   {key:"diff",   label:"Diferencia",     cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
-  {key:"estatus",label:"Estatus",        cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus}
+  {key:"estatus",label:"Estatus",        cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus},
+  {key:"impacto",label:"Impacto $",       cls:"r", sens:true,  get:r=>impactoCell(r), sort:r=>(r.impacto===null?0:r.costeoConfiable?r.impacto:0)}
 ];
 function numCell(v,um){ return v===null?dash():`<span class="num">${fmt(v)}</span>${um?`<span class="sub-um">${um}</span>`:""}`; }
 function dash(t){ return `<span class="dash">${t||"—"}</span>`; }
@@ -467,6 +508,17 @@ function estatusCell(r){
   if (r.flagEstatus) html+=`<span class="flagtag" title="El estatus original del archivo (${r.estatusOrig}) no coincide con el recálculo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>corregido</span>`;
   return html;
 }
+function impactoCell(r){
+  if (r.impacto===null) return dash();
+  if (Math.abs(r.impacto)<0.005) return dash(r.diff!==null && Math.abs(r.diff)>EPS ? "s/costo" : "—");
+  const c = r.impacto<0 ? "neg" : "pos";
+  const val = `<span class="num ${c}">${fmtMoney(r.impacto)}</span>`;
+  if (!r.costeoConfiable){
+    const ui = r.costoImplicito!==null ? `≈ $${Math.abs(r.costoImplicito).toLocaleString("es-MX",{maximumFractionDigits:2})}/${r.umC}` : "";
+    return `<span class="num norm">${fmtMoney(r.impacto)}</span><span class="flagtag norm" title="Costo unitario en base distinta a la unidad del conteo (${ui}). Requiere normalización de UM antes de costear."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>norm. UM</span>`;
+  }
+  return val;
+}
 
 /* ============================================================
    ESTADO DE VISTA
@@ -474,7 +526,7 @@ function estatusCell(r){
 let visible = {}; COLS.forEach(c=>visible[c.key]=true);
 let sortKey="no", sortDir=1, query="";
 const PRESETS = {
-  cliente:   {hide:["anexo","sistema","diff","estatus"], filter:null},
+  cliente:   {hide:["anexo","sistema","diff","estatus","impacto"], filter:null},
   completa:  {hide:[], filter:null},
   auditoria: {hide:[], filter:"diff"}
 };
@@ -536,10 +588,13 @@ function renderInvKpis(){
     const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
     const crit = DATA.filter(r=>r.sev==="CRÍTICO").length;
     const conDif = falt+exc;
+    const netConf = DATA.filter(r=>r.costeoConfiable && r.impacto!==null).reduce((s,r)=>s+r.impacto,0);
+    const nNorm = DATA.filter(r=>!r.costeoConfiable && r.impacto!==null && Math.abs(r.impacto)>EPS).length;
     host.innerHTML = card("Con diferencia", conDif, "vs. saldo del anexo","k-crit")
       + card("Faltantes", falt, "físico < anexo","k-falt")
       + card("Excedentes", exc, "físico > anexo","k-exc")
-      + card("Críticas", crit, "≥90% var o no registrado","k-crit");
+      + card("Críticas", crit, "≥90% var o no registrado","k-crit")
+      + card("Impacto $ confiable", fmtMoney(netConf), nNorm+" partidas IN²/BFT por normalizar","k-falt");
   }
 }
 function card(label,val,hint,cls){
@@ -583,12 +638,19 @@ function renderRiskKpis(){
   const noReg = DATA.filter(r=>r.tipo==="No registrado").length;
   const flags = DATA.filter(r=>r.flagEstatus).length + DATA.filter(r=>r.flagUM).length + DATA.filter(r=>r.noMapeo).length;
   const cobertura = Math.round(DATA.filter(r=>r.fisico>EPS).length/DATA.filter(r=>r.anexo>EPS||r.fisico>EPS).length*100);
+  const netConf = DATA.filter(r=>r.costeoConfiable && r.impacto!==null).reduce((s,r)=>s+r.impacto,0);
+  const normRows = DATA.filter(r=>!r.costeoConfiable && r.impacto!==null && Math.abs(r.impacto)>EPS);
+  const netNorm = normRows.reduce((s,r)=>s+r.impacto,0);
   document.getElementById("riskKpis").innerHTML =
       card("Partidas en riesgo", risks.length, "con diferencia material","k-crit")
     + card("Críticas", crit, "exposición aduanera alta","k-crit")
     + card("Faltantes / Excedentes", falt+" / "+exc, "contra anexo","k-falt")
     + card("Material no registrado", noReg, "anexo 0 con existencia","k-exc")
+    + card("Impacto $ confiable", fmtMoney(netConf), normRows.length+" partidas IN²/BFT por normalizar","k-falt")
     + card("Banderas de calidad", flags, "estatus, UM y sin mapeo","k-flag");
+  const eC=document.getElementById("exNetConf"); if(eC) eC.textContent=fmtMoney(netConf);
+  const eN=document.getElementById("exNorm"); if(eN) eN.textContent=fmtMoney(netNorm);
+  const eK=document.getElementById("exNormN"); if(eK) eK.textContent=normRows.length;
   document.getElementById("riskCount").textContent = risks.length;
   document.getElementById("exFalt").textContent = falt;
   document.getElementById("exExc").textContent = exc;
@@ -611,7 +673,7 @@ function renderRisk(){
     <td class="r pct ${r.diff<0?'neg':'pos'}">${fmtPct(r.pct)}</td>
     <td><span class="badge ${r.estatus==='FALTANTE'?'b-falt':r.tipo==='No registrado'?'b-exc':'b-exc'}">${r.tipo}</span></td>
     <td><span class="sev ${sevcls[r.sev]}">${r.sev}</span></td>
-    <td class="r">${r.impacto!==null?('$'+fmt(r.impacto)):'<span class="dash">pendiente</span>'}</td>
+    <td class="r">${impactoCell(r)}</td>
     <td>${evCell(r)}</td>
   </tr>`).join("");
 
