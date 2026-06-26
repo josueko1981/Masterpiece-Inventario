@@ -9,16 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0E1726; --ink-2:#16233A; --ink-3:#1F3050;
-  --bg:#F4F6FA; --surface:#FFFFFF; --surface-2:#FBFCFE;
-  --line:#E4E8EF; --line-strong:#CCD4E0;
-  --text:#18212F; --text-soft:#56616F; --muted:#8A95A4;
-  --primary:#0B6E75; --primary-deep:#085258; --primary-soft:#E4F1F1;
-  --faltante:#BE2A22; --faltante-bg:#FBEAE8;
+  --ink:#23282D; --ink-2:#2C3237; --ink-3:#3A4248;
+  --bg:#F4F4F4; --surface:#FFFFFF; --surface-2:#FAFAFA;
+  --line:#E5E5E5; --line-strong:#D2D2D2;
+  --text:#333639; --text-soft:#5E6469; --muted:#8B9096;
+  --primary:#BC1401; --primary-deep:#9A1001; --primary-soft:#FBE7E4;
+  --faltante:#BC1401; --faltante-bg:#FBE7E4;
   --excedente:#B07212; --excedente-bg:#FBF1DF;
   --conciliado:#1F7A52; --conciliado-bg:#E7F3EC;
-  --neutral:#6B7686; --neutral-bg:#EEF1F5;
-  --crit:#8E1410; --flag:#A8550A; --flag-bg:#FBEFDD;
+  --neutral:#6B7280; --neutral-bg:#EEEEEE;
+  --crit:#7A0D00; --flag:#A8550A; --flag-bg:#FBEFDD;
   --radius:14px; --radius-sm:9px;
   --shadow:0 1px 2px rgba(16,28,48,.05), 0 8px 24px -12px rgba(16,28,48,.18);
   --shadow-sm:0 1px 2px rgba(16,28,48,.06);
@@ -44,9 +44,9 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .brand{display:flex; align-items:center; gap:14px}
 .mark{
   width:42px; height:42px; border-radius:11px; flex:none;
-  background:linear-gradient(135deg,var(--primary) 0%, #12909a 100%);
+  background:linear-gradient(135deg,#BC1401 0%, #E03B26 100%);
   display:grid; place-items:center; font-family:'Space Grotesk'; font-weight:700; font-size:19px; color:#fff;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 4px 14px -4px rgba(11,110,117,.6);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 4px 14px -4px rgba(188,20,1,.55);
 }
 .brand h1{font-size:19px; font-weight:600; margin:0; line-height:1.1}
 .brand .sub{font-size:12px; color:#9FB0C4; margin-top:3px; letter-spacing:.02em}
@@ -122,8 +122,8 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .chip[aria-pressed="true"] .tick{background:var(--primary); border-color:var(--primary)}
 .chip[aria-pressed="true"] .tick svg{opacity:1; transform:scale(1)}
 .chip.sensitive::after{content:"·"; color:var(--faltante); font-weight:700; margin-left:1px}
-.chip.sensitive[aria-pressed="true"]{background:var(--faltante-bg); border-color:#E2A8A2; color:var(--faltante)}
-.chip.sensitive[aria-pressed="true"] .tick{background:var(--faltante); border-color:var(--faltante)}
+.chip.sensitive[aria-pressed="true"]{background:#ECEEEF; border-color:var(--ink-3); color:var(--ink)}
+.chip.sensitive[aria-pressed="true"] .tick{background:var(--ink); border-color:var(--ink)}
 
 /* table */
 .tablecard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
@@ -180,7 +180,7 @@ td.r{text-align:right}
 .exec b{color:var(--text)}
 .exec .crit-list{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px}
 .exec .pill{font-size:12px; background:#F7E2E0; color:var(--crit); padding:5px 11px; border-radius:8px; font-weight:600; font-family:'IBM Plex Mono'}
-.notebox{display:flex; gap:11px; align-items:flex-start; background:var(--primary-soft); border:1px solid #BBDEDE; border-radius:var(--radius-sm); padding:13px 15px; margin-top:14px; font-size:12.5px; color:var(--primary-deep)}
+.notebox{display:flex; gap:11px; align-items:flex-start; background:var(--primary-soft); border:1px solid #F1C9C2; border-radius:var(--radius-sm); padding:13px 15px; margin-top:14px; font-size:12.5px; color:var(--primary-deep)}
 .notebox svg{width:17px;height:17px;flex:none;margin-top:1px;color:var(--primary)}
 
 .qgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:4px}
@@ -279,9 +279,9 @@ td.r{text-align:right}
   <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
     <button class="cfgbtn" id="cfgEvidence">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      Configurar URL de evidencia (Drive)
+      Configurar URL de evidencia (Digizen / Drive)
     </button>
-    <span style="font-size:12px;color:var(--muted)" id="evState">Hipervínculos en modo demostración — pega la carpeta de Drive para activarlos.</span>
+    <span style="font-size:12px;color:var(--muted)" id="evState">Evidencia enlazada.</span>
   </div>
 
 </section>
@@ -335,9 +335,11 @@ const CONFIG = {
   cliente: "MASTERPIECE",
   entidad: "Entidad Tacna · Modelo Shelter · Conteo físico independiente",
   fechaConteo: "Jun 2026",
-  // URL base de la carpeta de evidencia en Drive. Vacío = modo demostración.
-  // Ejemplo: "https://drive.google.com/drive/folders/XXXX?search="
-  evidenceBase: ""
+  // Carpeta de evidencia (Digizen / Nextcloud). Vacío = modo demostración.
+  evidenceBase: "https://digizen.tacna.net/index.php/s/JBgoYqf7o8mHzWb",
+  // true  = añade el número de parte al final (si hay subcarpetas por parte).
+  // false = todos los enlaces abren la misma carpeta compartida.
+  evidenceAppendPart: false
 };
 
 /* ============================================================
@@ -425,7 +427,10 @@ function fmtPct(p){
   return (p*100).toLocaleString("es-MX",{maximumFractionDigits:0})+"%";
 }
 const SVG_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>';
-function evHref(r){ return CONFIG.evidenceBase ? CONFIG.evidenceBase+encodeURIComponent(r.parte) : "#"; }
+function evHref(r){
+  if(!CONFIG.evidenceBase) return "#";
+  return CONFIG.evidenceAppendPart ? CONFIG.evidenceBase+encodeURIComponent(r.parte) : CONFIG.evidenceBase;
+}
 function evCell(r){
   const live = !!CONFIG.evidenceBase;
   return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidencia: ${r.parte}">${SVG_LINK}<span>Evidencia</span></a>`;
@@ -559,9 +564,9 @@ document.getElementById("search").addEventListener("input",e=>{query=e.target.va
 
 /* ---- evidencia config ---- */
 document.getElementById("cfgEvidence").onclick=()=>{
-  const v=prompt("Pega la URL base de la carpeta de evidencia en Drive.\\nSe le añadirá el número de parte al final.\\n\\nEj: https://drive.google.com/drive/folders/XXXX?q=", CONFIG.evidenceBase);
+  const v=prompt("Pega la URL de la carpeta de evidencia (Digizen / Drive).\\n\\nEj: https://digizen.tacna.net/index.php/s/XXXX", CONFIG.evidenceBase);
   if (v!==null){ CONFIG.evidenceBase=v.trim();
-    document.getElementById("evState").textContent = CONFIG.evidenceBase? "Hipervínculos activos → "+CONFIG.evidenceBase : "Hipervínculos en modo demostración — pega la carpeta de Drive para activarlos.";
+    document.getElementById("evState").textContent = CONFIG.evidenceBase? "Evidencia enlazada → "+CONFIG.evidenceBase : "Modo demostración — pega la carpeta para activar los enlaces.";
     renderTable(); renderRisk();
   }
 };
@@ -646,6 +651,7 @@ document.getElementById("tab-risk").onclick=()=>selectTab("risk");
 document.getElementById("brandName").textContent=CONFIG.cliente;
 document.getElementById("brandSub").textContent=CONFIG.entidad;
 document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
+document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidencia enlazada → "+CONFIG.evidenceBase) : "Modo demostración — pega la carpeta para activar los enlaces.";
 renderChips(); renderTable(); renderRisk();
 </script>
 </body>
