@@ -9,19 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#23282D; --ink-2:#2C3237; --ink-3:#3A4248;
-  --bg:#F4F4F4; --surface:#FFFFFF; --surface-2:#FAFAFA;
-  --line:#E5E5E5; --line-strong:#D2D2D2;
-  --text:#333639; --text-soft:#5E6469; --muted:#8B9096;
+  /* TACNA — sin azul. Superficies: blanco 98% · rojo TACNA · gris TACNA neutro.
+     Negro sólo como fuente sobre claro · blanco sólo como fuente sobre rojo. */
+  --ink:#2A2A2A; --ink-2:#1F1F1F; --ink-3:#3A3A3A;   /* gris TACNA (neutro, 0% azul) */
+  --bg:#FAFAFA; --surface:#FFFFFF; --surface-2:#F5F4F3;
+  --line:#E7E4E2; --line-strong:#D4D0CE;
+  --text:#161616; --text-soft:#4A4644; --muted:#7C7875;
   --primary:#BC1401; --primary-deep:#9A1001; --primary-soft:#FBE7E4;
   --faltante:#BC1401; --faltante-bg:#FBE7E4;
   --excedente:#B07212; --excedente-bg:#FBF1DF;
   --conciliado:#1F7A52; --conciliado-bg:#E7F3EC;
-  --neutral:#6B7280; --neutral-bg:#EEEEEE;
+  --neutral:#6E6A68; --neutral-bg:#EEEDEC;
   --crit:#7A0D00; --flag:#A8550A; --flag-bg:#FBEFDD;
   --radius:14px; --radius-sm:9px;
-  --shadow:0 1px 2px rgba(16,28,48,.05), 0 8px 24px -12px rgba(16,28,48,.18);
-  --shadow-sm:0 1px 2px rgba(16,28,48,.06);
+  --shadow:0 1px 2px rgba(30,20,18,.06), 0 8px 24px -12px rgba(30,20,18,.20);
+  --shadow-sm:0 1px 2px rgba(30,20,18,.07);
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
@@ -35,40 +37,41 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 
 /* ---------- App bar ---------- */
 .appbar{
-  background:linear-gradient(180deg,var(--ink) 0%, var(--ink-2) 100%);
-  color:#EAF0F7; padding:0; position:sticky; top:0; z-index:40;
-  box-shadow:0 1px 0 rgba(255,255,255,.04), 0 6px 22px -14px rgba(0,0,0,.6);
+  background:var(--surface); color:var(--text); padding:0; position:sticky; top:0; z-index:40;
+  border-bottom:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(0,0,0,.02), 0 8px 22px -18px rgba(30,20,18,.45);
 }
 .appbar-inner{max-width:1320px; margin:0 auto; padding:18px 26px 0;}
 .brandrow{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap}
-.brand{display:flex; align-items:center; gap:14px}
-.mark{
-  width:42px; height:42px; border-radius:11px; flex:none;
-  background:linear-gradient(135deg,#BC1401 0%, #E03B26 100%);
-  display:grid; place-items:center; font-family:'Space Grotesk'; font-weight:700; font-size:19px; color:#fff;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 4px 14px -4px rgba(188,20,1,.55);
+.brand{display:flex; align-items:center; gap:16px}
+.mark{height:36px; display:flex; align-items:center; flex:none}
+.mark img{height:36px; width:auto; display:block}
+.mark .wordmark{
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:27px;
+  letter-spacing:.06em; color:var(--primary); line-height:1; white-space:nowrap;
 }
-.brand h1{font-size:19px; font-weight:600; margin:0; line-height:1.1}
-.brand .sub{font-size:12px; color:#9FB0C4; margin-top:3px; letter-spacing:.02em}
+.brand .divider{width:1px; align-self:stretch; background:var(--line); margin:2px 0}
+.brand h1{font-size:18px; font-weight:600; margin:0; line-height:1.15; color:var(--text)}
+.brand .sub{font-size:12px; color:var(--muted); margin-top:3px; letter-spacing:.01em}
 .meta{display:flex; gap:22px; text-align:right; flex-wrap:wrap; justify-content:flex-end}
 .meta .item{min-width:0}
-.meta .k{font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:#7F92AB}
-.meta .v{font-size:13px; color:#E7EEF6; font-weight:500; margin-top:2px}
+.meta .k{font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted)}
+.meta .v{font-size:13px; color:var(--text); font-weight:600; margin-top:2px}
 .meta .v.num{font-size:13px}
 
 /* tabs */
 .tabs{display:flex; gap:4px; margin-top:18px}
 .tab{
   appearance:none; border:0; background:transparent; cursor:pointer;
-  color:#9FB0C4; font-family:'Space Grotesk'; font-weight:600; font-size:14px;
+  color:var(--muted); font-family:'Space Grotesk'; font-weight:600; font-size:14px;
   padding:12px 20px 14px; border-radius:10px 10px 0 0; position:relative;
   display:flex; align-items:center; gap:9px; transition:color .15s, background .15s;
 }
-.tab:hover{color:#D7E2EF}
+.tab:hover{color:var(--text)}
 .tab .dot{width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.55}
-.tab[aria-selected="true"]{color:#fff; background:var(--bg)}
-.tab[aria-selected="true"]::after{content:""; position:absolute; left:14px; right:14px; bottom:100%; height:3px; border-radius:3px; background:var(--primary)}
-.tab .count{font-family:'IBM Plex Mono'; font-size:11px; background:rgba(255,255,255,.1); padding:1px 7px; border-radius:20px; color:inherit}
+.tab[aria-selected="true"]{color:var(--primary); background:var(--bg)}
+.tab[aria-selected="true"]::after{content:""; position:absolute; left:14px; right:14px; bottom:-1px; height:3px; border-radius:3px 3px 0 0; background:var(--primary)}
+.tab .count{font-family:'IBM Plex Mono'; font-size:11px; background:var(--neutral-bg); padding:1px 7px; border-radius:20px; color:var(--muted)}
 .tab[aria-selected="true"] .count{background:var(--faltante); color:#fff}
 
 /* ---------- Layout ---------- */
@@ -96,16 +99,16 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .cb-top{display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2)}
 .cb-title{font-family:'Space Grotesk'; font-weight:600; font-size:13px; color:var(--text-soft); display:flex; align-items:center; gap:8px}
 .cb-title .ico{width:18px;height:18px;color:var(--primary)}
-.segmented{display:inline-flex; background:#EDF1F6; border:1px solid var(--line-strong); border-radius:10px; padding:3px}
+.segmented{display:inline-flex; background:var(--neutral-bg); border:1px solid var(--line-strong); border-radius:10px; padding:3px}
 .segmented button{
   appearance:none; border:0; background:transparent; cursor:pointer; font-family:'Space Grotesk'; font-weight:600;
   font-size:12.5px; color:var(--text-soft); padding:7px 14px; border-radius:7px; transition:all .15s; white-space:nowrap;
 }
 .segmented button:hover{color:var(--text)}
-.segmented button[aria-pressed="true"]{background:var(--ink); color:#fff; box-shadow:0 1px 3px rgba(16,28,48,.25)}
+.segmented button[aria-pressed="true"]{background:var(--ink); color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.22)}
 .seg-client[aria-pressed="true"]{background:var(--primary)!important}
 .spacer{flex:1}
-.search{display:flex; align-items:center; gap:8px; background:#EEF1F6; border:1px solid var(--line-strong); border-radius:9px; padding:7px 12px; min-width:200px}
+.search{display:flex; align-items:center; gap:8px; background:var(--neutral-bg); border:1px solid var(--line-strong); border-radius:9px; padding:7px 12px; min-width:200px}
 .search input{border:0; background:transparent; outline:none; font-size:13px; color:var(--text); width:100%; font-family:'Inter'}
 .search svg{width:15px;height:15px;color:var(--muted); flex:none}
 .cb-cols{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:13px 18px}
@@ -122,7 +125,7 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .chip[aria-pressed="true"] .tick{background:var(--primary); border-color:var(--primary)}
 .chip[aria-pressed="true"] .tick svg{opacity:1; transform:scale(1)}
 .chip.sensitive::after{content:"·"; color:var(--faltante); font-weight:700; margin-left:1px}
-.chip.sensitive[aria-pressed="true"]{background:#ECEEEF; border-color:var(--ink-3); color:var(--ink)}
+.chip.sensitive[aria-pressed="true"]{background:var(--neutral-bg); border-color:var(--ink-3); color:var(--ink)}
 .chip.sensitive[aria-pressed="true"] .tick{background:var(--ink); border-color:var(--ink)}
 
 /* table */
@@ -130,16 +133,18 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .tablescroll{overflow-x:auto}
 table{border-collapse:collapse; width:100%; font-size:13px}
 thead th{
-  position:sticky; top:0; z-index:2; background:var(--ink); color:#CEDAE8;
+  position:sticky; top:0; z-index:2; background:var(--primary); color:rgba(255,255,255,.94);
   font-family:'Space Grotesk'; font-weight:600; font-size:11.5px; letter-spacing:.02em;
-  text-align:left; padding:12px 14px; white-space:nowrap; cursor:pointer; user-select:none; border-bottom:1px solid var(--ink-3);
+  text-align:left; padding:12px 14px; white-space:nowrap; cursor:pointer; user-select:none; border-bottom:1px solid var(--primary-deep);
 }
 thead th.r{text-align:right}
-thead th .arr{opacity:.35; font-size:10px; margin-left:4px}
+thead th .arr{opacity:.5; font-size:10px; margin-left:4px}
 thead th.sorted .arr{opacity:1; color:#fff}
-thead th.sensitive{background:var(--ink-3)}
+thead th.sensitive{background:var(--primary-deep)}
 tbody td{padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle}
-tbody tr:hover{background:var(--surface-2)}
+tbody td.sx{background:rgba(188,20,1,.035)}
+tbody tr:hover td{background:var(--surface-2)}
+tbody tr:hover td.sx{background:rgba(188,20,1,.06)}
 tbody tr:last-child td{border-bottom:0}
 td.r{text-align:right}
 .parte{font-weight:600; color:var(--text)}
@@ -218,7 +223,8 @@ td.r{text-align:right}
   <div class="appbar-inner">
     <div class="brandrow">
       <div class="brand">
-        <div class="mark">M</div>
+        <div class="mark" id="brandMark"><span class="wordmark">TACNA</span></div>
+        <div class="divider"></div>
         <div>
           <h1>Inventario Físico · <span id="brandName">MASTERPIECE</span></h1>
           <div class="sub" id="brandSub">Entidad Tacna · Modelo Shelter · Conteo físico independiente</div>
@@ -338,6 +344,9 @@ const CONFIG = {
   cliente: "MASTERPIECE",
   entidad: "Entidad Tacna · Modelo Shelter · Conteo físico independiente",
   fechaConteo: "Jun 2026",
+  // Logo TACNA: pega aquí la URL del archivo oficial (PNG/SVG) y reemplaza el wordmark.
+  // Recomendado: sube el archivo al repo (p. ej. logo-tacna.svg) y pon "logo-tacna.svg".
+  logoUrl: "",
   // Carpeta de evidencia (Digizen / Nextcloud). Vacío = modo demostración.
   evidenceBase: "https://digizen.tacna.net/index.php/s/JBgoYqf7o8mHzWb",
   // true  = añade el número de parte al final (si hay subcarpetas por parte).
@@ -567,7 +576,7 @@ function renderTable(){
   rows.sort((a,b)=>{ let x=sg(a),y=sg(b); if(typeof x==="string") return x.localeCompare(y)*sortDir; return (x-y)*sortDir; });
 
   const body=document.getElementById("invBody");
-  body.innerHTML = rows.map(r=>"<tr>"+COLS.filter(c=>visible[c.key]).map(c=>`<td class="${c.cls}">${c.get(r)}</td>`).join("")+"</tr>").join("");
+  body.innerHTML = rows.map(r=>"<tr>"+COLS.filter(c=>visible[c.key]).map(c=>`<td class="${c.cls}${c.sens?' sx':''}">${c.get(r)}</td>`).join("")+"</tr>").join("");
   renderInvKpis();
 }
 
@@ -711,6 +720,7 @@ document.getElementById("tab-risk").onclick=()=>selectTab("risk");
    INIT
    ============================================================ */
 document.getElementById("brandName").textContent=CONFIG.cliente;
+if (CONFIG.logoUrl){ document.getElementById("brandMark").innerHTML = `<img src="${CONFIG.logoUrl}" alt="TACNA">`; }
 document.getElementById("brandSub").textContent=CONFIG.entidad;
 document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
 document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidencia enlazada → "+CONFIG.evidenceBase) : "Modo demostración — pega la carpeta para activar los enlaces.";
