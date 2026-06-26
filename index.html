@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MASTERPIECE · Inventario Físico — Tacna Shelter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1726; --ink-2:#16233A; --ink-3:#1F3050;
+  --bg:#F4F6FA; --surface:#FFFFFF; --surface-2:#FBFCFE;
+  --line:#E4E8EF; --line-strong:#CCD4E0;
+  --text:#18212F; --text-soft:#56616F; --muted:#8A95A4;
+  --primary:#0B6E75; --primary-deep:#085258; --primary-soft:#E4F1F1;
+  --faltante:#BE2A22; --faltante-bg:#FBEAE8;
+  --excedente:#B07212; --excedente-bg:#FBF1DF;
+  --conciliado:#1F7A52; --conciliado-bg:#E7F3EC;
+  --neutral:#6B7686; --neutral-bg:#EEF1F5;
+  --crit:#8E1410; --flag:#A8550A; --flag-bg:#FBEFDD;
+  --radius:14px; --radius-sm:9px;
+  --shadow:0 1px 2px rgba(16,28,48,.05), 0 8px 24px -12px rgba(16,28,48,.18);
+  --shadow-sm:0 1px 2px rgba(16,28,48,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.num{font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums; font-feature-settings:"tnum"}
+h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
+
+/* ---------- App bar ---------- */
+.appbar{
+  background:linear-gradient(180deg,var(--ink) 0%, var(--ink-2) 100%);
+  color:#EAF0F7; padding:0; position:sticky; top:0; z-index:40;
+  box-shadow:0 1px 0 rgba(255,255,255,.04), 0 6px 22px -14px rgba(0,0,0,.6);
+}
+.appbar-inner{max-width:1320px; margin:0 auto; padding:18px 26px 0;}
+.brandrow{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:14px}
+.mark{
+  width:42px; height:42px; border-radius:11px; flex:none;
+  background:linear-gradient(135deg,var(--primary) 0%, #12909a 100%);
+  display:grid; place-items:center; font-family:'Space Grotesk'; font-weight:700; font-size:19px; color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18), 0 4px 14px -4px rgba(11,110,117,.6);
+}
+.brand h1{font-size:19px; font-weight:600; margin:0; line-height:1.1}
+.brand .sub{font-size:12px; color:#9FB0C4; margin-top:3px; letter-spacing:.02em}
+.meta{display:flex; gap:22px; text-align:right; flex-wrap:wrap; justify-content:flex-end}
+.meta .item{min-width:0}
+.meta .k{font-size:10px; text-transform:uppercase; letter-spacing:.09em; color:#7F92AB}
+.meta .v{font-size:13px; color:#E7EEF6; font-weight:500; margin-top:2px}
+.meta .v.num{font-size:13px}
+
+/* tabs */
+.tabs{display:flex; gap:4px; margin-top:18px}
+.tab{
+  appearance:none; border:0; background:transparent; cursor:pointer;
+  color:#9FB0C4; font-family:'Space Grotesk'; font-weight:600; font-size:14px;
+  padding:12px 20px 14px; border-radius:10px 10px 0 0; position:relative;
+  display:flex; align-items:center; gap:9px; transition:color .15s, background .15s;
+}
+.tab:hover{color:#D7E2EF}
+.tab .dot{width:7px; height:7px; border-radius:50%; background:currentColor; opacity:.55}
+.tab[aria-selected="true"]{color:#fff; background:var(--bg)}
+.tab[aria-selected="true"]::after{content:""; position:absolute; left:14px; right:14px; bottom:100%; height:3px; border-radius:3px; background:var(--primary)}
+.tab .count{font-family:'IBM Plex Mono'; font-size:11px; background:rgba(255,255,255,.1); padding:1px 7px; border-radius:20px; color:inherit}
+.tab[aria-selected="true"] .count{background:var(--faltante); color:#fff}
+
+/* ---------- Layout ---------- */
+.wrap{max-width:1320px; margin:0 auto; padding:24px 26px 80px}
+.panel{display:none; animation:fade .25s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+
+/* KPI */
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:22px}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:15px 16px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden}
+.kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent,var(--primary))}
+.kpi .label{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-soft); font-weight:500}
+.kpi .val{font-family:'Space Grotesk'; font-weight:700; font-size:26px; margin-top:7px; color:var(--text); line-height:1}
+.kpi .val small{font-size:14px; color:var(--muted); font-weight:500; margin-left:3px}
+.kpi .hint{font-size:11px; color:var(--muted); margin-top:6px}
+.kpi.k-crit{--accent:var(--crit)} .kpi.k-falt{--accent:var(--faltante)} .kpi.k-exc{--accent:var(--excedente)}
+.kpi.k-ok{--accent:var(--conciliado)} .kpi.k-flag{--accent:var(--flag)}
+
+/* control bar */
+.controlbar{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow-sm); margin-bottom:18px; overflow:hidden;
+}
+.cb-top{display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2)}
+.cb-title{font-family:'Space Grotesk'; font-weight:600; font-size:13px; color:var(--text-soft); display:flex; align-items:center; gap:8px}
+.cb-title .ico{width:18px;height:18px;color:var(--primary)}
+.segmented{display:inline-flex; background:#EDF1F6; border:1px solid var(--line-strong); border-radius:10px; padding:3px}
+.segmented button{
+  appearance:none; border:0; background:transparent; cursor:pointer; font-family:'Space Grotesk'; font-weight:600;
+  font-size:12.5px; color:var(--text-soft); padding:7px 14px; border-radius:7px; transition:all .15s; white-space:nowrap;
+}
+.segmented button:hover{color:var(--text)}
+.segmented button[aria-pressed="true"]{background:var(--ink); color:#fff; box-shadow:0 1px 3px rgba(16,28,48,.25)}
+.seg-client[aria-pressed="true"]{background:var(--primary)!important}
+.spacer{flex:1}
+.search{display:flex; align-items:center; gap:8px; background:#EEF1F6; border:1px solid var(--line-strong); border-radius:9px; padding:7px 12px; min-width:200px}
+.search input{border:0; background:transparent; outline:none; font-size:13px; color:var(--text); width:100%; font-family:'Inter'}
+.search svg{width:15px;height:15px;color:var(--muted); flex:none}
+.cb-cols{display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:13px 18px}
+.cb-cols .lead{font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:600; margin-right:4px}
+.chip{
+  appearance:none; cursor:pointer; font-family:'Inter'; font-size:12px; font-weight:500;
+  border:1px solid var(--line-strong); background:var(--surface); color:var(--text-soft);
+  padding:6px 11px 6px 9px; border-radius:20px; display:inline-flex; align-items:center; gap:7px; transition:all .14s;
+}
+.chip:hover{border-color:var(--primary); color:var(--text)}
+.chip .tick{width:14px;height:14px;border-radius:5px;border:1.5px solid var(--line-strong); display:grid;place-items:center; transition:all .14s}
+.chip .tick svg{width:10px;height:10px;color:#fff;opacity:0;transform:scale(.6);transition:all .14s}
+.chip[aria-pressed="true"]{background:var(--primary-soft); border-color:var(--primary); color:var(--primary-deep); font-weight:600}
+.chip[aria-pressed="true"] .tick{background:var(--primary); border-color:var(--primary)}
+.chip[aria-pressed="true"] .tick svg{opacity:1; transform:scale(1)}
+.chip.sensitive::after{content:"·"; color:var(--faltante); font-weight:700; margin-left:1px}
+.chip.sensitive[aria-pressed="true"]{background:var(--faltante-bg); border-color:#E2A8A2; color:var(--faltante)}
+.chip.sensitive[aria-pressed="true"] .tick{background:var(--faltante); border-color:var(--faltante)}
+
+/* table */
+.tablecard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+.tablescroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; font-size:13px}
+thead th{
+  position:sticky; top:0; z-index:2; background:var(--ink); color:#CEDAE8;
+  font-family:'Space Grotesk'; font-weight:600; font-size:11.5px; letter-spacing:.02em;
+  text-align:left; padding:12px 14px; white-space:nowrap; cursor:pointer; user-select:none; border-bottom:1px solid var(--ink-3);
+}
+thead th.r{text-align:right}
+thead th .arr{opacity:.35; font-size:10px; margin-left:4px}
+thead th.sorted .arr{opacity:1; color:#fff}
+thead th.sensitive{background:var(--ink-3)}
+tbody td{padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+td.r{text-align:right}
+.parte{font-weight:600; color:var(--text)}
+.desc{color:var(--text-soft); max-width:280px; white-space:normal; line-height:1.35; font-size:12.5px}
+.evlink{display:inline-flex; align-items:center; gap:6px; color:var(--primary); text-decoration:none; font-weight:600}
+.evlink:hover{text-decoration:underline}
+.evlink svg{width:13px;height:13px}
+.rowno{color:var(--muted); font-family:'IBM Plex Mono'; font-size:12px}
+.dash{color:var(--line-strong)}
+.sub-um{color:var(--muted); font-size:11px; margin-left:3px}
+
+/* badges */
+.badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; font-family:'Inter'; white-space:nowrap}
+.b-falt{background:var(--faltante-bg); color:var(--faltante)}
+.b-exc{background:var(--excedente-bg); color:var(--excedente)}
+.b-ok{background:var(--conciliado-bg); color:var(--conciliado)}
+.b-nd{background:var(--neutral-bg); color:var(--neutral)}
+.sev{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:6px; font-family:'Space Grotesk'}
+.sev::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.sev-crit{background:#F7E2E0; color:var(--crit)}
+.sev-alto{background:var(--faltante-bg); color:var(--faltante)}
+.sev-medio{background:var(--excedente-bg); color:var(--excedente)}
+.sev-bajo{background:var(--conciliado-bg); color:var(--conciliado)}
+.flagtag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--flag);background:var(--flag-bg);padding:2px 7px;border-radius:5px;margin-left:6px;vertical-align:middle}
+.flagtag svg{width:11px;height:11px}
+.pct{font-family:'IBM Plex Mono'; font-weight:500}
+.neg{color:var(--faltante)} .pos{color:var(--excedente)}
+
+/* risk tab */
+.section-head{display:flex; align-items:baseline; gap:12px; margin:30px 0 14px}
+.section-head h2{font-size:17px; margin:0; font-weight:600}
+.section-head .ln{flex:1; height:1px; background:var(--line)}
+.section-head .tag{font-size:11px; color:var(--muted); font-family:'IBM Plex Mono'}
+.exec{background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--crit); border-radius:var(--radius); padding:20px 22px; box-shadow:var(--shadow-sm); margin-bottom:8px}
+.exec h3{margin:0 0 10px; font-size:15px}
+.exec p{margin:0 0 10px; color:var(--text-soft); font-size:13.5px; max-width:80ch}
+.exec p:last-child{margin-bottom:0}
+.exec b{color:var(--text)}
+.exec .crit-list{display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 4px}
+.exec .pill{font-size:12px; background:#F7E2E0; color:var(--crit); padding:5px 11px; border-radius:8px; font-weight:600; font-family:'IBM Plex Mono'}
+.notebox{display:flex; gap:11px; align-items:flex-start; background:var(--primary-soft); border:1px solid #BBDEDE; border-radius:var(--radius-sm); padding:13px 15px; margin-top:14px; font-size:12.5px; color:var(--primary-deep)}
+.notebox svg{width:17px;height:17px;flex:none;margin-top:1px;color:var(--primary)}
+
+.qgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:4px}
+.qcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px; box-shadow:var(--shadow-sm)}
+.qcard .qh{display:flex; align-items:center; gap:9px; margin-bottom:9px}
+.qcard .qh .qn{font-family:'Space Grotesk'; font-weight:700; font-size:18px; color:var(--flag)}
+.qcard .qh h4{margin:0; font-size:13px; font-weight:600}
+.qcard ul{margin:6px 0 0; padding-left:0; list-style:none}
+.qcard li{font-size:12.5px; color:var(--text-soft); padding:4px 0; border-top:1px dashed var(--line); display:flex; justify-content:space-between; gap:10px}
+.qcard li:first-child{border-top:0}
+.qcard li code{font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--text); background:var(--neutral-bg); padding:1px 6px; border-radius:5px}
+.qcard li .v{color:var(--faltante); font-weight:600; font-family:'IBM Plex Mono'; font-size:11.5px; white-space:nowrap}
+
+.footer{max-width:1320px; margin:0 auto; padding:30px 26px 50px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:20px}
+.footer code{font-family:'IBM Plex Mono'}
+
+.cfgbtn{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--text-soft);cursor:pointer;font-size:12px;font-weight:500;padding:7px 12px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;font-family:'Inter'}
+.cfgbtn:hover{border-color:var(--primary);color:var(--primary)}
+.cfgbtn svg{width:14px;height:14px}
+
+:focus-visible{outline:2px solid var(--primary); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+@media (max-width:720px){
+  .wrap,.appbar-inner,.footer{padding-left:16px;padding-right:16px}
+  .meta{display:none}
+  .kpi .val{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brandrow">
+      <div class="brand">
+        <div class="mark">M</div>
+        <div>
+          <h1>Inventario Físico · <span id="brandName">MASTERPIECE</span></h1>
+          <div class="sub" id="brandSub">Entidad Tacna · Modelo Shelter · Conteo físico independiente</div>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="item"><div class="k">Partidas</div><div class="v num" id="metaSku">28</div></div>
+        <div class="item"><div class="k">Conteo</div><div class="v" id="metaDate">Jun 2026</div></div>
+        <div class="item"><div class="k">Estado</div><div class="v">Conciliación interna</div></div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" id="tab-inv" role="tab" aria-selected="true" aria-controls="panel-inv">
+        <span class="dot"></span> Inventario Físico
+      </button>
+      <button class="tab" id="tab-risk" role="tab" aria-selected="false" aria-controls="panel-risk">
+        <span class="dot"></span> Riesgos <span class="count" id="riskCount">0</span>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== PANEL: INVENTARIO ===================== -->
+<main class="wrap">
+<section class="panel active" id="panel-inv" role="tabpanel" aria-labelledby="tab-inv">
+
+  <div class="kpis" id="invKpis"></div>
+
+  <div class="controlbar">
+    <div class="cb-top">
+      <span class="cb-title">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Vista de presentación
+      </span>
+      <div class="segmented" role="group" aria-label="Vista predefinida">
+        <button class="seg-client" data-preset="cliente" aria-pressed="false">Vista Cliente</button>
+        <button data-preset="completa" aria-pressed="true">Vista Completa</button>
+        <button data-preset="auditoria" aria-pressed="false">Auditoría</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" type="search" placeholder="Buscar parte o descripción…" aria-label="Buscar" />
+      </div>
+    </div>
+    <div class="cb-cols" id="colChips">
+      <span class="lead">Columnas</span>
+    </div>
+  </div>
+
+  <div class="tablecard">
+    <div class="tablescroll">
+      <table id="invTable">
+        <thead><tr id="invHead"></tr></thead>
+        <tbody id="invBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+    <button class="cfgbtn" id="cfgEvidence">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Configurar URL de evidencia (Drive)
+    </button>
+    <span style="font-size:12px;color:var(--muted)" id="evState">Hipervínculos en modo demostración — pega la carpeta de Drive para activarlos.</span>
+  </div>
+
+</section>
+
+<!-- ===================== PANEL: RIESGOS ===================== -->
+<section class="panel" id="panel-risk" role="tabpanel" aria-labelledby="tab-risk">
+
+  <div class="kpis" id="riskKpis"></div>
+
+  <div class="exec">
+    <h3>Resumen ejecutivo del conteo</h3>
+    <p>El conteo físico independiente cubrió las <b>28 partidas</b> del padrón. <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>; el resto sin movimiento o sin saldo registrado. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
+    <p>El patrón dominante son los <b>insumos textiles</b> (telas de algodón y lino), que concentran las mayores magnitudes y los faltantes más severos —material que el anexo asume importado temporalmente y que no apareció en piso— junto con un caso inverso de <b>material no registrado</b> (existe físicamente con saldo cero en anexo). Las <b>etiquetas</b> muestran ambos extremos: una agotada por completo y otra con más del doble de lo registrado, señal de cruce de claves o descarga de BOM mal aplicada.</p>
+    <div class="crit-list" id="critPills"></div>
+    <div class="notebox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div>La severidad de abajo se calcula por <b>% de variación contra el anexo</b>. El <b>impacto financiero</b> (columna $) se activa automáticamente al cargar el costo unitario de cada parte — el modelo ya está conectado, solo falta el dato de costo.</div>
+    </div>
+  </div>
+
+  <div class="section-head"><h2>Riesgos priorizados</h2><span class="ln"></span><span class="tag">orden: severidad · % variación</span></div>
+  <div class="tablecard">
+    <div class="tablescroll">
+      <table id="riskTable">
+        <thead><tr>
+          <th>No.</th><th>Parte</th><th>Descripción</th>
+          <th class="r">Saldo anexo</th><th class="r">Físico</th><th class="r">Diferencia</th>
+          <th class="r">% Var</th><th>Tipo</th><th>Severidad</th><th class="r">Impacto $</th><th>Evidencia</th>
+        </tr></thead>
+        <tbody id="riskBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section-head"><h2>Banderas de calidad de datos</h2><span class="ln"></span><span class="tag">hallazgos de control</span></div>
+  <div class="qgrid" id="qgrid"></div>
+
+</section>
+</main>
+
+<div class="footer">
+  <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
+  <div>Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · costo: <code>pendiente</code></div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN — edita aquí
+   ============================================================ */
+const CONFIG = {
+  cliente: "MASTERPIECE",
+  entidad: "Entidad Tacna · Modelo Shelter · Conteo físico independiente",
+  fechaConteo: "Jun 2026",
+  // URL base de la carpeta de evidencia en Drive. Vacío = modo demostración.
+  // Ejemplo: "https://drive.google.com/drive/folders/XXXX?search="
+  evidenceBase: ""
+};
+
+/* ============================================================
+   DATOS DEL CONTEO  (28 partidas — Hoja 1)
+   anexo = SALDO UM COMPRA (D) · sistema = SISTEMA MASTERPIECE (F)
+   invLoc (H) · invWip (I) ·  null = celda en blanco (no contado)
+   ============================================================ */
+const RAW = [
+ {no:1, parte:"ACRYLICFIX", desc:"FIJADOR ACRÍLICO - GL -", anexo:0, umC:"LB", sistema:null, umM:"#N/D", invLoc:null, invWip:null, umF:"LB", estatusOrig:null},
+ {no:2, parte:"AlkydPrimer", desc:"PINTURA BASE ACEITE", anexo:102.960348, umC:"GAL", sistema:20, umM:"PAIL", invLoc:95, invWip:1.25, umF:"GAL", estatusOrig:"FALTANTE"},
+ {no:3, parte:"BOTTLE", desc:"ATOMIZADOR", anexo:3185.31, umC:"PCS", sistema:5816, umM:"PCS", invLoc:5816, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
+ {no:4, parte:"BOTTLE-A", desc:"BOTELLA DE PLÁSTICO", anexo:2947, umC:"PCS", sistema:0, umM:"#N/D", invLoc:0, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:5, parte:"BOX-CORR", desc:"CAJA DE CARTÓN CORRUGADO", anexo:7507, umC:"PCS", sistema:5684, umM:"PCS", invLoc:5684, invWip:195, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:6, parte:'CARTON TUBE KRAFT 84" (6X3X84)', desc:"MANUFACTURAS DE CARTÓN CORRUGADO", anexo:1636, umC:"PCS", sistema:0, umM:"#N/D", invLoc:2585, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
+ {no:7, parte:'CARTON TUBE KRAFT 84" (8X7X84)', desc:"MANUFACTURAS DE CARTÓN CORRUGADO", anexo:0, umC:"PCS", sistema:null, umM:"#N/D", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:8, parte:"CBDTUBE", desc:"BOBINAS DE PAPEL O CARTÓN", anexo:2283.989941, umC:"PCS", sistema:1628, umM:"PCS", invLoc:1073, invWip:24, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:9, parte:"CHIPCARD", desc:"HOJAS DE CARTÓN", anexo:1533, umC:"PCS", sistema:3879, umM:"PCS", invLoc:646, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:10, parte:"COTDCANP", desc:"TELA DE PUNTO POR URDIMBRE, 100% ALGODÓN, TEÑIDA", anexo:71057238, umC:"IN2", sistema:13683708, umM:"IN2", invLoc:24833628, invWip:0, umF:"IN2", estatusOrig:"FALTANTE"},
+ {no:11, parte:"COTICANP", desc:"TELA DE PUNTO POR URDIMBRE, 100% ALGODÓN, TEÑIDA", anexo:0, umC:"IN2", sistema:17361648, umM:"IN2", invLoc:17361648, invWip:9740.603, umF:"IN2", estatusOrig:"EXCEDENTE"},
+ {no:12, parte:"COTICANR", desc:"TELA DE PUNTO POR URDIMBRE, 100% ALGODÓN, TEÑIDA", anexo:6175536.785, umC:"IN2", sistema:8820144, umM:"IN2", invLoc:10418544, invWip:0, umF:"IN2", estatusOrig:"EXCEDENTE"},
+ {no:13, parte:"GESSO", desc:"SELLADOR DE ACRÍLICO", anexo:43.295048, umC:"GAL", sistema:18, umM:"GAL", invLoc:20, invWip:0, umF:"GAL", estatusOrig:"FALTANTE"},
+ {no:14, parte:"LABEL", desc:"ETIQUETA DE PAPEL CON ADHESIVO NO IMPRESA", anexo:106798.2676, umC:"PCS", sistema:216698, umM:"PCS", invLoc:0, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:15, parte:"LABEL-PAPER", desc:"ETIQUETA DE PAPEL IMPRESA", anexo:106629.99, umC:"PCS", sistema:901, umM:"PCS", invLoc:217324, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
+ {no:16, parte:"LABELPLASTIC", desc:"ETIQUETAS DE PLÁSTICO IMPRESAS", anexo:0, umC:"PCS", sistema:null, umM:"#N/D", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:17, parte:"LINICANP", desc:"TELA NO PUNTO 100% LINO CRUDO O BLANQUEADO", anexo:14841823.29, umC:"IN2", sistema:992100, umM:"IN2", invLoc:1004280, invWip:175136.768, umF:"IN2", estatusOrig:"FALTANTE"},
+ {no:18, parte:"LINICANR", desc:"TELA NO PUNTO 100% LINO CRUDO O BLANQUEADO", anexo:11781555.91, umC:"IN2", sistema:1114272, umM:"IN2", invLoc:22176, invWip:327533.728, umF:"IN2", estatusOrig:"FALTANTE"},
+ {no:19, parte:"LUMBPINE-BF", desc:"MADERA ASERRADA NUEVA DE PINO", anexo:290574.4653, umC:"BFT", sistema:27155, umM:"BFT", invLoc:27155, invWip:22962, umF:"BFT", estatusOrig:"FALTANTE"},
+ {no:20, parte:"MDFSHEET", desc:"TABLERO DE FIBRAS DE MADERA", anexo:0, umC:"PCS", sistema:null, umM:"PCS", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:21, parte:"MDFVNYL01", desc:"TABLEROS DE FIBRA DE DENSIDAD MEDIA (MDF)", anexo:25587.91262, umC:"FT2", sistema:16064, umM:"FT2", invLoc:23424, invWip:230.163, umF:"FT2", estatusOrig:"EXCEDENTE"},
+ {no:22, parte:"NAIL", desc:"GRAPAS DE ACERO", anexo:0, umC:"PCS", sistema:null, umM:"#N/D", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:23, parte:"PLYWOOD", desc:"TABLERO DE MADERA (OSB) NUEVO", anexo:171, umC:"PCS", sistema:42, umM:"Sheet", invLoc:42, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:24, parte:"POLYBAG", desc:"BOLSA DE PLÁSTICO", anexo:0, umC:"PCS", sistema:null, umM:"Sq. Inch", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:25, parte:"RR-72x6y-N-RMA", desc:"ROLLO DE LONA PARA PINTAR", anexo:0, umC:"PCS", sistema:null, umM:"#N/D", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:26, parte:"SCREW", desc:"TORNILLOS DE ACERO", anexo:0, umC:"PCS", sistema:null, umM:"PCS", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null},
+ {no:27, parte:"SPRAYER", desc:"ATOMIZADOR DE PLÁSTICO", anexo:3300, umC:"PCS", sistema:1200, umM:"PCS", invLoc:1200, invWip:162, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:28, parte:"STAPLEF", desc:"GRAPA PARA EMPAQUE", anexo:0, umC:"PCS", sistema:null, umM:"PCS", invLoc:null, invWip:null, umF:"PCS", estatusOrig:null}
+];
+
+/* ============================================================
+   MODELO — recálculo, severidad, banderas
+   ============================================================ */
+const EPS = 1e-6;
+function calc(r){
+  const contado = r.invLoc !== null || r.invWip !== null;
+  const fisico = contado ? (r.invLoc||0) + (r.invWip||0) : null;
+  const tieneAnexo = Math.abs(r.anexo) > EPS;
+  let diff = null, estatus = "SIN DATOS", pct = null, tipo="—";
+  if (contado || tieneAnexo){
+    diff = (fisico||0) - r.anexo;
+    if (diff > EPS){ estatus="EXCEDENTE"; tipo = tieneAnexo ? "Excedente" : "No registrado"; }
+    else if (diff < -EPS){ estatus="FALTANTE"; tipo="Faltante"; }
+    else { estatus="CONCILIADO"; tipo="Conciliado"; }
+    pct = tieneAnexo ? Math.abs(diff)/r.anexo : (Math.abs(diff)>EPS ? Infinity : 0);
+  }
+  // severidad
+  let sev = null;
+  if (estatus==="FALTANTE"){
+    sev = pct>=0.9 ? "CRÍTICO" : pct>=0.5 ? "ALTO" : pct>=0.2 ? "MEDIO" : "BAJO";
+  } else if (estatus==="EXCEDENTE"){
+    sev = (!tieneAnexo || pct>=1) ? "CRÍTICO" : pct>=0.5 ? "ALTO" : pct>=0.2 ? "MEDIO" : "BAJO";
+  } else if (estatus==="CONCILIADO"){ sev="BAJO"; }
+  // bandera: estatus original no coincide con recalculado
+  const flagEstatus = r.estatusOrig && estatus!=="SIN DATOS" && r.estatusOrig!==estatus;
+  // bandera UM: unidad de compra != unidad de sistema (cuando el sistema sí mapea)
+  const flagUM = r.umM && r.umM!=="#N/D" && r.umM.toUpperCase()!==r.umC.toUpperCase();
+  const noMapeo = r.umM==="#N/D";
+  const costo = (typeof r.costo==="number") ? r.costo : null;
+  const impacto = (costo!==null && diff!==null) ? Math.abs(diff)*costo : null;
+  return {...r, contado, fisico, diff, estatus, pct, tipo, sev, flagEstatus, flagUM, noMapeo, costo, impacto};
+}
+const DATA = RAW.map(calc);
+
+/* ============================================================
+   FORMATO
+   ============================================================ */
+function fmt(v){
+  if (v===null || v===undefined) return null;
+  const abs=Math.abs(v);
+  const dec = (abs>0 && abs<1000 && abs%1!==0) ? 2 : (abs%1!==0 ? 2 : 0);
+  return v.toLocaleString("es-MX",{minimumFractionDigits:0, maximumFractionDigits:dec});
+}
+function fmtPct(p){
+  if (p===null) return "—";
+  if (p===Infinity) return "s/saldo";
+  return (p*100).toLocaleString("es-MX",{maximumFractionDigits:0})+"%";
+}
+const SVG_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>';
+function evHref(r){ return CONFIG.evidenceBase ? CONFIG.evidenceBase+encodeURIComponent(r.parte) : "#"; }
+function evCell(r){
+  const live = !!CONFIG.evidenceBase;
+  return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidencia: ${r.parte}">${SVG_LINK}<span>Evidencia</span></a>`;
+}
+window.demoEv=function(e){e.preventDefault(); alert("Modo demostración.\\nUsa “Configurar URL de evidencia (Drive)” para enlazar la carpeta de conteo de "+ "esta partida."); return false;};
+
+/* ============================================================
+   COLUMNAS  (sensible = oculto en Vista Cliente)
+   ============================================================ */
+const COLS = [
+  {key:"no",     label:"No.",            cls:"",  sens:false, get:r=>`<span class="rowno">${r.no}</span>`},
+  {key:"parte",  label:"No. Parte SEER", cls:"",  sens:false, get:r=>`<a class="evlink parte" href="${evHref(r)}" ${CONFIG.evidenceBase?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidencia: ${r.parte}">${r.parte} ${SVG_LINK}</a>`, sort:r=>r.parte},
+  {key:"desc",   label:"Descripción",    cls:"",  sens:false, get:r=>`<span class="desc">${r.desc}</span>`, sort:r=>r.desc},
+  {key:"anexo",  label:"Saldo Anexo",    cls:"r", sens:true,  get:r=>numCell(r.anexo, r.umC), sort:r=>r.anexo},
+  {key:"sistema",label:"Sistema Master.",cls:"r", sens:true,  get:r=>r.sistema===null?dash(r.noMapeo?'#N/D':''):numCell(r.sistema, r.umM!=='#N/D'?r.umM:''), sort:r=>r.sistema??-1},
+  {key:"invLoc", label:"Inv. Locación",  cls:"r", sens:false, get:r=>r.invLoc===null?dash():numCell(r.invLoc,''), sort:r=>r.invLoc??-1},
+  {key:"invWip", label:"Inv. WIP",       cls:"r", sens:false, get:r=>r.invWip===null?dash():numCell(r.invWip,''), sort:r=>r.invWip??-1},
+  {key:"fisico", label:"Total Físico",   cls:"r", sens:false, get:r=>r.fisico===null?dash('sin conteo'):`<b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span>`, sort:r=>r.fisico??-1},
+  {key:"diff",   label:"Diferencia",     cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
+  {key:"estatus",label:"Estatus",        cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus}
+];
+function numCell(v,um){ return v===null?dash():`<span class="num">${fmt(v)}</span>${um?`<span class="sub-um">${um}</span>`:""}`; }
+function dash(t){ return `<span class="dash">${t||"—"}</span>`; }
+function diffCell(r){
+  if (r.diff===null) return dash();
+  const c = r.diff<0?"neg":r.diff>0?"pos":"";
+  const s = r.diff>0?"+":"";
+  return `<span class="num ${c}">${s}${fmt(r.diff)}</span>`;
+}
+function estatusCell(r){
+  const map={FALTANTE:"b-falt",EXCEDENTE:"b-exc",CONCILIADO:"b-ok","SIN DATOS":"b-nd"};
+  const lbl={FALTANTE:"Faltante",EXCEDENTE:"Excedente",CONCILIADO:"Conciliado","SIN DATOS":"Sin datos"};
+  let html=`<span class="badge ${map[r.estatus]}">${lbl[r.estatus]}</span>`;
+  if (r.flagEstatus) html+=`<span class="flagtag" title="El estatus original del archivo (${r.estatusOrig}) no coincide con el recálculo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>corregido</span>`;
+  return html;
+}
+
+/* ============================================================
+   ESTADO DE VISTA
+   ============================================================ */
+let visible = {}; COLS.forEach(c=>visible[c.key]=true);
+let sortKey="no", sortDir=1, query="";
+const PRESETS = {
+  cliente:   {hide:["anexo","sistema","diff","estatus"], filter:null},
+  completa:  {hide:[], filter:null},
+  auditoria: {hide:[], filter:"diff"}
+};
+let activeFilter=null;
+
+/* ---- render chips ---- */
+function renderChips(){
+  const host=document.getElementById("colChips");
+  host.querySelectorAll(".chip").forEach(e=>e.remove());
+  COLS.forEach(c=>{
+    if (c.key==="no"||c.key==="parte") return; // siempre visibles
+    const b=document.createElement("button");
+    b.className="chip"+(c.sens?" sensitive":"");
+    b.setAttribute("aria-pressed", visible[c.key]?"true":"false");
+    b.innerHTML=`<span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></span>${c.label}`;
+    b.onclick=()=>{ visible[c.key]=!visible[c.key]; b.setAttribute("aria-pressed",visible[c.key]?"true":"false"); renderTable(); };
+    host.appendChild(b);
+  });
+}
+
+/* ---- render table ---- */
+function renderTable(){
+  const head=document.getElementById("invHead");
+  head.innerHTML = COLS.filter(c=>visible[c.key]).map(c=>{
+    const sorted = sortKey===c.key?" sorted":"";
+    const arr = sortKey===c.key ? (sortDir>0?"▲":"▼") : "";
+    return `<th class="${c.cls}${c.sens?" sensitive":""}${sorted}" data-key="${c.key}">${c.label}<span class="arr">${arr}</span></th>`;
+  }).join("");
+  head.querySelectorAll("th").forEach(th=>{
+    th.onclick=()=>{ const k=th.dataset.key; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;} renderTable(); };
+  });
+
+  let rows = DATA.slice();
+  if (activeFilter==="diff") rows = rows.filter(r=>r.diff!==null && Math.abs(r.diff)>EPS);
+  if (query){ const q=query.toLowerCase(); rows=rows.filter(r=>r.parte.toLowerCase().includes(q)||r.desc.toLowerCase().includes(q)); }
+  const col=COLS.find(c=>c.key===sortKey);
+  const sg = col.sort||(r=>r[sortKey]);
+  rows.sort((a,b)=>{ let x=sg(a),y=sg(b); if(typeof x==="string") return x.localeCompare(y)*sortDir; return (x-y)*sortDir; });
+
+  const body=document.getElementById("invBody");
+  body.innerHTML = rows.map(r=>"<tr>"+COLS.filter(c=>visible[c.key]).map(c=>`<td class="${c.cls}">${c.get(r)}</td>`).join("")+"</tr>").join("");
+  renderInvKpis();
+}
+
+/* ---- KPIs inventario (reaccionan a Vista Cliente) ---- */
+function renderInvKpis(){
+  const host=document.getElementById("invKpis");
+  const clientView = !visible.anexo && !visible.diff && !visible.estatus;
+  const conExist = DATA.filter(r=>r.fisico>EPS).length;
+  const enWip = DATA.filter(r=>r.invWip>EPS).length;
+  const sinExist = DATA.filter(r=>r.contado && r.fisico<=EPS).length;
+  if (clientView){
+    host.innerHTML = card("Partidas inventariadas","28","padrón completo")
+      + card("Con existencia física", conExist, "encontradas en piso/WIP","k-ok")
+      + card("En proceso (WIP)", enWip, "con material en línea")
+      + card("Sin existencia", sinExist, "contadas en cero","k-flag");
+  } else {
+    const falt = DATA.filter(r=>r.estatus==="FALTANTE").length;
+    const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
+    const crit = DATA.filter(r=>r.sev==="CRÍTICO").length;
+    const conDif = falt+exc;
+    host.innerHTML = card("Con diferencia", conDif, "vs. saldo del anexo","k-crit")
+      + card("Faltantes", falt, "físico < anexo","k-falt")
+      + card("Excedentes", exc, "físico > anexo","k-exc")
+      + card("Críticas", crit, "≥90% var o no registrado","k-crit");
+  }
+}
+function card(label,val,hint,cls){
+  return `<div class="kpi ${cls||""}"><div class="label">${label}</div><div class="val num">${typeof val==="number"?fmt(val):val}</div><div class="hint">${hint||""}</div></div>`;
+}
+
+/* ---- presets ---- */
+document.querySelectorAll(".segmented button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".segmented button").forEach(x=>x.setAttribute("aria-pressed","false"));
+    b.setAttribute("aria-pressed","true");
+    const p=PRESETS[b.dataset.preset];
+    COLS.forEach(c=>visible[c.key]=true);
+    p.hide.forEach(k=>visible[k]=false);
+    activeFilter=p.filter;
+    renderChips(); renderTable();
+  };
+});
+
+/* ---- search ---- */
+document.getElementById("search").addEventListener("input",e=>{query=e.target.value; renderTable();});
+
+/* ---- evidencia config ---- */
+document.getElementById("cfgEvidence").onclick=()=>{
+  const v=prompt("Pega la URL base de la carpeta de evidencia en Drive.\\nSe le añadirá el número de parte al final.\\n\\nEj: https://drive.google.com/drive/folders/XXXX?q=", CONFIG.evidenceBase);
+  if (v!==null){ CONFIG.evidenceBase=v.trim();
+    document.getElementById("evState").textContent = CONFIG.evidenceBase? "Hipervínculos activos → "+CONFIG.evidenceBase : "Hipervínculos en modo demostración — pega la carpeta de Drive para activarlos.";
+    renderTable(); renderRisk();
+  }
+};
+
+/* ============================================================
+   PANEL RIESGOS
+   ============================================================ */
+const SEVRANK={"CRÍTICO":0,"ALTO":1,"MEDIO":2,"BAJO":3};
+function renderRiskKpis(){
+  const risks = DATA.filter(r=>r.sev && r.estatus!=="CONCILIADO" && r.estatus!=="SIN DATOS");
+  const crit = risks.filter(r=>r.sev==="CRÍTICO").length;
+  const falt = DATA.filter(r=>r.estatus==="FALTANTE").length;
+  const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
+  const noReg = DATA.filter(r=>r.tipo==="No registrado").length;
+  const flags = DATA.filter(r=>r.flagEstatus).length + DATA.filter(r=>r.flagUM).length + DATA.filter(r=>r.noMapeo).length;
+  const cobertura = Math.round(DATA.filter(r=>r.fisico>EPS).length/DATA.filter(r=>r.anexo>EPS||r.fisico>EPS).length*100);
+  document.getElementById("riskKpis").innerHTML =
+      card("Partidas en riesgo", risks.length, "con diferencia material","k-crit")
+    + card("Críticas", crit, "exposición aduanera alta","k-crit")
+    + card("Faltantes / Excedentes", falt+" / "+exc, "contra anexo","k-falt")
+    + card("Material no registrado", noReg, "anexo 0 con existencia","k-exc")
+    + card("Banderas de calidad", flags, "estatus, UM y sin mapeo","k-flag");
+  document.getElementById("riskCount").textContent = risks.length;
+  document.getElementById("exFalt").textContent = falt;
+  document.getElementById("exExc").textContent = exc;
+  // pills críticos
+  const pills = DATA.filter(r=>r.sev==="CRÍTICO").sort((a,b)=>(b.pct===Infinity?9e9:b.pct)-(a.pct===Infinity?9e9:a.pct));
+  document.getElementById("critPills").innerHTML = pills.map(r=>`<span class="pill">${r.parte} · ${r.tipo==="No registrado"?"no registrado":fmtPct(r.pct)}</span>`).join("");
+}
+function renderRisk(){
+  renderRiskKpis();
+  const risks = DATA.filter(r=>r.sev && r.estatus!=="SIN DATOS" && r.estatus!=="CONCILIADO")
+    .sort((a,b)=> (SEVRANK[a.sev]-SEVRANK[b.sev]) || ((b.pct===Infinity?9e9:b.pct)-(a.pct===Infinity?9e9:a.pct)));
+  const sevcls={"CRÍTICO":"sev-crit","ALTO":"sev-alto","MEDIO":"sev-medio","BAJO":"sev-bajo"};
+  document.getElementById("riskBody").innerHTML = risks.map(r=>`<tr>
+    <td><span class="rowno">${r.no}</span></td>
+    <td class="parte">${r.parte}</td>
+    <td><span class="desc">${r.desc}</span></td>
+    <td class="r">${numCell(r.anexo, r.umC)}</td>
+    <td class="r"><b class="num">${fmt(r.fisico)}</b></td>
+    <td class="r">${diffCell(r)}</td>
+    <td class="r pct ${r.diff<0?'neg':'pos'}">${fmtPct(r.pct)}</td>
+    <td><span class="badge ${r.estatus==='FALTANTE'?'b-falt':r.tipo==='No registrado'?'b-exc':'b-exc'}">${r.tipo}</span></td>
+    <td><span class="sev ${sevcls[r.sev]}">${r.sev}</span></td>
+    <td class="r">${r.impacto!==null?('$'+fmt(r.impacto)):'<span class="dash">pendiente</span>'}</td>
+    <td>${evCell(r)}</td>
+  </tr>`).join("");
+
+  // banderas de calidad
+  const estatusFlags = DATA.filter(r=>r.flagEstatus);
+  const umFlags = DATA.filter(r=>r.flagUM);
+  const noMap = DATA.filter(r=>r.noMapeo);
+  document.getElementById("qgrid").innerHTML =
+    qcard("01","Estatus mal etiquetado", estatusFlags.map(r=>[`${r.parte}`, `archivo: ${r.estatusOrig} → real: ${r.estatus}`]),
+          "El signo de la diferencia no correspondía a la etiqueta del archivo original.")
+  + qcard("02","Unidad de medida inconsistente", umFlags.map(r=>[`${r.parte}`, `${r.umC} vs ${r.umM}`]),
+          "La unidad de compra/anexo no coincide con la del sistema: impide descargar BOM y conciliar.")
+  + qcard("03","Sin mapeo en sistema (#N/D)", noMap.map(r=>[`${r.parte}`, "no reconocida"]),
+          "El ERP no reconoce la clave: la partida queda fuera de cualquier descargo automático.");
+}
+function qcard(n,title,items,note){
+  const lis = items.length? items.map(([k,v])=>`<li><code>${k}</code><span class="v">${v}</span></li>`).join("") : `<li style="color:var(--muted)">Sin hallazgos</li>`;
+  return `<div class="qcard"><div class="qh"><span class="qn">${n}</span><h4>${title}</h4></div><ul>${lis}</ul><p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;line-height:1.4">${note}</p></div>`;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+function selectTab(which){
+  const inv = which==="inv";
+  document.getElementById("tab-inv").setAttribute("aria-selected", inv);
+  document.getElementById("tab-risk").setAttribute("aria-selected", !inv);
+  document.getElementById("panel-inv").classList.toggle("active", inv);
+  document.getElementById("panel-risk").classList.toggle("active", !inv);
+}
+document.getElementById("tab-inv").onclick=()=>selectTab("inv");
+document.getElementById("tab-risk").onclick=()=>selectTab("risk");
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.getElementById("brandName").textContent=CONFIG.cliente;
+document.getElementById("brandSub").textContent=CONFIG.entidad;
+document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
+renderChips(); renderTable(); renderRisk();
+</script>
+</body>
+</html>
