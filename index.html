@@ -88,13 +88,14 @@ tr.grouprow td{background:#FBF7F5; border-top:1px dashed var(--line); border-bot
 .grptag{display:inline-block; font-size:10.5px; color:var(--muted); border:1px dashed var(--line); border-radius:20px; padding:2px 8px; font-style:italic; cursor:help; white-space:nowrap}
 
 /* KPI */
-.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:22px}
+.kpis{display:grid; grid-template-columns:repeat(auto-fit,minmax(164px,1fr)); gap:12px; margin-bottom:22px}
 .kpi{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:15px 16px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden}
 .kpi::before{content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--accent,var(--primary))}
 .kpi .label{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-soft); font-weight:500}
 .kpi .val{font-family:'Space Grotesk'; font-weight:700; font-size:26px; margin-top:7px; color:var(--text); line-height:1}
 .kpi .val small{font-size:14px; color:var(--muted); font-weight:500; margin-left:3px}
 .kpi .hint{font-size:11px; color:var(--muted); margin-top:6px}
+.kpi.money .val{font-size:19px; letter-spacing:-0.02em; white-space:nowrap}
 .kpi.k-crit{--accent:var(--crit)} .kpi.k-falt{--accent:var(--faltante)} .kpi.k-exc{--accent:var(--excedente)}
 .kpi.k-ok{--accent:var(--conciliado)} .kpi.k-flag{--accent:var(--flag)}
 
@@ -221,6 +222,7 @@ td.r{text-align:right}
   .wrap,.appbar-inner,.footer{padding-left:16px;padding-right:16px}
   .meta{display:none}
   .kpi .val{font-size:22px}
+  .kpi.money .val{font-size:17px}
 }
 </style>
 </head>
@@ -607,9 +609,9 @@ function renderInvKpis(){
   const enWip = DATA.filter(r=>r.invWip>EPS).length;
   const sinExist = DATA.filter(r=>r.contado && r.fisico<=EPS).length;
   const saldoCards =
-      card("Saldo Anexo (SEER)", fmtMoneyExact(SALDOS.anexo), "valor USD registrado · B23","k-crit")
-    + card("Saldo Inv. Físico", fmtMoneyExact(SALDOS.fisico), "valor USD del conteo · B24","k-ok")
-    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), "anexo sin respaldo físico · B25","k-falt");
+      card("Saldo Anexo (SEER)", fmtMoneyExact(SALDOS.anexo), "valor USD registrado","k-crit money")
+    + card("Saldo Inv. Físico", fmtMoneyExact(SALDOS.fisico), "valor USD del conteo","k-ok money")
+    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), "anexo sin respaldo físico","k-falt money");
   if (clientView){
     host.innerHTML = card("Partidas inventariadas", DATA.length, "padrón depurado")
       + card("Con existencia física", conExist, "encontradas en piso/WIP","k-ok")
@@ -675,7 +677,7 @@ function renderRiskKpis(){
     + card("Críticas", crit, "exposición aduanera alta","k-crit")
     + card("Faltantes / Excedentes", falt+" / "+exc, "contra anexo","k-falt")
     + card("Material no registrado", noReg, "anexo 0 con existencia","k-exc")
-    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), pctSobrante+"% del valor del anexo sin respaldo físico","k-falt")
+    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), pctSobrante+"% del valor del anexo sin respaldo físico","k-falt money")
     + card("Banderas de calidad", flags, "estatus, UM y sin mapeo","k-flag");
   document.getElementById("riskCount").textContent = risks.length;
   document.getElementById("exFalt").textContent = falt;
