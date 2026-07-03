@@ -358,7 +358,7 @@ td.r{text-align:right}
 
 <div class="footer">
   <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
-  <div>Documentos publicados en <code>docs/</code> del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · grupos combinados valuados una sola vez</div>
+  <div>Documentos publicados en la raíz del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · grupos combinados valuados una sola vez</div>
 </div>
 
 <script>
@@ -377,15 +377,15 @@ const CONFIG = {
   // true  = añade el número de parte al final (si hay subcarpetas por parte).
   // false = todos los enlaces abren la misma carpeta compartida.
   evidenceAppendPart: false,
-  // ---- Documentos del proyecto (carpeta docs/ dentro del repo) ----
+  // ---- Documentos del proyecto (en la raíz del repo) ----
   // URL pública del sitio (necesaria para el visor de Office de las .pptx).
   pagesBase: "https://josueko1981.github.io/Masterpiece-Inventario/",
-  docsFolder: "docs/",
+  docsFolder: "",   // archivos en la raíz del repo, junto a index.html
   // false = la sección Documentos se oculta en Vista Cliente (el reporte es interno).
   docsEnVistaCliente: false
 };
 
-/* Documentos publicados en <repo>/docs/ — subir junto con index.html */
+/* Documentos publicados en la raíz del repo — subir junto con index.html */
 const DOCS = [
   {k:"REPORTE · INTERNO", titulo:"Observación de Control de Inventarios",
    desc:"Versión interna con notas de conciliación: exposición financiera B23:C25, tablero de KPIs, partidas críticas, matriz de riesgos y plan a 90 días.",
