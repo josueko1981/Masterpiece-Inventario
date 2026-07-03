@@ -212,6 +212,16 @@ td.r{text-align:right}
 .footer{max-width:1320px; margin:0 auto; padding:30px 26px 50px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:20px}
 .footer code{font-family:'IBM Plex Mono'}
 
+.docsgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-top:4px}
+.doccard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px 17px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:8px}
+.doccard .dc-k{font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--primary); font-family:'IBM Plex Mono'}
+.doccard h4{margin:0; font-size:13.5px; font-weight:600}
+.doccard p{margin:0; font-size:12.5px; color:var(--text-soft); flex:1}
+.doccard .dc-actions{display:flex; gap:8px; flex-wrap:wrap; margin-top:4px}
+.doccard .dc-actions a{text-decoration:none}
+.cfgbtn.primary{background:var(--primary); border-color:var(--primary); color:#fff}
+.cfgbtn.primary:hover{background:var(--primary-deep); border-color:var(--primary-deep); color:#fff}
+
 .cfgbtn{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--text-soft);cursor:pointer;font-size:12px;font-weight:500;padding:7px 12px;border-radius:9px;display:inline-flex;align-items:center;gap:7px;font-family:'Inter'}
 .cfgbtn:hover{border-color:var(--primary);color:var(--primary)}
 .cfgbtn svg{width:14px;height:14px}
@@ -301,6 +311,12 @@ td.r{text-align:right}
     <span style="font-size:12px;color:var(--muted)" id="evState">Evidencia enlazada.</span>
   </div>
 
+  <!-- ===================== DOCUMENTOS DEL PROYECTO ===================== -->
+  <div id="docsBar">
+    <div class="section-head"><h2>Documentos del proyecto</h2><span class="ln"></span><span class="tag">reporte · entrenamientos</span></div>
+    <div class="docsgrid" id="docsGrid"></div>
+  </div>
+
 </section>
 
 <!-- ===================== PANEL: RIESGOS ===================== -->
@@ -310,7 +326,7 @@ td.r{text-align:right}
 
   <div class="exec">
     <h3>Resumen ejecutivo del conteo</h3>
-    <p>El conteo físico independiente cubre las <b>19 partidas</b> del padrón depurado (en la actualización de julio se retiraron <b>9 claves</b> que no tenían saldo en anexo ni existencia física). <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
+    <p>El conteo físico independiente cubre las <b>19 partidas activas</b> del inventario (en la actualización de julio se retiraron <b>9 claves</b> que no tenían saldo en anexo ni existencia física). <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
     <p>El patrón dominante son los <b>insumos textiles</b> (telas de algodón y lino), que concentran las mayores magnitudes y los faltantes más severos —material que el anexo asume importado temporalmente y que no apareció en piso— junto con un caso inverso de <b>material no registrado</b> (existe físicamente con saldo cero en anexo). Las <b>etiquetas</b> muestran ambos extremos: una agotada por completo y otra con más del doble de lo registrado, señal de cruce de claves o descarga de BOM mal aplicada.</p>
     <p><b>Valuación oficial (Hoja 1 · celdas B23:C25).</b> El inventario físico contado se valúa en <b class="num">$187,525.77</b> contra un saldo registrado en el Anexo 24 (SEER) de <b class="num">$518,194.78</b>. Queda un <b>saldo sobrante de <span class="num">$330,669.51</span></b> —el <b>64%</b> del valor del anexo— correspondiente a material importado temporalmente que hoy no tiene respaldo físico en piso. Ésta es la exposición aduanera de referencia para dimensionar descargos pendientes, mermas no reportadas y errores de captura. Los costos por partida (columna <i>VALOR DLLS</i>) ya vienen actualizados y en base homogénea desde el sheet; las claves con celda de valor combinada —<b>BOTTLE</b>, <b>COT</b> y <b>LABEL</b>, por tratarse de materiales idénticos o similares— se valúan <b>una sola vez por grupo</b>, de modo que ninguna suma del reporte las duplica.</p>
     <div class="crit-list" id="critPills"></div>
@@ -342,7 +358,7 @@ td.r{text-align:right}
 
 <div class="footer">
   <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
-  <div>Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · grupos combinados valuados una sola vez</div>
+  <div>Documentos publicados en <code>docs/</code> del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · grupos combinados valuados una sola vez</div>
 </div>
 
 <script>
@@ -360,11 +376,33 @@ const CONFIG = {
   evidenceBase: "https://digizen.tacna.net/index.php/s/JBgoYqf7o8mHzWb",
   // true  = añade el número de parte al final (si hay subcarpetas por parte).
   // false = todos los enlaces abren la misma carpeta compartida.
-  evidenceAppendPart: false
+  evidenceAppendPart: false,
+  // ---- Documentos del proyecto (carpeta docs/ dentro del repo) ----
+  // URL pública del sitio (necesaria para el visor de Office de las .pptx).
+  pagesBase: "https://josueko1981.github.io/Masterpiece-Inventario/",
+  docsFolder: "docs/",
+  // false = la sección Documentos se oculta en Vista Cliente (el reporte es interno).
+  docsEnVistaCliente: false
 };
 
+/* Documentos publicados en <repo>/docs/ — subir junto con index.html */
+const DOCS = [
+  {k:"REPORTE · INTERNO", titulo:"Observación de Control de Inventarios",
+   desc:"Versión interna con notas de conciliación: exposición financiera B23:C25, tablero de KPIs, partidas críticas, matriz de riesgos y plan a 90 días.",
+   file:"Observacion_Control_Inventarios.docx", tipo:"word"},
+  {k:"REPORTE · CLIENTE (EN)", titulo:"Inventory Control Observation",
+   desc:"Versión final en inglés para presentar al cliente — sin observaciones internas. Mismo contenido: exposición, KPIs, críticos, riesgos y plan.",
+   file:"Inventory_Control_Observation.docx", tipo:"word"},
+  {k:"ENTRENAMIENTO", titulo:"Exactitud de Inventario — el KPI que define la operación",
+   desc:"Sesión para planta: concepto y fórmula del KPI, benchmark, meta ≥98%, conteo cíclico ABC, causa raíz y plan de acción a 90 días.",
+   file:"Entrenamiento_Exactitud_Inventario.pptx", tipo:"pptx"},
+  {k:"INDUCCIÓN", titulo:"Sistema Kanban — control visual de inventarios",
+   desc:"Inducción para operadores y almacén: tarjetas, mín/máx, ubicaciones codificadas, conversión de unidades y 5 reglas de oro.",
+   file:"Induccion_Kanban.pptx", tipo:"pptx"}
+];
+
 /* ============================================================
-   DATOS DEL CONTEO  (19 partidas — Hoja 1 · padrón depurado Jul 2026)
+   DATOS DEL CONTEO  (19 partidas activas — Hoja 1 · actualización Jul 2026)
    Se retiraron 9 claves sin saldo en anexo ni existencia física:
    ACRYLICFIX, CARTON TUBE 8X7X84, LABELPLASTIC, MDFSHEET, NAIL,
    POLYBAG, RR-72x6y-N-RMA, SCREW, STAPLEF.
@@ -605,6 +643,7 @@ function renderTable(){
 function renderInvKpis(){
   const host=document.getElementById("invKpis");
   const clientView = !visible.anexo && !visible.diff && !visible.estatus;
+  updateDocsVisibility(clientView);
   const conExist = DATA.filter(r=>r.fisico>EPS).length;
   const enWip = DATA.filter(r=>r.invWip>EPS).length;
   const sinExist = DATA.filter(r=>r.contado && r.fisico<=EPS).length;
@@ -613,7 +652,7 @@ function renderInvKpis(){
     + card("Saldo Inv. Físico", fmtMoneyExact(SALDOS.fisico), "valor USD del conteo","k-ok money")
     + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), "anexo sin respaldo físico","k-falt money");
   if (clientView){
-    host.innerHTML = card("Partidas inventariadas", DATA.length, "padrón depurado")
+    host.innerHTML = card("Partidas inventariadas", DATA.length, "partidas activas")
       + card("Con existencia física", conExist, "encontradas en piso/WIP","k-ok")
       + card("En proceso (WIP)", enWip, "con material en línea")
       + card("Sin existencia", sinExist, "contadas en cero","k-flag")
@@ -629,6 +668,33 @@ function renderInvKpis(){
       + card("Críticas", crit, "≥90% var o no registrado","k-crit")
       + saldoCards;
   }
+}
+/* ---- Documentos del proyecto ---- */
+const SVG_DL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>';
+const SVG_EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+function docUrl(f){ return CONFIG.docsFolder + encodeURIComponent(f); }
+function viewerUrl(f){
+  const abs = CONFIG.pagesBase + CONFIG.docsFolder + encodeURIComponent(f);
+  return "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(abs);
+}
+function renderDocs(){
+  const host = document.getElementById("docsGrid");
+  if(!host) return;
+  host.innerHTML = DOCS.map(d=>{
+    const ver = d.tipo==="pptx"
+      ? `<a class="cfgbtn primary" href="${viewerUrl(d.file)}" target="_blank" rel="noopener">${SVG_EYE} Ver presentación</a>` : "";
+    const dlLabel = d.tipo==="word" ? "Descargar reporte (Word)" : "Descargar PPTX";
+    return `<div class="doccard">
+      <div class="dc-k">${d.k}</div>
+      <h4>${d.titulo}</h4>
+      <p>${d.desc}</p>
+      <div class="dc-actions">${ver}<a class="cfgbtn" href="${docUrl(d.file)}" download>${SVG_DL} ${dlLabel}</a></div>
+    </div>`;
+  }).join("");
+}
+function updateDocsVisibility(clientView){
+  const bar = document.getElementById("docsBar");
+  if(bar) bar.style.display = (clientView && !CONFIG.docsEnVistaCliente) ? "none" : "";
 }
 function card(label,val,hint,cls){
   return `<div class="kpi ${cls||""}"><div class="label">${label}</div><div class="val num">${typeof val==="number"?fmt(val):val}</div><div class="hint">${hint||""}</div></div>`;
@@ -743,7 +809,7 @@ if (CONFIG.logoUrl){ document.getElementById("brandMark").innerHTML = `<img src=
 document.getElementById("brandSub").textContent=CONFIG.entidad;
 document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
 document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidencia enlazada → "+CONFIG.evidenceBase) : "Modo demostración — pega la carpeta para activar los enlaces.";
-renderChips(); renderTable(); renderRisk();
+renderChips(); renderTable(); renderRisk(); renderDocs();
 </script>
 </body>
 </html>
