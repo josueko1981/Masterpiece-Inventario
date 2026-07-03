@@ -389,10 +389,10 @@ const CONFIG = {
 const DOCS = [
   {k:"REPORTE · INTERNO", titulo:"Observación de Control de Inventarios",
    desc:"Versión interna con notas de conciliación: exposición financiera B23:C25, tablero de KPIs, partidas críticas, matriz de riesgos y plan a 90 días.",
-   file:"Observacion_Control_Inventarios.docx", tipo:"word"},
+   file:"Observacion_Control_Inventarios.docx", pdf:"Observacion_Control_Inventarios.pdf", tipo:"word"},
   {k:"REPORTE · CLIENTE (EN)", titulo:"Inventory Control Observation",
    desc:"Versión final en inglés para presentar al cliente — sin observaciones internas. Mismo contenido: exposición, KPIs, críticos, riesgos y plan.",
-   file:"Inventory_Control_Observation.docx", tipo:"word"},
+   file:"Inventory_Control_Observation.docx", pdf:"Inventory_Control_Observation.pdf", tipo:"word"},
   {k:"ENTRENAMIENTO", titulo:"Exactitud de Inventario — el KPI que define la operación",
    desc:"Sesión para planta: concepto y fórmula del KPI, benchmark, meta ≥98%, conteo cíclico ABC, causa raíz y plan de acción a 90 días.",
    file:"Entrenamiento_Exactitud_Inventario.pptx", tipo:"pptx"},
@@ -681,8 +681,9 @@ function renderDocs(){
   const host = document.getElementById("docsGrid");
   if(!host) return;
   host.innerHTML = DOCS.map(d=>{
-    const ver = d.tipo==="pptx"
-      ? `<a class="cfgbtn primary" href="${viewerUrl(d.file)}" target="_blank" rel="noopener">${SVG_EYE} Ver presentación</a>` : "";
+    let ver = "";
+    if (d.tipo==="pptx") ver = `<a class="cfgbtn primary" href="${viewerUrl(d.file)}" target="_blank" rel="noopener">${SVG_EYE} Ver presentación</a>`;
+    else if (d.pdf)      ver = `<a class="cfgbtn primary" href="${docUrl(d.pdf)}" target="_blank" rel="noopener">${SVG_EYE} Ver PDF</a>`;
     const dlLabel = d.tipo==="word" ? "Descargar reporte (Word)" : "Descargar PPTX";
     return `<div class="doccard">
       <div class="dc-k">${d.k}</div>
