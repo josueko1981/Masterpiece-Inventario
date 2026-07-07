@@ -41,7 +41,7 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
   border-bottom:1px solid var(--line);
   box-shadow:0 1px 0 rgba(0,0,0,.02), 0 8px 22px -18px rgba(30,20,18,.45);
 }
-.appbar-inner{max-width:1320px; margin:0 auto; padding:18px 26px 0;}
+.appbar-inner{max-width:1680px; margin:0 auto; padding:18px 26px 0;}
 .brandrow{display:flex; align-items:flex-start; justify-content:space-between; gap:20px; flex-wrap:wrap}
 .brand{display:flex; align-items:center; gap:16px}
 .mark{height:36px; display:flex; align-items:center; flex:none}
@@ -75,7 +75,7 @@ h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif; letter-spacing:-.01em}
 .tab[aria-selected="true"] .count{background:var(--faltante); color:#fff}
 
 /* ---------- Layout ---------- */
-.wrap{max-width:1320px; margin:0 auto; padding:24px 26px 80px}
+.wrap{max-width:1680px; margin:0 auto; padding:24px 26px 80px}
 .panel{display:none; animation:fade .25s ease}
 .panel.active{display:block}
 @keyframes fade{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
@@ -147,19 +147,21 @@ tr.grouprow td{background:#FBF7F5; border-top:1px dashed var(--line); border-bot
 .topscroll::-webkit-scrollbar-thumb{background:var(--primary); border-radius:8px}
 .topscroll::-webkit-scrollbar-thumb:hover{background:var(--primary-deep)}
 .topscroll{scrollbar-width:thin; scrollbar-color:var(--primary) #F0EDEB}
-table{border-collapse:collapse; width:100%; font-size:13px}
+table{border-collapse:collapse; width:100%; font-size:12.5px}
 thead th{
   position:sticky; top:0; z-index:2; background:var(--primary); color:rgba(255,255,255,.94);
-  font-family:'Space Grotesk'; font-weight:600; font-size:11.5px; letter-spacing:.02em;
-  text-align:left; padding:12px 14px; white-space:nowrap; cursor:pointer; user-select:none; border-bottom:1px solid var(--primary-deep);
+  font-family:'Space Grotesk'; font-weight:600; font-size:11px; letter-spacing:.02em;
+  text-align:left; padding:9px 10px; white-space:normal; line-height:1.25; min-width:72px;
+  vertical-align:top; cursor:pointer; user-select:none; border-bottom:1px solid var(--primary-deep);
 }
+thead th[data-key="no"]{min-width:0}
 thead th.r{text-align:right}
 thead th .arr{opacity:.5; font-size:10px; margin-left:4px}
 thead th.sorted .arr{opacity:1; color:#fff}
 thead th.sensitive{background:var(--primary-deep)}
 /* fila de bandas: agrupa columnas por bloque para lectura rápida */
 thead tr.bandrow th{
-  position:sticky; top:0; z-index:3; height:24px; padding:4px 14px; cursor:default;
+  position:sticky; top:0; z-index:3; height:24px; padding:4px 10px; cursor:default;
   font-family:'Space Grotesk'; font-weight:700; font-size:9.5px; letter-spacing:.09em;
   text-transform:uppercase; text-align:left; color:rgba(255,255,255,.85);
   border-bottom:1px solid rgba(255,255,255,.22); white-space:nowrap;
@@ -172,20 +174,20 @@ thead tr.bandrow th{
 thead th .thsub{display:block; font-size:9.5px; font-weight:500; opacity:.75; letter-spacing:.015em; text-transform:none; margin-top:2px}
 th.gstart, td.gstart{border-left:1px solid var(--line-strong)}
 thead th.gstart{border-left:1px solid rgba(255,255,255,.28)}
-tbody td{padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle}
+tbody td{padding:9px 9px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle}
 tbody td.sx{background:rgba(188,20,1,.035)}
 tbody tr:hover td{background:var(--surface-2)}
 tbody tr:hover td.sx{background:rgba(188,20,1,.06)}
 tbody tr:last-child td{border-bottom:0}
 td.r{text-align:right}
 .parte{font-weight:600; color:var(--text)}
-.desc{color:var(--text-soft); max-width:280px; white-space:normal; line-height:1.35; font-size:12.5px}
+.desc{color:var(--text-soft); max-width:210px; white-space:normal; line-height:1.3; font-size:11.5px}
 .evlink{display:inline-flex; align-items:center; gap:6px; color:var(--primary); text-decoration:none; font-weight:600}
 .evlink:hover{text-decoration:underline}
 .evlink svg{width:13px;height:13px}
 .rowno{color:var(--muted); font-family:'IBM Plex Mono'; font-size:12px}
 .dash{color:var(--line-strong)}
-.sub-um{color:var(--muted); font-size:11px; margin-left:3px}
+.sub-um{color:var(--muted); font-size:10.5px; margin-left:3px}
 
 /* badges */
 .badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; font-family:'Inter'; white-space:nowrap}
@@ -232,7 +234,7 @@ td.r{text-align:right}
 .qcard li code{font-family:'IBM Plex Mono'; font-size:11.5px; color:var(--text); background:var(--neutral-bg); padding:1px 6px; border-radius:5px}
 .qcard li .v{color:var(--faltante); font-weight:600; font-family:'IBM Plex Mono'; font-size:11.5px; white-space:nowrap}
 
-.footer{max-width:1320px; margin:0 auto; padding:30px 26px 50px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:20px}
+.footer{max-width:1680px; margin:0 auto; padding:30px 26px 50px; color:var(--muted); font-size:12px; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; border-top:1px solid var(--line); margin-top:20px}
 .footer code{font-family:'IBM Plex Mono'}
 
 .docsgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-top:4px}
@@ -580,13 +582,14 @@ function fmtMoneyExact(v){
   return sign+"$"+Math.abs(v).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 const SVG_LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg>';
+function attEsc(s){ return String(s).replace(/"/g,"&quot;"); }
 function evHref(r){
   if(!CONFIG.evidenceBase) return "#";
   return CONFIG.evidenceAppendPart ? CONFIG.evidenceBase+encodeURIComponent(r.parte) : CONFIG.evidenceBase;
 }
 function evCell(r){
   const live = !!CONFIG.evidenceBase;
-  return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${r.parte}">${SVG_LINK}<span>Evidence</span></a>`;
+  return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${attEsc(r.parte)}">${SVG_LINK}<span>Evidence</span></a>`;
 }
 window.demoEv=function(e){e.preventDefault(); alert("Demo mode.\\nUse “Configure evidence URL” to link the count evidence folder for "+ "this line item."); return false;};
 
@@ -604,7 +607,7 @@ const BANDS = {
 };
 const COLS = [
   {key:"no",     label:"No.",             grp:"id",   cls:"",  sens:false, get:r=>`<span class="rowno">${r.no}</span>`},
-  {key:"parte",  label:"SEER Part No.",   grp:"id",   cls:"",  sens:false, get:r=>`<a class="evlink parte" href="${evHref(r)}" ${CONFIG.evidenceBase?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${r.parte}">${r.parte} ${SVG_LINK}</a>`, sort:r=>r.parte},
+  {key:"parte",  label:"SEER Part No.",   grp:"id",   cls:"",  sens:false, get:r=>`<a class="evlink parte" href="${evHref(r)}" ${CONFIG.evidenceBase?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${attEsc(r.parte)}">${r.parte} ${SVG_LINK}</a>`, sort:r=>r.parte},
   {key:"desc",   label:"Description",     grp:"id",   cls:"",  sens:false, get:r=>`<span class="desc">${r.desc}</span>`, sort:r=>r.desc},
   {key:"invLoc", label:"Location Count",  sub:"qty counted in warehouse",  grp:"fis",  cls:"r", sens:false, get:r=>r.invLoc===null?dash():numCell(r.invLoc, r.umF), sort:r=>r.invLoc??-1},
   {key:"invWip", label:"WIP Count",       sub:"qty in process",            grp:"fis",  cls:"r", sens:false, get:r=>r.invWip===null?dash():numCell(r.invWip, r.umF), sort:r=>r.invWip??-1},
@@ -613,8 +616,8 @@ const COLS = [
   {key:"sistema",label:"Masterpiece System",   sub:"qty per client ERP",   grp:"conc", cls:"r", sens:true,  get:r=>r.sistema===null?dash(r.noMapeo?'#N/D':''):numCell(r.sistema, r.umM!=='#N/D'?r.umM:''), sort:r=>r.sistema??-1},
   {key:"diff",   label:"Difference",      sub:"Physical − Annex · in its UoM", grp:"conc", cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
   {key:"estatus",label:"Status",          sub:"result vs. Annex 24",       grp:"conc", cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus},
-  {key:"valor",  label:"Physical Inventory Value", sub:"USD · col. L",     grp:"usd",  cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?-0.5:-1)},
-  {key:"sobrante", label:"Annex 24 Shortage Balance",  sub:"USD · col. M", grp:"usd",  cls:"r", sens:true, get:r=>sobranteCell(r), sort:r=>r.sobranteDlls??(r.grupoObj?-0.5:-1)}
+  {key:"valor",  label:"Physical Inventory Value", sub:"USD · col. L",     grp:"usd",  cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?r.grupoObj.valor:-1)},
+  {key:"sobrante", label:"Annex 24 Shortage Balance",  sub:"USD · col. M", grp:"usd",  cls:"r", sens:true, get:r=>sobranteCell(r), sort:r=>r.sobranteDlls??(r.grupoObj?r.grupoObj.sobrante:-1)}
 ];
 function numCell(v,um){ return v===null?dash():`<span class="num">${fmt(v)}</span>${um?`<span class="sub-um">${um}</span>`:""}`; }
 function dash(t){ return `<span class="dash">${t||"—"}</span>`; }
@@ -648,7 +651,8 @@ function sobranteCell(r){
    ESTADO DE VISTA
    ============================================================ */
 let visible = {}; COLS.forEach(c=>visible[c.key]=true);
-let sortKey="no", sortDir=1, query="";
+/* Orden default: mayor faltante en Anexo 24 (USD) primero — críticas arriba (madera, telas...) */
+let sortKey="sobrante", sortDir=-1, query="";
 const PRESETS = {
   cliente:   {hide:["anexo","sistema","diff","estatus","sobrante"], filter:null},
   completa:  {hide:[], filter:null},
