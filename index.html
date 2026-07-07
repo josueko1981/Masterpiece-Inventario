@@ -139,6 +139,14 @@ tr.grouprow td{background:#FBF7F5; border-top:1px dashed var(--line); border-bot
 /* table */
 .tablecard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
 .tablescroll{overflow-x:auto}
+/* scroll horizontal superior — espejo del inferior, siempre a la vista */
+.topscroll{overflow-x:auto; overflow-y:hidden; height:16px; background:var(--surface); border-bottom:1px solid var(--line); cursor:grab}
+.topscroll>div{height:1px}
+.topscroll::-webkit-scrollbar{height:11px}
+.topscroll::-webkit-scrollbar-track{background:#F0EDEB; border-radius:8px}
+.topscroll::-webkit-scrollbar-thumb{background:var(--primary); border-radius:8px}
+.topscroll::-webkit-scrollbar-thumb:hover{background:var(--primary-deep)}
+.topscroll{scrollbar-width:thin; scrollbar-color:var(--primary) #F0EDEB}
 table{border-collapse:collapse; width:100%; font-size:13px}
 thead th{
   position:sticky; top:0; z-index:2; background:var(--primary); color:rgba(255,255,255,.94);
@@ -295,7 +303,8 @@ td.r{text-align:right}
   </div>
 
   <div class="tablecard">
-    <div class="tablescroll">
+    <div class="topscroll" id="invTop" aria-hidden="true"><div></div></div>
+    <div class="tablescroll" id="invScroll">
       <table id="invTable">
         <thead><tr id="invHead"></tr></thead>
         <tbody id="invBody"></tbody>
@@ -328,7 +337,7 @@ td.r{text-align:right}
     <h3>Resumen ejecutivo del conteo</h3>
     <p>El conteo físico independiente cubre las <b>19 partidas activas</b> del inventario (en la actualización de julio se retiraron <b>9 claves</b> que no tenían saldo en anexo ni existencia física). <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
     <p>El patrón dominante son los <b>insumos textiles</b> (telas de algodón y lino), que concentran las mayores magnitudes y los faltantes más severos —material que el anexo asume importado temporalmente y que no apareció en piso— junto con un caso inverso de <b>material no registrado</b> (existe físicamente con saldo cero en anexo). Las <b>etiquetas</b> muestran ambos extremos: una agotada por completo y otra con más del doble de lo registrado, señal de cruce de claves o descarga de BOM mal aplicada.</p>
-    <p><b>Valuación oficial (Hoja 1 · celdas B23:C25).</b> El inventario físico contado se valúa en <b class="num">$187,525.77</b> contra un saldo registrado en el Anexo 24 (SEER) de <b class="num">$518,194.78</b>. Queda un <b>saldo sobrante de <span class="num">$330,669.51</span></b> —el <b>64%</b> del valor del anexo— correspondiente a material importado temporalmente que hoy no tiene respaldo físico en piso. Ésta es la exposición aduanera de referencia para dimensionar descargos pendientes, mermas no reportadas y errores de captura. Los costos por partida (columna <i>VALOR DLLS</i>) ya vienen actualizados y en base homogénea desde el sheet; las claves con celda de valor combinada —<b>BOTTLE</b>, <b>COT</b> y <b>LABEL</b>, por tratarse de materiales idénticos o similares— se valúan <b>una sola vez por grupo</b>, de modo que ninguna suma del reporte las duplica.</p>
+    <p><b>Valuación oficial (Hoja 1 · celdas B23:C25).</b> El inventario físico contado se valúa en <b class="num">$187,525.77</b> contra un saldo registrado en el Anexo 24 (SEER) de <b class="num">$518,194.78</b>. Queda un <b>saldo sobrante de <span class="num">$330,669.51</span></b> —el <b>64%</b> del valor del anexo— correspondiente a material importado temporalmente que hoy no tiene respaldo físico en piso. Ésta es la exposición aduanera de referencia para dimensionar descargos pendientes, mermas no reportadas y errores de captura. Los costos por partida (columna <i>VALOR DLLS</i>) ya vienen actualizados y en base homogénea desde el sheet; las claves con celda de valor combinada —<b>BOTTLE</b>, <b>COT</b> y <b>LABEL</b>, por tratarse de materiales idénticos o similares— se valúan <b>una sola vez por grupo</b>, de modo que ninguna suma del reporte las duplica. La columna <b><i>Sobrante $</i></b> (columna <b>M</b> de la Hoja 1) cuantifica el <b>liability por partida</b> —valor en Anexo 24 menos valor del inventario físico, en dólares— y es la base para dimensionar qué requiere <b>cambio de régimen, retorno o reestructura</b> del anexo. <b>Nota de cuadre:</b> la suma de la columna M (grupos una sola vez) da <b class="num">$337,972.00</b>, es decir <b>$7,302.49 por arriba</b> del Saldo Sobrante oficial (B25 · $330,669.51); la diferencia coincide con el sobrante de <b>CHIPCARD</b> ($7,302.48), por lo que se recomienda verificar en el sheet si esa partida quedó fuera del rango del total antes de cualquier presentación a dirección.</p>
     <div class="crit-list" id="critPills"></div>
     <div class="notebox">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -338,7 +347,8 @@ td.r{text-align:right}
 
   <div class="section-head"><h2>Riesgos priorizados</h2><span class="ln"></span><span class="tag">orden: severidad · % variación</span></div>
   <div class="tablecard">
-    <div class="tablescroll">
+    <div class="topscroll" id="riskTop" aria-hidden="true"><div></div></div>
+    <div class="tablescroll" id="riskScroll">
       <table id="riskTable">
         <thead><tr>
           <th>No.</th><th>Parte</th><th>Descripción</th>
@@ -358,7 +368,7 @@ td.r{text-align:right}
 
 <div class="footer">
   <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
-  <div>Documentos publicados en la raíz del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · grupos combinados valuados una sola vez</div>
+  <div>Documentos publicados en la raíz del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · sobrante por partida desde col. <code>M</code> (liability USD) · grupos combinados valuados una sola vez</div>
 </div>
 
 <script>
@@ -442,9 +452,9 @@ const RAW = [
    subtotal de grupo — nunca se duplica en sumas ni en el reporte.
    ============================================================ */
 const GRUPOS = [
-  {id:"BOTTLE", partes:["BOTTLE","BOTTLE-A"],              valor:505.90},
-  {id:"COT",    partes:["COTDCANP","COTICANP","COTICANR"], valor:85651.69},
-  {id:"LABEL",  partes:["LABEL","LABEL-PAPER"],            valor:10530.59}
+  {id:"BOTTLE", partes:["BOTTLE","BOTTLE-A"],              valor:505.90,   sobrante:364.02},
+  {id:"COT",    partes:["COTDCANP","COTICANP","COTICANR"], valor:85651.69, sobrante:36371.92},
+  {id:"LABEL",  partes:["LABEL","LABEL-PAPER"],            valor:10530.59, sobrante:97.45}
 ];
 const VALOR_FISICO = {
   "AlkydPrimer":1771.00, "BOX-CORR":14701.91,
@@ -453,6 +463,27 @@ const VALOR_FISICO = {
   "LINICANP":4394.10, "LINICANR":1882.26, "LUMBPINE-BF":33077.48,
   "MDFVNYL01":22249.71, "PLYWOOD":672.00, "SPRAYER":284.18
 };
+/* ============================================================
+   SALDO SOBRANTE POR PARTIDA (USD) — columna M "SALDO SOBRANTE DLLS" (Hoja 1)
+   = valor en Anexo 24 − valor del inventario físico, en dólares.
+   Cuantifica el LIABILITY aduanero por partida: la base para dimensionar
+   qué requiere cambio de régimen, retorno o reestructura del Anexo 24.
+   ⚠ CELDAS COMBINADAS: mismos grupos que VALOR DLLS (BOTTLE · COT · LABEL);
+   el sobrante del grupo se reporta UNA sola vez en el subtotal.
+   ⚠ NOTA DE CUADRE: Σ col. M (grupos una vez) = $337,972.00 vs. Saldo
+   Sobrante oficial B25 = $330,669.51 → diferencia $7,302.49, que coincide
+   con el sobrante de CHIPCARD ($7,302.48). Verificar en el sheet si esa
+   partida quedó fuera del rango del total antes de presentar a dirección.
+   ============================================================ */
+const SOBRANTE_DLLS = {
+  "AlkydPrimer":116.98, "BOX-CORR":4171.67,
+  'CARTON TUBE KRAFT 84" (6X3X84)':0.00,
+  "CBDTUBE":323.67, "CHIPCARD":7302.48, "GESSO":1544.52,
+  "LINICANP":56630.93, "LINICANR":58944.81, "LUMBPINE-BF":168112.78,
+  "MDFVNYL01":1804.75, "PLYWOOD":1944.00, "SPRAYER":242.02
+};
+const SUMA_SOBRANTE_M = 337972.00; // Σ col. M — no cuadra con B25 por $7,302.49 (≈ CHIPCARD)
+
 /* Saldos oficiales · Hoja 1 celdas B23:C25 — se usan tal cual del sheet */
 const SALDOS = {
   anexo:    518194.78,   // SALDO EN ANEXO (SEER)
@@ -492,7 +523,10 @@ function calc(r){
   const grupoObj = GRUPOS.find(g=>g.partes.includes(r.parte)) || null;
   const vf = VALOR_FISICO[r.parte];
   const valorFisico = grupoObj ? null : (typeof vf==="number" ? vf : null);
-  return {...r, contado, fisico, diff, estatus, pct, tipo, sev, flagEstatus, flagUM, noMapeo, grupoObj, valorFisico};
+  // saldo sobrante en USD (col. M): liability por partida; grupos se valúan en el subtotal
+  const sd = SOBRANTE_DLLS[r.parte];
+  const sobranteDlls = grupoObj ? null : (typeof sd==="number" ? sd : null);
+  return {...r, contado, fisico, diff, estatus, pct, tipo, sev, flagEstatus, flagUM, noMapeo, grupoObj, valorFisico, sobranteDlls};
 }
 const DATA = RAW.map(calc);
 
@@ -552,7 +586,8 @@ const COLS = [
   {key:"fisico", label:"Total Físico",   cls:"r", sens:false, get:r=>r.fisico===null?dash('sin conteo'):`<b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span>`, sort:r=>r.fisico??-1},
   {key:"diff",   label:"Diferencia",     cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
   {key:"estatus",label:"Estatus",        cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus},
-  {key:"valor",  label:"Valor Físico $", cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?-0.5:-1)}
+  {key:"valor",  label:"Valor Físico $", cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?-0.5:-1)},
+  {key:"sobrante", label:"Sobrante $ (col. M)", cls:"r", sens:true, get:r=>sobranteCell(r), sort:r=>r.sobranteDlls??(r.grupoObj?-0.5:-1)}
 ];
 function numCell(v,um){ return v===null?dash():`<span class="num">${fmt(v)}</span>${um?`<span class="sub-um">${um}</span>`:""}`; }
 function dash(t){ return `<span class="dash">${t||"—"}</span>`; }
@@ -575,13 +610,20 @@ function valorCell(r){
   return `<b class="num">${fmtMoney(r.valorFisico)}</b>`;
 }
 
+function sobranteCell(r){
+  if (r.grupoObj) return `<span class="grptag" title="Celda combinada en Hoja 1: el saldo sobrante de ${r.grupoObj.partes.join(" + ")} es ${fmtMoneyExact(r.grupoObj.sobrante)} y se reporta una sola vez en el subtotal del grupo para no duplicar la suma.">grupo ${r.grupoObj.id}</span>`;
+  if (r.sobranteDlls===null) return dash();
+  if (r.sobranteDlls<=EPS) return `<b class="num">$0.00</b>`;
+  return `<b class="num neg" title="Liability aduanero: valor en Anexo 24 sin respaldo físico — candidato a cambio de régimen, retorno o reestructura.">${fmtMoneyExact(r.sobranteDlls)}</b>`;
+}
+
 /* ============================================================
    ESTADO DE VISTA
    ============================================================ */
 let visible = {}; COLS.forEach(c=>visible[c.key]=true);
 let sortKey="no", sortDir=1, query="";
 const PRESETS = {
-  cliente:   {hide:["anexo","sistema","diff","estatus"], filter:null},
+  cliente:   {hide:["anexo","sistema","diff","estatus","sobrante"], filter:null},
   completa:  {hide:[], filter:null},
   auditoria: {hide:[], filter:"diff"}
 };
@@ -631,12 +673,13 @@ function renderTable(){
     let h = rowHtml(r);
     GRUPOS.forEach(g=>{
       if(lastIdx[g.id]===i){
-        h += `<tr class="grouprow"><td colspan="${visCols.length}"><span class="gr-l">Σ Valor grupo <b>${g.id}</b> · ${g.partes.join(" + ")} <i>(celda combinada — materiales idénticos/similares, se suma una sola vez)</i></span><span class="gr-v num">${fmtMoneyExact(g.valor)}</span></td></tr>`;
+        h += `<tr class="grouprow"><td colspan="${visCols.length}"><span class="gr-l">Σ Valor grupo <b>${g.id}</b> · ${g.partes.join(" + ")} <i>(celda combinada — materiales idénticos/similares, se suma una sola vez)</i></span><span class="gr-v num">Valor ${fmtMoneyExact(g.valor)}${visible.sobrante?` &nbsp;·&nbsp; Sobrante <span class="neg">${fmtMoneyExact(g.sobrante)}</span>`:""}</span></td></tr>`;
       }
     });
     return h;
   }).join("");
   renderInvKpis();
+  syncTopScroll();
 }
 
 /* ---- KPIs inventario (reaccionan a Vista Cliente) ---- */
@@ -662,11 +705,13 @@ function renderInvKpis(){
     const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
     const crit = DATA.filter(r=>r.sev==="CRÍTICO").length;
     const conDif = falt+exc;
+    const sobranteM = card("Σ Sobrante col. M", fmtMoneyExact(SUMA_SOBRANTE_M),
+      "liability por partida — difiere $7,302.49 del B25 (≈ CHIPCARD), ver nota","k-falt money");
     host.innerHTML = card("Con diferencia", conDif, "vs. saldo del anexo","k-crit")
       + card("Faltantes", falt, "físico < anexo","k-falt")
       + card("Excedentes", exc, "físico > anexo","k-exc")
       + card("Críticas", crit, "≥90% var o no registrado","k-crit")
-      + saldoCards;
+      + saldoCards + sobranteM;
   }
 }
 /* ---- Documentos del proyecto ---- */
@@ -700,6 +745,23 @@ function updateDocsVisibility(clientView){
 function card(label,val,hint,cls){
   return `<div class="kpi ${cls||""}"><div class="label">${label}</div><div class="val num">${typeof val==="number"?fmt(val):val}</div><div class="hint">${hint||""}</div></div>`;
 }
+
+/* ---- scroll horizontal superior (espejo del inferior) ---- */
+function bindTopScroll(topId, scId){
+  const top=document.getElementById(topId), sc=document.getElementById(scId);
+  if(!top||!sc) return;
+  top.addEventListener("scroll",()=>{ sc.scrollLeft=top.scrollLeft; });
+  sc.addEventListener("scroll",()=>{ top.scrollLeft=sc.scrollLeft; });
+}
+function syncTopScroll(){
+  [["invTop","invScroll"],["riskTop","riskScroll"]].forEach(([t,s])=>{
+    const top=document.getElementById(t), sc=document.getElementById(s);
+    if(!top||!sc||!top.firstElementChild) return;
+    top.firstElementChild.style.width = sc.scrollWidth+"px";
+    top.style.display = (sc.scrollWidth > sc.clientWidth+1) ? "" : "none";
+  });
+}
+window.addEventListener("resize", syncTopScroll);
 
 /* ---- presets ---- */
 document.querySelectorAll(".segmented button").forEach(b=>{
@@ -783,6 +845,7 @@ function renderRisk(){
           "La unidad de compra/anexo no coincide con la del sistema: impide descargar BOM y conciliar.")
   + qcard("03","Sin mapeo en sistema (#N/D)", noMap.map(r=>[`${r.parte}`, "no reconocida"]),
           "El ERP no reconoce la clave: la partida queda fuera de cualquier descargo automático.");
+  syncTopScroll();
 }
 function qcard(n,title,items,note){
   const lis = items.length? items.map(([k,v])=>`<li><code>${k}</code><span class="v">${v}</span></li>`).join("") : `<li style="color:var(--muted)">Sin hallazgos</li>`;
@@ -798,6 +861,7 @@ function selectTab(which){
   document.getElementById("tab-risk").setAttribute("aria-selected", !inv);
   document.getElementById("panel-inv").classList.toggle("active", inv);
   document.getElementById("panel-risk").classList.toggle("active", !inv);
+  syncTopScroll();
 }
 document.getElementById("tab-inv").onclick=()=>selectTab("inv");
 document.getElementById("tab-risk").onclick=()=>selectTab("risk");
@@ -810,7 +874,8 @@ if (CONFIG.logoUrl){ document.getElementById("brandMark").innerHTML = `<img src=
 document.getElementById("brandSub").textContent=CONFIG.entidad;
 document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
 document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidencia enlazada → "+CONFIG.evidenceBase) : "Modo demostración — pega la carpeta para activar los enlaces.";
-renderChips(); renderTable(); renderRisk(); renderDocs();
+bindTopScroll("invTop","invScroll"); bindTopScroll("riskTop","riskScroll");
+renderChips(); renderTable(); renderRisk(); renderDocs(); syncTopScroll();
 </script>
 </body>
 </html>
