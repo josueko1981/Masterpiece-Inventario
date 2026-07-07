@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>MASTERPIECE · Inventario Físico — Tacna Shelter</title>
+<title>MASTERPIECE · Physical Inventory — Tacna Shelter</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -157,6 +157,21 @@ thead th.r{text-align:right}
 thead th .arr{opacity:.5; font-size:10px; margin-left:4px}
 thead th.sorted .arr{opacity:1; color:#fff}
 thead th.sensitive{background:var(--primary-deep)}
+/* fila de bandas: agrupa columnas por bloque para lectura rápida */
+thead tr.bandrow th{
+  position:sticky; top:0; z-index:3; height:24px; padding:4px 14px; cursor:default;
+  font-family:'Space Grotesk'; font-weight:700; font-size:9.5px; letter-spacing:.09em;
+  text-transform:uppercase; text-align:left; color:rgba(255,255,255,.85);
+  border-bottom:1px solid rgba(255,255,255,.22); white-space:nowrap;
+}
+.band-id{background:var(--primary)}
+.band-fis{background:var(--primary)}
+.band-conc{background:var(--primary-deep)}
+.band-usd{background:var(--ink)}
+#invHead th{top:33px}
+thead th .thsub{display:block; font-size:9.5px; font-weight:500; opacity:.75; letter-spacing:.015em; text-transform:none; margin-top:2px}
+th.gstart, td.gstart{border-left:1px solid var(--line-strong)}
+thead th.gstart{border-left:1px solid rgba(255,255,255,.28)}
 tbody td{padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap; vertical-align:middle}
 tbody td.sx{background:rgba(188,20,1,.035)}
 tbody tr:hover td{background:var(--surface-2)}
@@ -253,22 +268,22 @@ td.r{text-align:right}
         <div class="mark" id="brandMark"><span class="wordmark">TACNA</span></div>
         <div class="divider"></div>
         <div>
-          <h1>Inventario Físico · <span id="brandName">MASTERPIECE</span></h1>
+          <h1>Physical Inventory · <span id="brandName">MASTERPIECE</span></h1>
           <div class="sub" id="brandSub">Entidad Tacna · Modelo Shelter · Conteo físico independiente</div>
         </div>
       </div>
       <div class="meta">
-        <div class="item"><div class="k">Partidas</div><div class="v num" id="metaSku">28</div></div>
-        <div class="item"><div class="k">Conteo</div><div class="v" id="metaDate">Jun 2026</div></div>
-        <div class="item"><div class="k">Estado</div><div class="v">Conciliación interna</div></div>
+        <div class="item"><div class="k">Line Items</div><div class="v num" id="metaSku">19</div></div>
+        <div class="item"><div class="k">Count</div><div class="v" id="metaDate">Jun 2026</div></div>
+        <div class="item"><div class="k">Status</div><div class="v">Internal reconciliation</div></div>
       </div>
     </div>
     <nav class="tabs" role="tablist">
       <button class="tab" id="tab-inv" role="tab" aria-selected="true" aria-controls="panel-inv">
-        <span class="dot"></span> Inventario Físico
+        <span class="dot"></span> Physical Inventory
       </button>
       <button class="tab" id="tab-risk" role="tab" aria-selected="false" aria-controls="panel-risk">
-        <span class="dot"></span> Riesgos <span class="count" id="riskCount">0</span>
+        <span class="dot"></span> Risks <span class="count" id="riskCount">0</span>
       </button>
     </nav>
   </div>
@@ -284,21 +299,21 @@ td.r{text-align:right}
     <div class="cb-top">
       <span class="cb-title">
         <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Vista de presentación
+        Presentation view
       </span>
-      <div class="segmented" role="group" aria-label="Vista predefinida">
-        <button class="seg-client" data-preset="cliente" aria-pressed="false">Vista Cliente</button>
-        <button data-preset="completa" aria-pressed="true">Vista Completa</button>
-        <button data-preset="auditoria" aria-pressed="false">Auditoría</button>
+      <div class="segmented" role="group" aria-label="Preset view">
+        <button class="seg-client" data-preset="cliente" aria-pressed="false">Client View</button>
+        <button data-preset="completa" aria-pressed="true">Full View</button>
+        <button data-preset="auditoria" aria-pressed="false">Audit</button>
       </div>
       <div class="spacer"></div>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="search" type="search" placeholder="Buscar parte o descripción…" aria-label="Buscar" />
+        <input id="search" type="search" placeholder="Search part or description…" aria-label="Search" />
       </div>
     </div>
     <div class="cb-cols" id="colChips">
-      <span class="lead">Columnas</span>
+      <span class="lead">Columns</span>
     </div>
   </div>
 
@@ -306,7 +321,7 @@ td.r{text-align:right}
     <div class="topscroll" id="invTop" aria-hidden="true"><div></div></div>
     <div class="tablescroll" id="invScroll">
       <table id="invTable">
-        <thead><tr id="invHead"></tr></thead>
+        <thead><tr id="invBand" class="bandrow"></tr><tr id="invHead"></tr></thead>
         <tbody id="invBody"></tbody>
       </table>
     </div>
@@ -315,14 +330,14 @@ td.r{text-align:right}
   <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center">
     <button class="cfgbtn" id="cfgEvidence">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-      Configurar URL de evidencia (Digizen / Drive)
+      Configure evidence URL (Digizen / Drive)
     </button>
-    <span style="font-size:12px;color:var(--muted)" id="evState">Evidencia enlazada.</span>
+    <span style="font-size:12px;color:var(--muted)" id="evState">Evidence linked.</span>
   </div>
 
   <!-- ===================== DOCUMENTOS DEL PROYECTO ===================== -->
   <div id="docsBar">
-    <div class="section-head"><h2>Documentos del proyecto</h2><span class="ln"></span><span class="tag">reporte · entrenamientos</span></div>
+    <div class="section-head"><h2>Project Documents</h2><span class="ln"></span><span class="tag">report · training decks</span></div>
     <div class="docsgrid" id="docsGrid"></div>
   </div>
 
@@ -334,41 +349,44 @@ td.r{text-align:right}
   <div class="kpis" id="riskKpis"></div>
 
   <div class="exec">
-    <h3>Resumen ejecutivo del conteo</h3>
-    <p>El conteo físico independiente cubre las <b>19 partidas activas</b> del inventario (en la actualización de julio se retiraron <b>9 claves</b> que no tenían saldo en anexo ni existencia física). <b id="exFalt">—</b> presentan <b>faltante</b> contra el saldo del anexo y <b id="exExc">—</b> presentan <b>excedente</b>. La conciliación no es marginal: hay partidas con desviaciones superiores al 90%.</p>
-    <p>El patrón dominante son los <b>insumos textiles</b> (telas de algodón y lino), que concentran las mayores magnitudes y los faltantes más severos —material que el anexo asume importado temporalmente y que no apareció en piso— junto con un caso inverso de <b>material no registrado</b> (existe físicamente con saldo cero en anexo). Las <b>etiquetas</b> muestran ambos extremos: una agotada por completo y otra con más del doble de lo registrado, señal de cruce de claves o descarga de BOM mal aplicada.</p>
-    <p><b>Valuación oficial (Hoja 1 · celdas B23:C25).</b> El inventario físico contado se valúa en <b class="num">$187,525.77</b> contra un saldo registrado en el Anexo 24 (SEER) de <b class="num">$518,194.78</b>. Queda un <b>saldo sobrante de <span class="num">$330,669.51</span></b> —el <b>64%</b> del valor del anexo— correspondiente a material importado temporalmente que hoy no tiene respaldo físico en piso. Ésta es la exposición aduanera de referencia para dimensionar descargos pendientes, mermas no reportadas y errores de captura. Los costos por partida (columna <i>VALOR DLLS</i>) ya vienen actualizados y en base homogénea desde el sheet; las claves con celda de valor combinada —<b>BOTTLE</b>, <b>COT</b> y <b>LABEL</b>, por tratarse de materiales idénticos o similares— se valúan <b>una sola vez por grupo</b>, de modo que ninguna suma del reporte las duplica. La columna <b><i>Sobrante $</i></b> (columna <b>M</b> de la Hoja 1) cuantifica el <b>liability por partida</b> —valor en Anexo 24 menos valor del inventario físico, en dólares— y es la base para dimensionar qué requiere <b>cambio de régimen, retorno o reestructura</b> del anexo. <b>Nota de cuadre:</b> la suma de la columna M (grupos una sola vez) da <b class="num">$337,972.00</b>, es decir <b>$7,302.49 por arriba</b> del Saldo Sobrante oficial (B25 · $330,669.51); la diferencia coincide con el sobrante de <b>CHIPCARD</b> ($7,302.48), por lo que se recomienda verificar en el sheet si esa partida quedó fuera del rango del total antes de cualquier presentación a dirección.</p>
+    <h3>Executive summary of the count</h3>
+    <p>The independent physical count covers the <b>19 active line items</b> of the inventory (the July update removed <b>9 part numbers</b> with no annex balance and no physical stock). <b id="exFalt">—</b> show a <b>shortage</b> against the annex balance and <b id="exExc">—</b> show an <b>overage</b>. The reconciliation gap is not marginal: some line items deviate by more than 90%.</p>
+    <p>The dominant pattern is <b>textile materials</b> (cotton and linen fabrics), which concentrate the largest magnitudes and the most severe shortages —material the annex assumes was temporarily imported but was not found on the floor— together with the opposite case of <b>unregistered material</b> (physically on hand with a zero annex balance). The <b>labels</b> show both extremes: one fully depleted and another with more than double the registered quantity, a sign of crossed part numbers or misapplied BOM discharges.</p>
+    <p><b>Official valuation (Sheet 1 · cells B23:C25).</b> The physical inventory counted is valued at <b class="num">$187,525.77</b> against an Annex 24 (SEER) registered balance of <b class="num">$518,194.78</b>, leaving an <b>Annex 24 shortage balance of <span class="num">$330,669.51</span></b> —<b>64%</b> of the annex value— temporarily imported material with no physical backing on the floor today. This is the customs exposure of reference for sizing pending discharges, unreported scrap and data-entry errors. Per-item costs (<i>VALOR DLLS</i> column) come from the sheet already updated and on a homogeneous basis; part numbers with a merged value cell —<b>BOTTLE</b>, <b>COT</b> and <b>LABEL</b>, being identical or similar materials— are valued <b>once per group</b>, so no total in this report double-counts them. The <b><i>Annex 24 Shortage Balance</i></b> column (column <b>M</b> of Sheet 1, labeled <i>"Saldo Sobrante DLLS"</i> in the sheet) quantifies the <b>per-item liability</b> —Annex 24 value minus physical inventory value, in dollars— and is the basis for sizing what requires a <b>change of customs regime, return or Annex 24 restructuring</b>. <b>Reconciliation note (Jul 2026 update):</b> the sum of column M —counting groups once— is <b class="num">$330,669.52</b>, which <b>matches the official balance</b> (B25 · $330,669.51) except for a ¢1 rounding difference. The $7,302 discrepancy found in the previous version was corrected in the sheet (COT group shortage: $36,371.92 → $29,069.44), so the figure can be presented to management without caveats.</p>
     <div class="crit-list" id="critPills"></div>
     <div class="notebox">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <div>La severidad se calcula por <b>% de variación contra el anexo</b>. El <b>valor $</b> por partida proviene de <code>VALOR DLLS</code> (Hoja 1) con costos ya actualizados. Los grupos con celda combinada (<b>BOTTLE · COT · LABEL</b>) se reportan como subtotal de grupo y se suman <b>una sola vez</b>. Los saldos totales provienen de las celdas <code>B23:C25</code> de la Hoja 1 y se muestran tal cual.</div>
+      <div>Severity is computed from the <b>% variance against the annex</b>. The per-item <b>$ value</b> comes from <code>VALOR DLLS</code> (Sheet 1) with updated costs. Merged-cell groups (<b>BOTTLE · COT · LABEL</b>) are reported as a group subtotal and added <b>only once</b>. Official totals come from cells <code>B23:C25</code> of Sheet 1 and are shown as-is.</div>
     </div>
   </div>
 
-  <div class="section-head"><h2>Riesgos priorizados</h2><span class="ln"></span><span class="tag">orden: severidad · % variación</span></div>
+  <div class="section-head"><h2>Prioritized Risks</h2><span class="ln"></span><span class="tag">sorted by severity · % variance</span></div>
   <div class="tablecard">
     <div class="topscroll" id="riskTop" aria-hidden="true"><div></div></div>
     <div class="tablescroll" id="riskScroll">
       <table id="riskTable">
         <thead><tr>
-          <th>No.</th><th>Parte</th><th>Descripción</th>
-          <th class="r">Saldo anexo</th><th class="r">Físico</th><th class="r">Diferencia</th>
-          <th class="r">% Var</th><th>Tipo</th><th>Severidad</th><th class="r">Valor Físico $</th><th>Evidencia</th>
+          <th>No.</th><th>SEER Part No.</th><th>Description</th>
+          <th class="r">Annex 24 Balance <span class="thsub">active imported qty</span></th>
+          <th class="r">Total Physical <span class="thsub">Location + WIP · qty</span></th>
+          <th class="r">Difference <span class="thsub">Physical − Annex · in its UoM</span></th>
+          <th class="r">% Var</th><th>Type</th><th>Severity</th>
+          <th class="r">Physical Inv. Value <span class="thsub">USD · col. L</span></th><th>Evidence</th>
         </tr></thead>
         <tbody id="riskBody"></tbody>
       </table>
     </div>
   </div>
 
-  <div class="section-head"><h2>Banderas de calidad de datos</h2><span class="ln"></span><span class="tag">hallazgos de control</span></div>
+  <div class="section-head"><h2>Data Quality Flags</h2><span class="ln"></span><span class="tag">control findings</span></div>
   <div class="qgrid" id="qgrid"></div>
 
 </section>
 </main>
 
 <div class="footer">
-  <div>Dashboard de conciliación · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">vista interna previa al entregable formal</span></div>
-  <div>Documentos publicados en la raíz del repositorio · Diferencia recalculada como <code>Físico − Saldo&nbsp;Anexo</code> · valor $ desde <code>VALOR DLLS</code> (costos actualizados Jul 2026) · saldos oficiales <code>B23:C25</code> · sobrante por partida desde col. <code>M</code> (liability USD) · grupos combinados valuados una sola vez</div>
+  <div>Reconciliation dashboard · <b>MASTERPIECE</b> · Tacna Shelter — <span class="num">internal view prior to the formal deliverable</span></div>
+  <div>Documents published at the repository root · Difference recalculated as <code>Physical − Annex&nbsp;Balance</code> · $ value from <code>VALOR DLLS</code> (costs updated Jul 2026) · per-item Annex 24 shortage balance from col. <code>M</code> (USD liability) · official balances <code>B23:C25</code> · merged groups valued once</div>
 </div>
 
 <script>
@@ -377,8 +395,8 @@ td.r{text-align:right}
    ============================================================ */
 const CONFIG = {
   cliente: "MASTERPIECE",
-  entidad: "Entidad Tacna · Modelo Shelter · Conteo físico independiente",
-  fechaConteo: "Jun 2026 · costos Jul 2026",
+  entidad: "Tacna Entity · Shelter Model · Independent Physical Count",
+  fechaConteo: "Jun 2026 · Jul 2026 costs",
   // Logo TACNA: pega aquí la URL del archivo oficial (PNG/SVG) y reemplaza el wordmark.
   // Recomendado: sube el archivo al repo (p. ej. logo-tacna.svg) y pon "logo-tacna.svg".
   logoUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVcAAABQCAYAAACtQzYUAABSQklEQVR42u29e3gb13Uv+tt7Bg+ORAEDEpZsOQ/GERndPNpCDT4lJmGaYZqmjtumDs0wjxoVmaJVc9Kqr5z23HPanN72tD1t1fa0StCILtTWVWFdt3Xt3C/nFGFokHZZfCHaxm0UkkmUxI9YAYghRGuIx8ze94/ZAw4gUiKJoRw73N8HmyLAwczea6+91m+t9VvA3nhJxsL4KC3NTPn4/Jx/YXzUd80HKAXn7J85Z89yzl4PAJwziXMm7c3e3tgbuzM4ZxKfn/Pz+Tnfwviof2F81N/yfpBzluOccfH6UOO9+bmmz8p703lTFoxos9OS2j/ItdlpUkgl0TeZNjCZrjo+81YAdyCfo4tnTlcAHNBmp28B8CIAAwC02em9ydwbe8PFfQlAAsCRz5HFM6dBCDUAmC2fCyOfu1vTdSxOjN0CINR78pT1ZiS6qbGzp1xvwiCEcltBOhaMIp+TybHjNc6ZAuBXAfyopusA8GIxm9kvPvpPAGoAUEgl9yZzb+yNXdyX9ijNTPlCA0NVYdS8G0CqkEqSYjZTWdOWAQDheAKqpZwBAGLv7inX3R6lmSlJVRSPpusIDQxVNviIgkj0N/j8XGhxYkwCMGy/4VCsAMABeDln8uLEGN+b2b2xN9qwVufnZESisjY7veG+5Jz1AfgVAJ6F8dE1APLFEyNv6Y4NE/ERf2XFYdnmc2TPcr2JrkY2ICE0MGQ23AtKwU3jDgAK8rn64pnT0Ganvx/AR+01KGYz0C4t2zBB3R+Ep5jNeAFw7dKy1jeZNhbGR/fw1r2xN7Y5njhASKxsYnFiDOTYccO2VjlnfgCvBeBDPlfRdJ1qs9P3q4rygG2FFrMZVMtlLJ1rQHgEABNwAjRd53vK9eZYq7I2Oy0dGrkfTXiqadwOIAngsKbrhnDxA8VspjH/wtXwdirWQVgH94qFNN9jQAeApXPpvUneG3tjm8YO8jkZ+RwVv6o63j4O4E8AyJquVwqppAdAuCCUqj2kiolOhXhrXgJvjfNVndfFHkY4nmh8rhW2a1KuwjIitsbujg2/oibanjDHc7G+yTTb4aJJAMjixBhsxRcaGHKeij0ABpHPQZudfj2AdzgXQFiqJoA6AOJXqUcJUSr8DQmMkWq5bPoCgcN8fu6jiERnP+Oh8/Z3E0JNl4Sv6TleCaP35CkgEgUAU+BqW9uEgKTNTuPiiZFWOdkV+es9e37L9+fSWtPFiTG6G/u79XovXHjYvOsKf0lgLDuAXEglIfZJ3fFeFMAbAUCbnb5bVZQ3arreui8bCrhTIah7QSmVPBKAmpcB+tYei+ydba7iOX5y7HhFLOLPIZ87LRauUsxmfNVymTBmAuAAocAmskepBMYMVFZQOfLAqL/37HkA+D1C6C/Z34NItHozN+be2BsvW8sV8BJCq+LffwbgI9rstL0v/dVyGYyJuNaN9yWvrKCm9nT5xGEy3jeZflAYp/6+yXRlDxbYjRGJ/jifnzu+eOY0FifGvtdxqvvXtGXmBML9QUYolSUAYJxttqDOX3Y6D8VsoD34tTQzJQOgoYGh2iscqvGGBobqLXP5nbT5PYTQ+t7mcc1i9Thlmkgy56bxq5yzVy1OjGFxYuydLfvSqKysX+OafWldGM5/29DdjYbMOSO2BbQwPnobgID4Yv4KtWy5iPzxcDzxfGhg6Iq9MDeyBMVn7NPwNgAB4X7UAPi12elxANFW98IXpJQQKish2jjMGGewrNgbehYM+ZyBSFTbROnuSAhFPh84Z7cCCIqTnBWzGfpyW1CHO8qFu00EPPMVQmjNdokJoWyDeeDi530ADmuz09LFEyO7JfscAI4+eIEAqIcGhr5CCK0/cYCQQyP3k51CVFtYay4Uzy0AQoVUcjf2NwdAxFrUATxrW3FPHCBktyECx/rWOGeKNjv9GgHDvVabnT4JoLt1X3YqRIKPykpoXeS3si/rXg55HQohm+kOeXFizIt1kPdjAH5YYENVAL5XmGJlsCL4HiEAHwfwWQBYnBjzQOSTbrZ4AKSF8VGmzU7vU/sHPw4LRyUAqsVsxl/MZl5nf75aLsMXpF5LQzKAg7D1i23nnqm4303z6bYrhOJatrX0nwH8QCGV5OL5vS+3RXXgfRbmks95EIkuA/gJAEt8fs6DfE4GsNb0h9bv7Hn4PuRzfwBgv1DMVLzcHKbY8HI4nri8MD4a75tMfz32+X/yaLouYTK95uaXPXGAkMWJMQ/nzEA+5wEwDsCuKHJ7rU2xFyiA5wD8LIAvAcChkfslTKaN3ZQBbXa6ozQzVQkNDJkiE+dMIZWUitkMitlMt/25tRUNALy+IEUdjIBztJy42/1qCYCHc1Z/qjfcrFwBULHh6OLE2PcAOPrd4EKIKN9Bx78pJtPXWzwCwNs3mb6KyfSV0szUEVVRjgorAABgXC5hVecVy72AR2q4FzteOKcF27aV0Sidzeckztn/BeBObXZ6BMCttpJ6uQ5nsEjTdWB2GqqifJTPz/0dOXZ8GkB9YXyU9p49z20rQ9N1p/LsAvDWm3W/hVTyDb0nT/0nfvb83xNCZxwHH3cZS5eF9V4VnunN2N93ADjQYiDslsUqAaCE0KsCBroHwFghlXxjY+9eWua2AekPwquEZGrf1nUguRt6IACwdC693DeZrgHAk0e6SKty5cKcZgvjowWHoqjUvfCDkHaUwnfMoFSCVDHZqs6N7hi8AGqqoqxt1dV+6u4hrvZ01cUk+i+eGHnRtlAZM6oA8cEL+L2kUV+8Bbd/a6eyrkN140L5nEcE3EzO2Q8in/vtQiqJ5x57pMKY4V/X4S/D9RZy+sw/XMDSuXRN7enyHn3wwscAHOXzc/9Gjh3XwvGEpM1O295L05prs9MVAOVCKhnQLi3XAUhKSKZurSFAGsfj0rl0Ve3p8oXjiZ9X87leztm/EEJfRD4nIRI1XV4Ap2FWsw8ia39z//UCONvZW3rJMPzBhrX/fDieqDmMlV0TqMWJMdJ79rwhFOvrAfxWIZV8y3OPPQK9ZNSVkOzxq5SAczf3ZUOJqj1dASwtb/ictJjNEMfpfwWAUS2XDctd4gY4MwD+CnjBEPlpdQBQ+we9iEQ7Npqw1lGamdrXqRB+59JybWF89Fh3bPjPAHyfdmlZ10tG3VMjALjBQTilkrXRXYKz7MOulVfgrivbl9fFM6epQ5nUbXhBLxm1ygoM6xnwsltbDmJwDoODGBWNGQC4cbnECqkkCqnkAIA/5ZzdW0glTbV/kHHOPMJ6BOeMcM68AORCKinkHgYAw2Ruyj6z9hK37q9aLrNCKglN1wcBfIpzdq+m67I2O03s+2vTopPvusL50rl0nXMW4ZwlAQwXs5mKcblUq3u5hUu7sL+teYLhqREDgBGOJ4zdPqE5Z4TPz3n6JtOGwJTfqyrK7xVSybcUsxnoJcMAwBgzTADr+5KQdr7UOsUJlY3LJSbw85/gnP0W5+xWcSjbHghkAIxzdgDA4ad6w68SGAKpe4kXhLySsgl4p0Lsk1UD8AyAyzbYrirKNcEEhxt5FQD4/NzrFs+c/jCADwOAL0irAGSTUgLOQDiHe5ZOkwt53WTlrQY1ABiCx+Dw4sTYoWI2UwUg+4LUTwhkSoSbhJdXTMu5XZSQDAByjTG+dC595cgDowcAjAF4pm8y/Rgm03amRN0yeCkHUFsYH1218TNfkAKAJFFKGXdVIwCEQAlRmTGDLZ1LXwFwQO0f/CCAL4UGhh4TcuZzYME7xSBlAMZ7DJgcOALgJ8PxBL756IVqVeey4pdpIxre5pAIBcBQ8xIqlkNSlfWQejiewPUgt50oVuHRSUKeb0U+9xFN199dzGaYdmlZV0LyfgCy7fYz7t6+pIRKq7phqABVFaUfwBsAnH+PgW85YBBGjculGoA7ATzSHRu+S7u0XJcqJqeUesE5XvYvIdSMmTXTL1H5YEgG8P8BGAXwlHww5H3iACGIRK8R5t6Tp7wimITSzNStmq5/CsCPC7cKADwEnOwQt9m2gm1zo+GFCw/XAbwB+dwkgAd0TZO0S8uQKPVYAshe9uttH24EjADwFLMZaLoObXa6tgEE5PTaKk5PgcCRhuOyLDq+Wy5mMxApQlcdMJAbRg1vCjblcyikkqiuMNKk7N16LgASpQjHE6aqKHVEoo03VEVxezt4xHU5gLsBXNB0fbCQSqJaLlMASsPIcXtfOizfarlsB5f1FvjF0rAiReKQALoDANiqVYHwikrDqqxw5gsEeHdsmAH4OiH0y4TQK92xYeqwYABYUdbSzJREjh2vEEJrnLPjav/gzwJ4JwBVu7S8tqrzukQpvYmYNOWcyfapvd2/FVACB6Bquj4A4BbHRiOuCaJwvSiVbvhad9N2Q9SI/R9WSCWrhVRSdxxURLhuJufMzzn7waMPXhiFlR3DCDjdTfm3vQNfkHqq5bJRzGbWABwvzUyNgFIpNDB0hXMmlWam2oIHBOQhAzA1XV9BC5We28MXCFjecCR6GM5MBKtazr2Rz1FCKCfHjleFon1TIZXsWDqXLpuMmXbAaje8yGvXEXUAzXObzzUCWtBmp525PUS4Ra+IYbm6hr3RSDiekAAErge2Hxq5n6iKIonN5wPwC8jn3ldIJbF0Ll31q7SjMbm7oFhtd80fbMJdWZ/ITX3ySNd2rV5n4KZaSCVfAHCoUyFY1V2+/0bCtfkSrzx3Hiw+NBfMUAC0bzJt8LPnVQAfVxVl8KKVA1lTQrKXMRNuuc2bzBGRqOTRS4YpVUpeAO8HcFfpicxzoYGhpwihZrtEPTYUVJqZ4mIOJABmp0Lc0bKEABvPUaFdWOO6npiDLEWbnfYIrFwG4L+pmJb17B5xkFxzGMucM79IhLdz+4RL9MpRsPZUdMeGbRelq3Giz06T3rPnrbI367T3CDdK4py9C8AHkc8NL545jecee4QBIFR8dtdORm7nd3NeLZfhCwSgXVq+4nBHdmxVCUVrAGB1L9AJdzYapZKYE6PuqES7XupB4z1/kMiUSvJuHlg3sOpD12jlm+SR+IKU1tYP0Ft7T576BOfsYULop/sm0zVBkbdtDoJCKkkcPxcc68BrXgI36NUERs8ZMw21p8vmJXkIwKMAvrEwPurpm0zX3bKY7VS1xYkx8Pm52wEkNF3vL2YzrFou1/1BKnOA7NqheB24Tu0fdCp/MT+EVgqp5IsC/6FbLe16OSlVWxaK2UxF0/WvIBL9D0KoQSwlyVpcDpkQysix42sCKvmwpuvBYjZTNhmDEpK9VhXHTVhAQqlUMWFcLnG1p6uHc9bHOdvPuPXl24UIxOepvdYAR93rDhTAmAHGDFAqe9SeLr94+Rw/t74a7wFc1ksGlyrmZpZQ28MZEHS6buIgvazper0Vh93twZgBiVIiUUq0S8t6MZsxNF0fRj53knN2jHPWpem6BIDsAA5iAkZ6bTie+D4h/9wXpJTA3TmurHADAO2ODZNCKpkhhF4ghC7b3kJrZdyOLdbZaQkA6ZtMVxGJQtP1HwcwWC2XvXrJ4JRSiRDsmgzd4N6u+Z3NJXrVLiGseQm35cu2Rrblzu7WaU8IbItxm8OkVJY7FdNbLZcvFlLJn1X7B//9cRm0UyFE7R+sOa0CZ/WTNjt91T6dtEvLHl+QuodNbs0y8K7qBgNgHokN/zCA7wHwS54q/zysSiQvrlNVZg9HcYAsXmQjGGLHriGAyooFY/gCAXTHhq9VZpuc+Pb9VVaWa6s69/i9xFUce6N7afp3PkdEAOklyIwhzrn3r2nL5OKJERx98MKbVMsC/INCKvkXqqIAkahnK2tdmpmSAODpe95R7z17/iCA31YV5c4C4KuWyyYBl+G+dUccJcjejbAZt7aEULCVp3rDV7tjw1ftQ+par2+3TDXuuDxpyPJG2Twy5+xXFifG3lTMZgzjcglVC84wgC2flASAZOODu/ZgnEHX2E4SrGsAoPZ0QQa0vsn0E5hM1x+XQVd17qwtp4RQVkglOefsIIC7tNnpfsGcI8PKDNhUueySwrVdZxaOJ7pgVRGFHXXadBvXASG0/riMF9SeLnfwDEsJcg7C1Z4uAKh0x4ZnADwvPiFt5hKG4wk7rxTdseH+7hiOAMBzjz1iMGbIVtK9K0qWAzA3SrXjnFGRSUGdbrTbRsF15UP83ipYMJh2ablcSCWDqqL0AQj2TaYrIn3MtxXlqvYPAvkc7rrCObdw1uMAbhe5n0wJyTJj5m5kobJwPMEAdPCz530A6trstCspWIIXwWu3XVkYH/0eAO8qZjNe43JpjfrlDr/KpGtgut3dm5saC05L5rfC8QSK2QzqXg71YJdcLZd3Nru7arlSKKHtmdK+QAC6pnFFVWVxsnYsxHC4bzL99SMPjFofshc/n5Ng8btW+Nnzb0Q+97sAXvPcY48wIZQexsxrcdabY8WSQioJVVGuIhJdc1jZW/rytRVtPS2mp6vrGqW8w2eghEKqmrzmhdkdG/YAqIfjidOhgaH/jck0FsZHvXZp4DUbZn7OHxLEHpyz/wbgE8K1Mp577BFZqpio+1zBPomqKDIi0aZnXjxzGn2TaVaamTLsgN9O5f6Gls72DlO/w9Pgjs275QCRw/syAbyg6fprmiwfFz0DT42gYt0mhZX3yWx6v9LMlCvfkQ1IODRyv/NXPyVeWNV5xe81AUKkNud+W3rOCvrzjTiim5TrrwI4fvTBCz/crta2WyJYZnqblocjEslBoQTVLbmbG9ybJxxPQFUUaLp+q6oo/lI80ejEaitXTdfl0swUDQ0MVbXZ6eVCKhkCAL1krAt5454clR4N94rsdhCEWR7F1m0OG2PNBiRDtLT4KW12+p0XT4wEjMslAz5xWG33nh3Puapz+LyEizkOOJX/ZooVAGzeWzEeArCs9g/+NIC+YjYDrbRsKH7JSgLfzrw2V+BYf2SlAgVaLXkACA0MFRbGRytNPlJbLjMXkJqFMpiM1asrjPmD8FAqEvc3eBbrOwnxB4nHuFwyitkM644Nv680M3XLxRMjn+ibTL8orDa57zokKE3Yn4UrmwDMarm8Ky2Cal4C6NYDiaBOgxrTWUiw49mcn/OQY8frmExXOWd3IJ/7z4tnTr/H1jW+IJWv2RICQmyCC1wo870O9EBg9bnzEELrdscQmRD6P0ozU29VFeUIIlEgn6tik9SCDdxVAAiqJ0/dunjmtC1ZbrtXXFFV0h0b5uF44nlVUa5scA+bu0knT1lpGpEoVIulZzVEqCkijwwiWEAIXROn7cFCKnmsmM0sA/D7VSqBg1oBLAfJtVCy9iayXK1dtWKppuuyur35Jcjn6F1XeJ0DXuRz74NVMIJVnVcUvx2h3xlKwDjjviCFoqoUQBGR6CVYzGH+cDzBRYPG+iaHHheHOyWEfhVWieq7VUV5o8Pq2hEOajLGCQhRQhIFcBUWS9NXbWo/cW3OOQtrs9NHCqlkyKbg8wWpa2kyIu/To6iWVWzdFycbHhbcVspUWtUN068tSwCihVTyrW//m888zSPRKQDfWpwYo1ulxxRkQ1Ihldyt3mvcW+OoWlbrFeRzzyMS/aaDYpDtXH9Zz6jpOhXlyYeRz41puj4BANql5VUAyjrMwZ1GmXVAEgpK6K4U+dgQoXG5hJqXmEvn0isiM6LJcoXaP/ivAO4Tp/xW8rB8WKcpfB+A/y6ghbrJmIe4oGBFmgerrMB41Y8Me8VC/SEi0c+IU9mLSHQrRM9OhV8B8G2BP9oRd0mbne4A8KLY9D8HK+fwNu3SMvOr1AMC3rw4HJ4agXwwhO7YMIrZDNa0Em7UYcCVsR7lvuFYnBhrWPrCoqk6sCHSroXmqaImHwz5BGzxiNo/+Ac23qr2D9YA1NVNDsCn73kH3vyZz1myNpmG2EBSq3VpWSBbVP7CavXWuGH6Jc/he+/zAphHPvfziES/emjkfqn35Cl58czpat9kmvOz58dURfloAThcLZdrjJk+Alh4707WUChNSzYCTa6i4BE1/EHisWTbvJ7LSQGG5x57BIfvvY8A+H8APK7NTv8qgBe12WmZc2ZuFIV3pAZJADyFVHLXcioZM+vwS171YMBbzGamw/HEx1Xgm/LBkPy4vmxucX9uqgI4Z0ybneYAXgXg9wEcF0RD8AXpPgLWkGEO68yy9QYAoyOoygCkarksct3d8y45CBwxGIZWOkuIPFdCaAXAxR2eMP9hL6quacx2idzIARV4DhNgeQ3AvxJCL7olHKWZKbsX1Yucs8MA7lmcGHs/gNcK/G3j9BxCUfPCPBQb5gJvoc88mqaVFUAJ0V1NoN8ul6u92YSleEUERTxu3MuqzplqPT8B8DVC6KJwXTuEZXVdKS5Z73ORcxwC4GmHq7bpvg4G7HVbJseO/7O4Ly8AyUFK/XpEokcE/LPmDwKUyjs+dGxuhlWdm6ploJjheGIawLcAvBfI7F/TlmEyZhIbI9zAgpWoRAAKvWSsFrOZjnA88SrMTh8NDQytAEApntgnWLyuo+epAeDZhfHR6rXwgzvDUwMz/Y398UJoYOjfAODJI10+bKN/2SZGhKTpuhQaGKpxzkqCo/Wg6MLKlJDcwTgaHqREKUzGuK4ZptrTJXfHhiXnwWZcLqHuInstIaBCuk1FVbuO/d2FCd4/OEMInelUCONlU6JCsW4XB/E7/hmyranqCiPeGncNUHaU4VIAHlVRwg7F6AaRt1PJ/Jg2O50E8Nqlc+kKYwZXQrKnUT8tSjo9VRHdVVUpHE/IvSdPydjFigtn3nFrRHIHfAMeAN5quUzayWd2pMQ5L3LgGuBxy4JKDeRzVUEHiHaUgbg3J2mIvzQzpYqfWxV+2eEJEBcDIfXu2DAJxxOy2j/450/dPfQRAJ/vjg2DUhnVFWZeL63QDpz6g/BWy2X54okRXDwxcuXJI137AODiiZH60/e844Y3uTA+eotTxhtr3u7zibLlVZ0TO/WuOzasLIyP+oSxwRsB4x2OxTOn2dP3vKMuPDC1kEoWC6kklJDs61SIvO7qry+bt8YJALk7Nozek6ea4jN2JeIO0zk3kjMqrlsHcKuqKL8J4CMAcNcVzgB4ZLEItPfkKSow161cW+bzczYeJrUqRMXvLq4j3BwZQKfjez18fm7rJqL9bBZfJhUWK+GcHQHwk8jn3uUgviatt0CFobGqcxM6N1/1w8NeuyrDzraorCyv37KL8MD1FOz1xgsXHoZ8MATOmbQ4Mea7poWLi/BFOJ6g/Ox5GYC51U6yzmcRmQ+1QippH/Z1xhmz0gr5liXFUe/NxOYyhIdGtdnpZss/n2Oi1bnknrBSAFaRh5CP8HsMVEvxxO8WUslv+AKBD/sC6FjTNJMDlBBCNm+IJ8uMGdy4XKrIB0Nv6Y4Nf2ohhj/tm0zPCQNjX2hg6KqNUSKfk7N3v81u3/N+5HPvXTxz+nXFbKbOmOlhXiK5sebr7GlN608AyPzs+Xo7nYQ5ZxT5XAc5dtwmv34vgA9ePDFym3G5tMZ8pAN+SYLtGQsoSC8ZdbWny3PEgmJyiEQ/pQLvAvDeYjbjseSAe+D+2Dhoms9ZlIJ9k2mGbfTvKc1MGaKNNDhnplNgXatbtigCsapziyIwn3sOkehz2bvfZt51hXM+P1cjx44bO1xAiXPGCKFrIoqe0HS987nHHlnTSwZVQrKvKe2KUJiiKErt6ZK6Y8NSOJ74NgBbm3YBuEUJySJo4V5Qz66gcrQyIVsJaLRYhiaA5SePdNWar9v+bYoMDi7cQJu0eCf5jbSQSgZg1YejUyF+k1Abed0uGtg43lVF6RTlo4zPz0lNRSJWJwLZrQ4MjFsBq06FyABeFDIriSaJswvjo0p3bPgkALp0Ll3tVIhs+iXpOjCSBBBe8xIqA6+F9brC5+cK5Njxr4YGhq5yzsjixBgBwDVdl++6wutixw8hEr1fBH/WrGwFie5GybYIXjJN1w1CKCvNTO2IxU3INQNwVWDwr9NmpycKqeQPCcOm6vdygDQFHTm46DVnxYG+BeAvCaF/zjl7raoo3u7YMLRLacMtOKx1e8Eq6KmL1kKN+2rbRm4t+6p5iVuCWgNAOxXiKWYz/weR6AiAmbqPeDajCNzGPUuipxAWJ8auarPTVwupJKSK6d1oJ1NCUV1hrLrC6nY6mKoofworCHhfIZX8q+7YMHyBAKorrAaAu+F+tFoHQgnIwhIj21QKvFoumzt13a93mwDqqqK0tWtFEn+Tz+MLBHb06lQIGjwSkaj/eqdIO1SO1+wxzuuUSpAPhjzFbCav6fqHADxkdyPtPXve03vyFA3HE/AFaX1Vd5qRZLP1JwA8xuWSvf4f0HT906WZqVcLC8kTjid8G2DctQ0hj12w3ATFoGF7cjumGLQqDu3xVuRz6UIqebcj7crTXNVGAA4GAq72dBEAzwL45XA88ZD4wGubGblIk7XrsoL1tHpA8g43gp1DKQnSl11YMsZMvwxfIECq5fIzhNAvC7Dcb1wuYSdg+RMHCHnzZz5HQwNDa+KkPK7NTr9LdD2t1LzE5/eS9YDGemTR7FQIMf0SA/DvqqI8iUj0PCF0ScAqX2pRNrvjegB86Vz623bKR2vPnhbvQnr6nncwWDXmb9Zmp/svnhi5w7hcMpmXSBxUJnCl+omq/YNeoKkTDdnG39vzVQHwNwCeFpa1ae4wN1OyUq3sv/0PcW1oum5X4BEA0uLEmKtYeUuApxAaGPqCkA8pHE/4AHwLkegnMTv97lf/yMhr7U6k/iB8lEqbFqhIlNJV3ajj0rLRHUOwkEre3Xvy1Mc4Z39LCH3KXm/nvIvS7apwiV0flvHAbPfHCyDs+H6LDGmL3gvnzG4VT7gVIx0A8D5N198iLO+rAPxKSJYaaVcil1UvGcwfBO2ODXsBBAHkQgNDmiAcn0M+tw/AkBKS9wtOEAbifoxE03XSmia543pqB52Z2azC22TUEgqtsgKi9jTSWfbbC9UdG+YvXHh4R5cWOY4WleD8nBf53CkA9zeEXKWEEkqahZzbeI7/UGzYD2CKHDv+sy1u0f7GJF9Ku3csNhMrAwBRe7pUu2ePs/Jqo71+1xVewZVlkwPvBvA73bFhLJ1LV/xeLklU5Ae2f2I34HaHK74lre1sJd03mb4KK93GMdpoGDqZvmZzhwaGzIXxUbsBoLEwPtp2AM1pCa3qnKjrKVgdCzF09k2m7Q4HIITmAZzk83O/g3jil4W88Bt9L2Mm/Cr1APA4+m/9gprPvZ5z9gFCqK4qirR45rRzPeRCKrnb3Zud37fiwB+3e2pLh0buZ+TY8Qrn7DYAn0A+970i7aruD2LfBl5Co96sQ+2yvUkNkWgAk2kIrtdPLoyP/iOAv/UFAm9eW9HgqXGz7iO7EoB2evGaru9YCzrpzEoOl5XvWECbTkR+bbDEYvihABArmzvQU8zTe/Y8AFhUgpHopzVdf6dgL28cNM57d7j2VTsC2XvylM9hHXo4Zx5Rt17dDauVg9o9ewwAvqMPXvgY5+y/cM6CFY0ZnDO7e+81ayTe8yKfC7gGBxACq2cShdrT5QGwgHzuZwH87cL4KH3ySBdtB7LZ7dHSM65sQyudCmlrXjaAgUg4npAda7N+UkSif64qyi+G44nVIw+M+j01UqtorNIgEb9miTiolRAPAGRtRbP7bw0BSHLO7hHsWXVBkO3bqHDArTQsxhkzGeMCW17WdP0TAM4AMJ480iVhm5WEotgBAqa7rM1OH9B0HcVsxtBLhkmpDBDaYKKjlIKDcJMxQ+3pQndsuArgQUSivwLg+YXxUeWJA9aJt3QuXQBg2DnHq7o1l25DAxtl8sjbVFB2IIUJEunbFyfG7Ioabic/uw2WXxMs2dmp4gkNDNUBrHHO3oB87scF+XXZF6SdDZfD3ixUagSn1J6ugNgUXwXwrHA5GDl23G5I5lPzOV+h4R4SmC5lTBACQgklq7pRVwGfqijvAHA7gHPvMbDCN4l0F1JJHhoYYrD6Q33L4SK2LVXeGjdNq7pLKmYz3+ybTP+xcH/tbsI7MokXxkc9AOgz/3ABFY3Br+7s7K9oDGpPF97+N58BIlFGiFTn3HTK7j5YfcTuKGYzvFouE+Z11VXk4XiCqYpiB3j40/e8w+Dzcx5YVZFfBvDl0szUm8LxxA8Ws5lDSrnMGTMYByWE0JYMAmIpFgKL8tLqv1UGEFD7Bz8E4N9DA0OfaVjsVhvtRoplp0JQdwtityqgGAGofLBLAlB+6u6h1HsMfF1AVR5CaH07OmVxYowLY+BW5HNvXDxz+kUAtTVt2bsxOiYsnhVWf/WPDHeE4wkZwBOE0P9X6IjOFy48DM6ZrM1OHy6kkrsCjdxIwcrbVFASAOOFCw/Xes+evwPAH4Xjie+7eGKEG5dLTPJLHksfuYo1NgVL2ujHI9uHg7NfEQCP1W+JXuPmVVeYoYRkjwhifQvATwP4IiJRQ1R12ULkcQDnrpERb+QtaLoONZ9bs10vbXZ6szlxroOJ9ZLmnXsXAuda1Q2i+BtkFdLjl9LKewzoArYBlnbGhPTChYcNiMiARyFAdWcKwaMQq8dZY024Let10TPu+wH8AYDXGZdLpq5zancfcIOFKxxPGKqiGPb3q4piQVKRqLE4MWba66D2D/5XbXb637pjw6cBkKVzaR1gFrZ4TQYBd9Ya2gEUiLQnOx1LEtF2XsxmGgqu7m3iyWsba9U1Bn+wsf60O4YOB2y35fUX6WMerJc6JwB8EMDhFy48zOEF/EEqNee0cvu44b4grQPoEIG0JuhAeLcmLDIhXkglbZzYLev9xnO13bkFGr2Y9gPoVxXl1mq5DBH5JC6a27w7NkxURfEiEg3tIFhiW0NU4G1XCKG8NDP1YwAGitlMpZjNGP7WCKSg0WOMMSUkc18gUA3HE59XFeWPCaH/SAi9LFbIBEDE9b+AfO4vAHxD7emSJUrBdq+BTx1AeTMpcbqhnLNbOGfvB3C3DdtYRBftD1E3j3A84bnnn+dCosqqrXHXFc7dfBFCeSPwmc85ZbcLQDQcT3Sv6s7QsyvGAFEVxYNI9BbHgUh6z54HIZQLJi5/aWZKJoQ+C+DhcDxxRsjOPiUkS6bNOEI2yyAg8AWpp5jN2P233laamfpRQqgJSjnn7APdseG3AjCNyyUOUNe5aq128jDD8QTrPXkqYLcD3w6x0uLEGNF03ds3mTb7JtNVbXb6dk3XX1/MZjpWdW6CUFBqW/EclFruvF4yapTK5NU/MnIgHE+UAJwDsFSamVKE/Bt2XEjtH7QJj8zd6FBg56CL/dUEX9IdCM/6Js/nvqXpejP7THMgxi2w/MpOMUPRM8vGSCMiaPLja9qyV7u0DEqp5SpzZwUH55UVZhy+9z5vd2wYhVTyDDl2/LeFsvYRQnloYGhNROtlQug/Lp45nQAw3x0b9vgCAeKpcaPtPukbux4eTde9yOeIEzxvjHzOzl2uw2qpfDocT4wAYLqmMcl6XrcgG6iKwhCJVgmhRmtVzHfSaOm7VNFmp1eEG9feAokALOMMnQpxkkZrWC+AaZLZ0MDQmgiu+UMDQ8+HBoZ+BkDakc5nbCrmjf5b1KNdWia6pnkBfADA7y2Mj76Km0YEwKcAvEu7tGyu6pxTe83dqMxat4YRjickVVEkRKJ1GwrYjmf5woWH+cUTIw0L++KJkerFEyOolsvwB0HR1Kq+me3MFwiQcDwBtX/wswAmCKEZYfBYqWGOu1YVRQ7HExJ1M44l5rLu5Q2qymI2w0SHE1bMZtpiX+earhuFVNKEi+WfjDMTIFKnAk8xm3kmHE/8iQrMCICaaLpuhLaQhuVItyGlmal9av9gHPncPYtnTr+2mM2AgxJfcOP7rqyAwUrf8faePOVDJFoT5CIE+ZyMyXS14QKJVe+bTFecONeqzrnf565idfKNblaDr+m680u9AG6x/7a6wqCERGPTHWy0DYSzLsg52tq1oupOdsjVlidOVRSu6ToRlJJM4Or8eniYs4+YbXns1M0QDTAZ5wSibfsVTdfPqMAUgIrAoTckeQ/HE9yR0ZCClQD/ESUk9whCawOEyJutlc3gJaymO8LxxGkACvI5m/ZPwi7luHJ760Sit6G5+8CWvq80M6UAqIYGhqpPHul6XXds+FeK2czbtUvLlU6FeOG3+JOdMRC9ZJi+IKVHHrDKbEXJ6aN2PAaAQQjlfH6uGfqMRG9V8zmL37m0zFsPRhe8FQCArmlXHXuV7Fi5igifDEDioNy1QBZnDCCSfDAkVcvlb4cGhpIAyk8cIGRV59SuDNuCy0F7T56SBZN7jXP2bgDvLmYzpnZpeU0JyfsBEJt71s4zNC04QPYFAgfC8cRVRKJfAWA6mODr1+hxi1lrPwDFyTr1EhlpTmmpwEqsvk2qmK7fj6ooHlglfzs+XAUObqCtvKsNr8mvE0Bp9BGre7nJQdvCyD01wutexrtjwzKAqxdPjPzVnUvL/+HwdDZ6Nh4aGKoKMhm5bzJ9sTQz9RUAYwA6nnvsEa6XDNOvbuzSW/23ZAt2uLRsABkSjifuQz6HxTOn68VshvqDRHK15cB6LTKRLL1+GcC/A7jSoBm0WPVuuDahgSFd/PvVgixpQhwYtZp1KkgbyDUnVm7t5XA88S+LZ07/Yd9kuliamfKpimKnXzWwdmGQ6QCe1HT9rQBu8wcpZYxxgBG4Ysk2LsIVVb2NFwpHATz3uVvk6rauvlmxQFPDs3ZOAkKsE1G4H4fvvY8+LqPDfnubZBBE03WPQ9leFZyzEgCJcdbAr5zrV11hdV8ggKMPXoCqKJ+DRT840/hgS5qRcIOZqig1rNezX8/acwMaaPr5OkUcFPmcp5BKSi630HZezO+Ym6YumFtQgtSulHNRsXo2U/bCm7mmXxYBc5MtinTHhju2CmP1njzFwvFEXcAH+3pPntoXjifgCwTqAMz1tCFy7a5ryDCkarksFVJJLJ45DdGWiNpf7cqzWZ3/OGNmTe3por5AgBZSybOwOgJ8VT4Ysq1X8wZGmWTHQRbGR/3I5343HE/8rM1cBStQR1vumTPG6kpIJh1qVx3AJwF8tG8yXRTzVls8c9q5L01CKD80cr8HwAsAfr6QSv5Rd2zY7FBVCWB1uFRFSanklSom1y4t17tjw3cBeATAnZ4qr8k7FGBJm52W3e47ZEUiDfhV2ohEv/3zUyHeP1jMBqQte26lmSlfaGCoisn0amlm6jYAP3TxxMjtxuWSbvqlDrtly7qByUXlBqVKiLLu2PBlVVGyAP7KrgwrzUx5bZD8WrmjnHPG1XzOdJsI5Dp4tMw5o5uRZHDOJEHbRgAQwdPQLmTDKaG8UyESgJqm60+owOcA6E8c2F4ols/PycKiq3HO7gAQs107bC+LxXS4v18lhD7RUNxWWhgXrjPps36uPy7jstrT5Zo2XdU5OrEe4AFwoBRPeO2y1+uOSJSpaLC8eRGJnlfzuR/sjg33Axmvdmm56gtSj0Qp3ayCSwnJhDGTL51L1/xBkA61y9vUssZVfuF1i+Sbj174ct9k+isA8OSRro7N9keLTKJgye4xAIPa7PR7C6mk17hcqlqkT5LPyg5gDY/SZIxXV1jtyAMj+0UM5ZuhgaGvAQSlmc8FCKFl5yHmuAeb9e9rTx7petqG8Tw1wtwq0wdARDCfCS8uAODQXVc4l3d2iFFzYXy0KVG4bcIWB1hunygix7VKCDWEO7dVy845c+8tpJJ/sl6dZIBSWXaqKUosPEcJyfTwvfd1APjS4pnTv9Q3mf6GOGXpRhul9+z5ZhaxSFRSRUDJTat1A8uDF1JJIzQwxBbGR6WNrFpCqNlaPdd+4IZxxpnpO9jlAVC+eGLkD+5cWv6s2FxeQuh2yJHlBhSQz30QwCccUMZ2soRrQikB+dw/8vm5L5JjxzWRNsgclpSzj1gILtNECoIdCYCkKkqdHDtea3g21ykDtQmvSzNTIIR+G8Bvcs6+KNph76uWHyHmDdq4C6VL/EHiAyCI23cHmfLUrI0qFJXqrJy8XgqW6IzgCQ0MWX3Tzp7/IPK5nymkkvjmoxcqxMv9fi/BRlSCcKSeOfgiAHCoilLdiofVHRvusu976Vya+NxTrhCGCxGyDESiOrZpITRVtyydS39L7emq289e8xIQd1Md6gBqWy2lbFhDx44bfZPpimDV+TVtdvpeG/T3Bal8nYQ/bm8GVVEOIxLVMZlG78lT+zVdRymeqIqgCWlyuyNRmc/PEQAdAG5HJArBwrOeT9oOcC7qqDsV4sx8rPZNpp+/jlULALh4YuRyd2zYtDd/J0ibgRtmp+CgOzbMi9mM5hBespX8RnuNYKWKvQH53M9ouv4uB7Sx3fILZzDlnb1nzz/KOfs0rL5cnM/P+RGJ1kQfsf0ATmqz0++4eGJEcfQRI9tfn+YuQxzUlp2DiER92w3wtGDOn1cVJYF44qMAjovy7Kv+INm3IQfBNQEa7rpydRCBO0kkJJGCtxWaSZuYp+KI2Vh991ZY3R+E3/lslEpgnDWoBF/9I8O+cDzxLCLR3wbwzwvjoyqAqqbrFrywwQjHE94Fq1JOAuDfFQ6UlnNO03WmCg9O3voeZ2RxYoxhKQ3O2W3a7PSxiydG9tkrSeAq0x7C8YRHVZQgIlHJgU9tagWISD4R7uAhAP3a7PQvFFJJ39K59BoASQnJXou8wXRaYzA5uBKSqS8Q4KqifBWR6FON5zp2/MoWb7nKOcsgn9sP4PWdCqF1q+8WB2k/H6vu5ZRawsi7Y8PB0szUXWr/4MXFibFlgV/R3rPn+eLEGBNzcFibnY4WUkmf6A/lhtWCVZ1DcGaSow9euIX3D3oAGKLK5oZDlGka5Nhxg8/PvUbT9Y+KSrmrNtyBnUVhqkceGJUBvAnAIWcbHwD0rivc4IACYExVlO8V7ny13T5iENSYsqoSWC2EFgFodoBno5beGw2RmkXD8cQ+QugqgIdKM1MHwvFEGMAd1fIj+xgzuMkYJ0S4RNd0McA6PruLrYYcNJOGHaxbGB+9ru4Q67Ei4LXXFVLJ/bBKxj2+IPWhBfdmnHFwkE6FMADVcDzxFVhUgn/adPHrkcOI7sKYTIPPz60gnmh4dt4ad62KssnYWn9tzTWyKyleuPCwKYIC/0lVlD8EcFi7tFwHQCiV6M4XtFkYfIGAbf53NB2/TfRh60O47vam7ADwSwB+VygW+IPwWXRlzQJJCUVlBay6wuqH771POvrghRqA3wLw04TQ4nafQpud/vXFM6c/BqAgHwx5LNJkd3q+cFCZMRPVcrkGoE/tH/w0gB8XCdhm79nzXuRzsqhy8gP4FVVRfgtAsFou1zmoVPdyqZ3ghhOzFTmGhthgvPfkqW0HwzRdNx3k2F4AXn/Q6pawjRfpVIhXCcn7itnMF7XZ6fcBeGhhfFReGB+lyOdqTd+dz1UcaWxkxwEfAoHVmzX5YEiCxUf7ECLREwAuNgI8keiWsyAEkU3j5tT+wfOw2O2/efje+wCgXl1h1c3hJtE1Y/fbvTPhVTKnPFxnXzi9i2MA0gDufeHCwzAul2DlXhNHk0YJnMMEGJcPhrzdseFvFVLJk6GBd/zOju84Eq06cnC5ywHe5iGgwu3AAvSuK9yuo3szItHXOTAyV3wQxpnZqViBEU3XZ1TgCQArj8uw8TO2iZVLAHgFe7nBOTuCfO41Iu1KV0JypwObakr89gUpUVSVhuMJovYPUliExHdxzrqFoq5d5/l4C35YBPDqQirp7Y4Nk2ceTcNTI8T0t99XS6KUMGZALxlM3NcRAL3OjwDgYo0kABFEoq8BAL1kVJSQbCWxuLS5VEUxALDtUj/aloPojsAAlIrZzC1KSLZD4kQJbSOaxRiXVZUcsnomXQ4NDE3ZGLCuaVg6lzaPPDBKRScCqZBKrgKoVctl744Va5M1b8lkd2yYFLOZxT5BQ7mVAM9mFiznTEY+5yGErgD4fGlm6o8LqeSPdahdb+9QAV3TRDcNQm6CIm2CPgTNIFUVxYdItPN68IcwxLA4MUY4Z0EAMeRzP7Z45vRbitkMVnVu+IKUSBv8rbfGSd1L7f5sPgB9pZnPhYRXyrHeIJVsBdfXZqffZn/WrSrF63hn21OuzgoX5HPLrad/e8ESAJxzcG7IB7t8AIyLJ0b+7M6l5b8WguojhFY3cxcLqSQvpJJ1ERjwLE6MvehQON6NNxAXzeBkAouezc7b/G9uTLBdqFD3MqntyElzabgTOF9xWAfcgU9zAAXkc01ta7bVSfU64L2NNW/Fq7hOIMdcGB/lYuPIjBmi5HOL7XEEz0F1hRFlHQRUSjNTamhgSOu2mkc2IiOEUCaCsLKN01qEJm1jkERdd5eDNu58owDPDebGgEWJ6OubTFdDA0O/vzA+utQdG/7rYjazj1g9TgglMtnNZpjXblPLGHH8at3K3ig2ks9JiERZ32S6ws+ePwTg1zRdjwgMuW5n7Wy0P+teLlEq2R04bgXwZ25gpsVsBhKlMmOGa8ZGzUsAoR4LqWTDipd3qJnNQirZlHLkRi6dp0bsbqooZjMrWwmWiBYaNQA1Pj/3vQB+rgB8fzGbWVvTNL9/01OKXKOrRR6si8Jo7e1dqGnmmq6baosl31IGa2q67iSNdkuQuBCeAJrJMsgWhdsZFP22nRLFQZvzpbeg3JzzIXJFDbV/sNEvq5BK8mI20yhJ7ZtMF5880lVxbGDuJj65kz5iN1rnhfFR2jeZZkvn0p8/8sDoTwF4v6dG7gYgmX7UAXg2kmX3hNiaH5MxQ6Ky7AsEPAC+AODPAMwujI/KL1x42NyIZlLTdQkWJKBrs9OXARwopJJY05YNWFkcno2Cva35544WR20r1s2gyHYPnc3M5m25c+JnCYBrprWj4RlxKNQwXzzvBVDfKFjiqMKhog/WYeRzH9R0/QEAEPmBkCiVNs4PtOr+GTOxpi3jhQsP25hiHe2VmxEAHn8QxM0+6Rt8h2yTkWzgihEROHJTsbJOhcCklBZSyW+p/YNfBvD84zLoe4zNIZvWe3uqN2y30r5tcWLs+wUNIm8zIEoAeNX+wU5YCeSsNDMlheMJKoJ5nHMW1manj1w8MRKyLVoOSt0IwdoBHlVR2u0j1orB1h6XQRfGRwN9k+kyJtN/tTA++kYA9xSzGaxaXQw8180gcGl4a9yQDwbsltVfJseOf9r2Kld1zlppJkszU1JoYKgqfu4qpJLfW8xmXgRQo1T2+oNM8LPyTTy19b3pqRG+dC5db/MEkfxBW2ftTvGkfQgUUknCOdtaIqZowXDNz27jOas6b5xQ4XjCAFAnhPJNwHJJuCNMYI+fBPATgr0cviD1WlSCm7iU1CIfplQCCEXdy+EPAv4gZH8Q3p28fEHq9QeFYrUra3YRE2vlFxAHIBUBBOo8EB3VPDvTrMyom36J+gIBuZjNnEc+dx+ALwjCbNyIw1NUY0lv/5vPMFgtYX49HE98AkCndmnZACEUZOvdSR3PwoUcAI5qMVVRoPYPeu5cWjZFoOj9av/gn3fHht+sXVquMWaCEMgurQ8DUHOWfrZBjdkKw9hWOQCg9+z5fb0nT9n7xHA0qdhFPMCRx9lilG3URlsEmJ0T8ACAJIA+7dIyY8wACK4tzRXt6ymVGnuTUhl1LydiX3nbeEkAQKks9ry789XSql4G4N0uWbYdFKAOBne4TDvPhGI1rxcM0GanZT4/B3LseI1z9qI2O/12APueeTStV1YgKSHZxziaT3SB0zFmMF1ju9Drijkmm5O6l0u7IfTFbOaa6KwonCB2p9eF8dG1ZoC57cPPfhDeHRs+hEj0LQAuAnhRkJNsWqFVzGawODEmA5BEO5cCn597o6oorxEfMSihInJvblEWwRmYXS1W1XT98yqQAVB54gChIt+QOJ7/9VgPAK6JdultYZZNAZ7+QR+AA9uFSbYy1P7BuphjD4B/QiR6azieeC+AA888mjb1ksGUkOxZT8Df9eHl83MHEIlebYU/+PycRI4dNzGZXhVBrB/WZqc/BOAOG1kCCCih184952Dc4JUV7KIZbkH7/iAkXENK3h5cJq/Le6GP0Kq8nQ3dRyh74gDh8sEQAyymJeZSi2ZvjdvhPwpAVhWF3gCmMEOTaQMAFifGDsAikXgdAL8vaOU4XpsHyK3Na5W50t2UPhOwSvh2SdidwLlDgXBhOeyHFShybaNLlHr1ksFMppnheOIDAO4B8P47l5Y/K3KfvZsQlFjWTAzcnpbSzJSq6Xq5leRmy5Y1ISCcMXBw+WCXDKta7H/eubTcyBQIDQzV+Pyc84Jlt7uhCqzNea2rbh5ogOCfJbQuGhDWCKHnOWdPADgcjifeVsxmpMrKsul0p92UOQdk58SWmabr1ZBVBdjaoNRmAQOAH9Bmpz9dSCW9S+fSNQCyTUq+MYzBAUKJEtrdaH5D1q7hFtnhdSxZIA5cN7gtzFXXNGIv9j96tauKqjYLUZsLKvBO28WTEYnuc7hYxInlqIriF2lXKM1MfRjA+y6eGFGNy6UKvMQHQGINw9RS/s4aZbUn5HMDIN/KgbSmLe+GMXMNDm5ZBGCC/esDixNj31PMZurVcllex5raH9UVxsX3BtT+wdV1fXf90te+ybQJwOScxZDP/eTimdNvKGYza9VyucMXpHKbVhfTLi2XHK4qwVK6NcDHXOF9EO6kHeBRewIeAF+ExaE6+7gM6cgDo8ztPmKC9Nme6+c5Z7+mzU6PdseGx7tj8C6dSxsAJCUkuZpB0EqgIiCKeivsYXM5aLPTRDQZ/Enkc+8qpJJem6h9oxJ5DgLBsAWTMUMJqqQ7NiyFHQn/u7U3tUvL8AcBFzBrAlC5Wi5DkD79FO8ffNcNN53d9pYQMM5ZEPncbU+9/57bquWyHRWiLiwg9wcJKJUorC6SzwL4VoPGTLibC+OjNDQwZAK4yjnrAHBEm51OFFLJO4WCrvp91BJ/e6OK1B6TMSZRStUe1dcdG9bD8cQ3sG4puwURNMK2hVQy1B0bvqWYzZA1bXm9S4O7liyxA3t9wornZ88fB/AhcSCuETAZhLoClPuDgKdGaDGbMQGsFFLJNyyMj9pKzQNsihD5YOUlcm12+gFYrTzsttKQqEy3I9yUUEhVbtfz8+7YMOmO4SA/e95DiHRN4EPUtUuwaAbdOmQMJUTtAM9XCaGfFFazFaDbYR+xzXW6BZGVZqYUVVFqhNB/LM1MlcLxRKSQSr5WCcn7GGPUZAxk9wBYK3CoKJ3OFjYF6/CSEImy0MBQhXPGAHwYwOuK2UxNu7RsKiG5o84Z0LLOEqXQSwbvVAg/PHK/LCzjbwDQhWfmViqE8zreYjZze6dCfHWhf9q1fCilkl4y4LMadAwCGLyhctVmp713XeHVJw6gDuAdAH6jOzZ829K5dL1TIR74Jc+Otb6tbDivUSr5RJrH/0Yk+usAnj80cr/niQsP17N3v60uwHyPTVQN4G4Av19IJV9nWYgafEHqbbhGTW6NieoKqwvFClhMTh8XuXl+YfW5sYBe2EUH8cQHC6nkLwLwVFZg+IPwbIgz7cyCaDwe8jkv56xul3s6FVx1hRF/0J38VssTILTmJcQsl1HMZgKwcoKvOkjDN5tDCoAVsxkUs5nbGho3SD1og+7PUyMQ3An1cDxRswA13mTZiziBp5BKugYDiV5MxG51A0CysyaOPnhhVy0utX+wYitatX/waeRzDxSAXzp8730fKmYzRLu0XPMH4d1yvvAWrHQH1u4kTmm82Xv2PNdmp6kgLVpbnBi7Go4nrhZSSaytaJ4tXL++qnPzzfFEh9o/WAHwywC+KLptrBP8tIlsCSOKL545/RoAfywfDB2payWAcxMg8s5VwMZ6eSvuYqP3EM/nbgdwVPy+YlGEtX9KempgstXvnRSzmWf7BM2fTcgQK5uWBZrPUc5ZGBY93QeRz71BWEBXOxXSYfolukGTOQaAihrlywCy4XjiodDA0MXdhAQ4Z8+riuKz7i9tcLjWXsX5cFcaBMHr40Xkc1dtzJW7Rv5kHVoEICZjMC6XZPlg6NUOnGlrFl+5DL1kVAF4lJBMGd8ZpGSXLx4C5HA8cauqKD5b6TiYqOya9urC+Gi5dQ7dyD8WwVep9+z5Lg5ozt71u2I6WsUQFEBAVHA9vTA++m/CUoRQRF73BJkxDkqUkCwLTHkKwGcBGE8cIASRKEM+J9tpV3x+7s2CiMcv+nt1NJoMNll6Fkyna0ZN7enyCcX9RQCPA/i77XSQ3e54XMY31Z6uF50PaRl6rsF1dVVRTLqFDzprwV90JNoTf9Cdm3GmeXTHhvdvoEhkACDHjq8BuA3A7yKfe+/imdP8mX+4YPiD2Ff3cnrNZiEEUsU0KZVwaOT+ju7Y8HMAfjk0MPTok0e6qIjAuieH83P+Jit2vWqJemvurFynQpzA+T4hqa3W8z57ztz63gauzjkIOOpei9puuy/GTPiDxOcPEtput1WH/C2LdjMNV3WDg2h/6xzu3GptNlDU/kECQY2pKopFRbmLo28yzbFedg4At7YaQy4ORsC4LxCQASwvnjn93wmhZwihhmhrY4qcant8BMD/LGYzR7RLywScgQqygM3Wujs2bJEyRaJJQuh/IVYAz1ValYXxUVl0JsCRB0Zv644Ne7pjwwAhDRrFHe+JFuNBQGR+eZsamQEwitkMdaMXuu2yt/5aJJmzxYkxLixmmXNGCaFVbXa6qCqKquk6vvnohbrVF0qG6DnUpFhFG2jD7zVYOJ7wAehW+wc1TKZx9MELHgC0ZNHEuaZ+RNsOKqCHBICE2tP1PdVymZiMGaSt4guCupd4zHKZ+wIBE8C7OWcHADxICLVD4aHdbvNt08GBM9MSL7qNJ2CUUplaUMM2oQqHGylYzOoAHlUV5W8BXHzySJfnzqXluuP565yzNwL46cWJsf5iNmNWy2XCvMQNL8KZXxt2KLVdbe/DObNJxuucswiAk4sTY28rZjNGtVyWrG7G7hyolFCY3MqKENCP+c1HLzQitEcfvGC77JRz9jYAP6HNTr/bAYvIrdOxEZUggK8JKsHHnXPI5+fkxTOnsQ1SoM3hTV2Xe0+eIiUryCmJcvk6JdSzqhtQ/BIYdhhU3UA3a7q+7Y1OW6EEl0s7eTiecFa50AWACosVnLODyOe+f/HM6RKAfQTM06kQxxZdZ9WxaocZV0Jyx+F774OqKJcRiX4BQKg0M6Wr/YN1rOeFujWMx2VQtafL00fo0wCefvJI190AIkKxGBa20zZwzoCyGY4n3gSLYm8GgK1cvwFgAcBtSkj2SBWT170mx2Y0dTvCX20CHCtQRrYpQu1kBnAOrmtGXe3pUkQ7lXly7PhfC+ukA0vpusPCM/nZ868F8DPheMI+jKkSkqU2MWgu9oIB4DkA+SY3eReHNjstAzDEs70ewLh4tqpLz9Zsia0w20PgAKRjf5c5xPsHnxVuu4cQugZA55zdjnzuI4I+ctUXpB1KSJattKv1KTEZE9V4ovACeD4cT/wNIfTTQqHu13R9zSbVBtB2pZvQHQBghuyuIYoS0HTd89xjj7hr5jvm/oYbvRVPs/9d8xJIdhCatKMsJBuvttM8nJJBek+ecgaxPgor0nz4hQsPc3hBal5CNyLp5qCsusKMIw/c5xVRxz8CcB7A87DaP9Rt1h43h6hW4Q4CD8meN13T7MZubeHmviBtnXVnwcAF5HM5AP/j8L33DTz32CP1SslgSkjq2H27qu0YwPUFlzPTajuNWndsWBHrus/efA2s1dkdwpKnGgBvdYW1yN2O7sMEAFGZVlo8c/r/7j17/gkAunCTje0yYW1ntBCkmMjnUEglUV1Zl2Xqwr50QCiorbewsRt02gEmiXMmEUJNB1kSAHi8NU7W+VL5uoXHwQAQtaeLdMeGnwXwiwCeavxlJKqHdnH+GtIXiXaoDjnxBQKWS9/mnFFHYs4NlauzF08xm2EADONyCVWdGwCjLm3XOgC/qiheAF3O/SRcjqMA7kQ+935N13sEXVldsVCNRgfXBpUgYyaxFpAB+A9VUZ7SdD0dIvTr4nS0SzZ3bRFFn7FOwcNQNy6XiJizdr10USzAjEIqyVRFKdttJcQzFQEUSzNTgGD1f+HCw1gtGQZe5qNTIXJHT5fUHRv2AVhTFeVRRKL/wufnOhCJ1rTZacN2yRyjps1Of7uQSnbbFqegbdyp3BoAuC8AD4CrS+fS/9w3mX5GWM4essuKwUkupM1OV2ARdB8QewV6ySAuH6F16JzCCpAeVhWl8YyhgSFNeJjvLqSS9wjuAK8vSOUa0Gz0CJhO1wyzUyG8OzbsC8cTIQBfCA0MXRY9xKiwhHdjMAAQ9KUagElN1wdMxt4OwNQuLTPhjbQ1d3rJsCHUGytXXyAAfHu5CRaQD4aglMsmANkXCLR1M9VyGYwZnkZSfyTa0OaNCCRndwH4pKbruHhipKprmtcfhJUCdk1nTI7KCq+rPV3+7tiwH8A0OXb8o0L4/S9ceLhKjh2v77YiED2squF4ghRSSY98MAS/tmx2qF1tB9HWVjQmAitewY7laVHsFsu71QwO8sFQVQV8dpLzy3jUumPDtifyJICfIYSWSjNTHsxOIzQwdO265nMSrACf3x8kdYDTDrVLakNeCay0JBmA7+iDiUMYGFpqNtF2b7T05JJhBer8/iCpUSrJvkDA1YDWmraMDrWLihY2hdbiiNLM1GsA/AaAYyITpK6E5OaiENHxg1leF5Ut/mSoiqIhEu0G8ExoYKhqGz27tB8ZADx5pEsmhF4G8F+fPNL1YUVVBxQVnmq5XG1Xn61pJXSooa1brk66v6MPXnBG8n0uPrtfWAS/DmBKtJTx902m18QGqdingXZpue4LUg+lMmmNNlNCRTUAq3bHhv0CCPc53EYPgBqsaOuujN6z563+QJNpu7KsWz17HmErRcetOaOwWKAgFEeHQ7H6hOv6KUSifyvW8H3heOKHXu6WayGVnAHwkMi1fI4QWhK/N3vPnucO19m5QfyqoqjqyVP2+rc7bMIgADgIYJ/tGofjCeIGPrhVQEVVlA4Aing27y59n60jHgPwlwAu2bnDav/g/QB+dHFi7Fgxm4HlQTrjp6I60gqMsarGdLWna79oW/8oItG/AvBcaWaqIzQwtIZIdNfJaY8+eIFgYMjWbfVwPEHd1md2gPyGyjUcTzBbYFRFeRbARdFpswbLYmrHcrXIiyNRgnzu3zVdPx0iVOeckXA8IfGz5zsAHF6cGHsVgGoxm5E7FeKtg5OWY8mq2qmYjHk5UXu6AsIK/hqAZ0szUz7RkqSq9g/y3d4AjlJFhkj0X2FlKdhz5sYmsLuaegTeWnBYanbK2mccClcH0CPer7p8MO72qNoN/9T+wYcIoX9ur19pZsqj9g9adHfONXUGlSLRZQD/DOCAms8ZcPQ4amPuuejttgygYAdFt9ovq82N63y2bwP4FwB+NZ+rC8XmYmIzaqJggCOfmyTHjj/qXBfO2QDyuR8DwLVLy6v+ID2ghBwtwNerIzkBqNrTtb87NlwH8DUAZwmhjwuYzue0Lnd7/kSsxa4o/BIA4pI+s9dla5C3gzcVguXm1qZjqf0FtK+hE0LtklQsjI/6es+e70U+9/uarr/p4omRg8blEqt5iUTASVOnS2LRB+olo+JXKY38bcarKsq3EYk+AOBfRPoWQSRqkt0HyxtzJhbxMIBOF+esde4YgOcIoS+2rpfjfjoB3O7EsV9GytV5v8+LHvVwyAnpa/FEWmR2n1gDCe60RXVewxBzr28297slW451vU3Mj5uytdHcf4MQqi+Mj+4TzGZYGB89DeDnRJ2+7g8SpalOX6QoVTRWtQsFwvHEP6mK8tOIRJfsebMJwW+GMLXszYDL+mxDk/96WAV3/LwCq/Z/1x5cm53eB6ASGhiqluKJFwG8rZBK7tc1jVd1zhW/RJyMNpTKdqUHEzgrAOQQif49IfSzjuvSmxCFbJoz8f9nb6Ymcmw8GfmcvHjmNEQ30Yt4BYyF8VG/wOuM7N1vM/s2gHhaZPYqrI6sN23ub9Z3iHVduFlzz+fn/OTY8asL46OBcDzxwxdPjBw1LpfWTL/ka7RscaQiUUI54wydCuFCb8wAeIQcO/5vwvOw97p5s/eH+P+u6jPynbZ5Gong1s/fA+ARAHcI8hMThDYRHFMqQaqYbFXnxpEHRr0inevDoYGhtFhAnx0Y2xt7Y2/sbDj3UWlm6n2FVPKvAPiWzqVrnQqRG6XnDqgOnBkAaIfaRQF8vTs2fF/fZDrfus9fqWNbkeuF8VHae/Y8tbG97Talax3a7DRR+we5wHQkTde9oYGhF8V3fQjA+5577JGQVDEr8FE/AKkpAgmAMVaHX5LUgwETwP8B8JD4P0S5G38pJ5hzJqG5qaA7F26+1nXhDkEHR12/h5sxmu+XbReXE+6f5Nqz27mRW5z73XZxXX22a+edwyJj4TaHBZ+f+7im6z8KwFfMZuALUqmOlpYmjbQrZgKoRf7uggLgoNo/eAWTafD5OVnTdQkbZXfcXC/IVX32HWm5OjEXzlmHNjv9+kIqeQZAv8Bzqv4g8Tkp++wqrMoKdFGtg3A88b9CA0MfE6frgUIq+eLNwnL2xt54pQ2bqlEYQN0A3qLNTp8DcOu/3vcDNdEBwd8M00l21gCjVKaH770PvSdPLYvA7i9qs9NfCg0M1RxlvK/Y8R0R2HCmyGiz03cBeBhA9LnHHlmnErRWu+VooABgdMeGee/JU1D7BxupYqqi1J3pOXtjb+yNbVvFHrV/kIuS248A+GQhlbz14okRMGZ4OhXi3cRO45UV1A/fe5/dLeMcLJ6NBYfOMV/pc0hf4gW0v59yzsKcs/tURflIIZV8QzGb8eol4yoHmNRo0skbTcz0kmFwDuPIA6MHwvEEQST6dwCeKM1M+fn8nOw2E/ze2BvfbUObnZYJoabAWm9HPncHAGiXlssAIU0Un8TupsxMgEJUR35VVZS/APAQIfSrovrK6o3zEkEpN3PIL+m3W9UzLDQwtMY5OwLgtzVdf30xm+GCvXwfY6aDHEbAApaq5YqqekTk+F8B/CIh9GsL46NUPXmKvtJdjr2xN3ZzZAMSDo3c34DUFifGqkCDW8S3WSijssIMkXbVAWBe0/WPhAaGaoItzggNDNW+W+bwJVWumq7LfH6OkmPHq9rsdBGAWkglYVwurVudLTiryRjXS4ap9nTZJbN/iUj0PCH0a4DFdbngXtuWvbE3vhshATkbkExYbYTehnzuJxbPnH5bMZupVstlj01r2DB6RADLGqzWHRuWe0+ekhCJ7rd7q/WePe8BYN6ECrY95SqSedcAoDQzdUshlXwrAK2YzXTWfcTj8xJmIwEOvkTurXHuVYjZHRteDccTzwJIEkKfFN0x/aGBoat9u1jeujf2xncDHHDXFW5gMr3GT566VdP1jwg4oAoASkiWGtwBQrFaVViMqz1dVsFMJPoNAEucs/2ifN2tVkp7yvVGilWbnfYCaFAJhuOJD108MXKbcbnEqV8iIBYeTB0UfSZjdZ9F6wZY5Z2/CauUDqGBIZNztra3NfbG3mhvOHuALZ45fdWGA/zB9bZBlNCmGFZ1hdX9QZhHH7zQoSpKDcDHAcwC0GGlixnfDTjrS6pcRd4ng9UG+giAOxcnxkYB9BiXS1jVeR26AWycJmYoKrxHH7zgA7AWGhj6srB8A2r/4OrNqE3eG3vjlTrsNihL59LGwvjovmI2M1jMZt6pXVpehUWuJAGMbIC6GWpPl1fAdF9GJPoogL8nhNq5sfS7TbG+NJZrPuchx45XYLWpuBv5XFIsaNUXpF6ltZusDQlwhsoKqKMDZSNgpSpK5bvN5dgbe8PtcWjkfgkAu2sybSwAt3XHhn8NwFur5UfAmFGnVL5GXzBm8soKN7pjw7JIuzpDCP1fwujxhwaGKuTY8e/K4PJNV66arhOHou0AYOfCGdiclcYUroUnHE98A5Ho7wOYK81MeVRF4YhE69+NJ+Pe2Btuj96z54HJNMLxhARAvcHH62JPegDMAfgTWL3jbKPnu9qTfCkw16ZusrC6WHrEvRChaJtGIZU0w/GEpCqKpOl6YXFibLJvMq1zzgjyOWkPDtgbe6P94dx7qqIYAF5AJPpq0SEEmxg9HkSiEvK5RXLs+EMCBjgAQCfHjte+m+fz/wcC3Ulf+Ctf2AAAAABJRU5ErkJggg==",
@@ -397,17 +415,17 @@ const CONFIG = {
 
 /* Documentos publicados en la raíz del repo — subir junto con index.html */
 const DOCS = [
-  {k:"REPORTE · INTERNO", titulo:"Observación de Control de Inventarios",
-   desc:"Versión interna con notas de conciliación: exposición financiera B23:C25, tablero de KPIs, partidas críticas, matriz de riesgos y plan a 90 días.",
+  {k:"REPORT · INTERNAL (ES)", titulo:"Observación de Control de Inventarios",
+   desc:"Internal Spanish version with reconciliation notes: financial exposure B23:C25, KPI board, critical line items, risk matrix and 90-day plan.",
    file:"Observacion_Control_Inventarios.docx", pdf:"Observacion_Control_Inventarios.pdf", tipo:"word"},
-  {k:"REPORTE · CLIENTE (EN)", titulo:"Inventory Control Observation",
-   desc:"Versión final en inglés para presentar al cliente — sin observaciones internas. Mismo contenido: exposición, KPIs, críticos, riesgos y plan.",
+  {k:"REPORT · CLIENT (EN)", titulo:"Inventory Control Observation",
+   desc:"Final English version for client presentation — no internal notes. Same content: exposure, KPIs, critical items, risks and plan.",
    file:"Inventory_Control_Observation.docx", pdf:"Inventory_Control_Observation.pdf", tipo:"word"},
-  {k:"ENTRENAMIENTO", titulo:"Exactitud de Inventario — el KPI que define la operación",
-   desc:"Sesión para planta: concepto y fórmula del KPI, benchmark, meta ≥98%, conteo cíclico ABC, causa raíz y plan de acción a 90 días.",
+  {k:"TRAINING", titulo:"Exactitud de Inventario — el KPI que define la operación",
+   desc:"Plant session (ES): KPI concept and formula, benchmark, ≥98% target, ABC cycle counting, root cause and 90-day action plan.",
    file:"Entrenamiento_Exactitud_Inventario.pptx", tipo:"pptx"},
-  {k:"INDUCCIÓN", titulo:"Sistema Kanban — control visual de inventarios",
-   desc:"Inducción para operadores y almacén: tarjetas, mín/máx, ubicaciones codificadas, conversión de unidades y 5 reglas de oro.",
+  {k:"ONBOARDING", titulo:"Sistema Kanban — control visual de inventarios",
+   desc:"Onboarding for operators and warehouse (ES): cards, min/max, coded locations, unit conversion and 5 golden rules.",
    file:"Induccion_Kanban.pptx", tipo:"pptx"}
 ];
 
@@ -422,9 +440,9 @@ const DOCS = [
 const RAW = [
   {no:2, parte:"AlkydPrimer", desc:"PINTURA BASE ACEITE", anexo:102.960348, umC:"GAL", sistema:20, umM:"PAIL", invLoc:95, invWip:1.25, umF:"GAL", estatusOrig:"FALTANTE"},
  {no:3, parte:"BOTTLE", desc:"ATOMIZADOR", anexo:3185.31, umC:"PCS", sistema:5816, umM:"PCS", invLoc:5816, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
- {no:4, parte:"BOTTLE-A", desc:"BOTELLA DE PLÁSTICO", anexo:2947, umC:"PCS", sistema:0, umM:"#N/D", invLoc:0, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
+ {no:4, parte:"BOTTLE-A", desc:"BOTELLA DE PLÁSTICO", anexo:2947, umC:"PCS", sistema:0, umM:"PCS", invLoc:0, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
  {no:5, parte:"BOX-CORR", desc:"CAJA DE CARTÓN CORRUGADO", anexo:7507, umC:"PCS", sistema:5684, umM:"PCS", invLoc:5684, invWip:195, umF:"PCS", estatusOrig:"FALTANTE"},
- {no:6, parte:'CARTON TUBE KRAFT 84" (6X3X84)', desc:"MANUFACTURAS DE CARTÓN CORRUGADO", anexo:1636, umC:"PCS", sistema:0, umM:"#N/D", invLoc:2585, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
+ {no:6, parte:'CARTON TUBE KRAFT 84" (6X3X84)', desc:"MANUFACTURAS DE CARTÓN CORRUGADO", anexo:1636, umC:"PCS", sistema:0, umM:"PCS", invLoc:2585, invWip:0, umF:"PCS", estatusOrig:"EXCEDENTE"},
   {no:8, parte:"CBDTUBE", desc:"BOBINAS DE PAPEL O CARTÓN", anexo:2283.989941, umC:"PCS", sistema:1628, umM:"PCS", invLoc:1073, invWip:24, umF:"PCS", estatusOrig:"FALTANTE"},
  {no:9, parte:"CHIPCARD", desc:"HOJAS DE CARTÓN", anexo:1533, umC:"PCS", sistema:3879, umM:"PCS", invLoc:646, invWip:0, umF:"PCS", estatusOrig:"FALTANTE"},
  {no:10, parte:"COTDCANP", desc:"TELA DE PUNTO POR URDIMBRE, 100% ALGODÓN, TEÑIDA", anexo:71057238, umC:"IN2", sistema:13683708, umM:"IN2", invLoc:24833628, invWip:0, umF:"IN2", estatusOrig:"FALTANTE"},
@@ -453,7 +471,7 @@ const RAW = [
    ============================================================ */
 const GRUPOS = [
   {id:"BOTTLE", partes:["BOTTLE","BOTTLE-A"],              valor:505.90,   sobrante:364.02},
-  {id:"COT",    partes:["COTDCANP","COTICANP","COTICANR"], valor:85651.69, sobrante:36371.92},
+  {id:"COT",    partes:["COTDCANP","COTICANP","COTICANR"], valor:85651.69, sobrante:29069.44},
   {id:"LABEL",  partes:["LABEL","LABEL-PAPER"],            valor:10530.59, sobrante:97.45}
 ];
 const VALOR_FISICO = {
@@ -470,10 +488,10 @@ const VALOR_FISICO = {
    qué requiere cambio de régimen, retorno o reestructura del Anexo 24.
    ⚠ CELDAS COMBINADAS: mismos grupos que VALOR DLLS (BOTTLE · COT · LABEL);
    el sobrante del grupo se reporta UNA sola vez en el subtotal.
-   ⚠ NOTA DE CUADRE: Σ col. M (grupos una vez) = $337,972.00 vs. Saldo
-   Sobrante oficial B25 = $330,669.51 → diferencia $7,302.49, que coincide
-   con el sobrante de CHIPCARD ($7,302.48). Verificar en el sheet si esa
-   partida quedó fuera del rango del total antes de presentar a dirección.
+   ✓ NOTA DE CUADRE (actualización Jul 2026): Σ col. M (grupos una vez)
+   = $330,669.52, cuadra con el Saldo Sobrante oficial B25 = $330,669.51
+   (¢1 de redondeo). La discrepancia previa de $7,302.49 se corrigió en
+   el sheet ajustando el sobrante del grupo COT: $36,371.92 → $29,069.44.
    ============================================================ */
 const SOBRANTE_DLLS = {
   "AlkydPrimer":116.98, "BOX-CORR":4171.67,
@@ -482,13 +500,13 @@ const SOBRANTE_DLLS = {
   "LINICANP":56630.93, "LINICANR":58944.81, "LUMBPINE-BF":168112.78,
   "MDFVNYL01":1804.75, "PLYWOOD":1944.00, "SPRAYER":242.02
 };
-const SUMA_SOBRANTE_M = 337972.00; // Σ col. M — no cuadra con B25 por $7,302.49 (≈ CHIPCARD)
+const SUMA_SOBRANTE_M = 330669.52; // Σ col. M — cuadra con B25 $330,669.51 (¢1 de redondeo)
 
 /* Saldos oficiales · Hoja 1 celdas B23:C25 — se usan tal cual del sheet */
 const SALDOS = {
   anexo:    518194.78,   // SALDO EN ANEXO (SEER)
   fisico:   187525.77,   // SALDO INVENTARIO FÍSICO
-  sobrante: 330669.51    // SALDO SOBRANTE (anexo sin respaldo físico)
+  sobrante: 330669.51    // "SALDO SOBRANTE" en el sheet — en dashboard: Saldo Faltante en Anexo 24
 };
 
 /* ============================================================
@@ -502,18 +520,18 @@ function calc(r){
   let diff = null, estatus = "SIN DATOS", pct = null, tipo="—";
   if (contado || tieneAnexo){
     diff = (fisico||0) - r.anexo;
-    if (diff > EPS){ estatus="EXCEDENTE"; tipo = tieneAnexo ? "Excedente" : "No registrado"; }
-    else if (diff < -EPS){ estatus="FALTANTE"; tipo="Faltante"; }
-    else { estatus="CONCILIADO"; tipo="Conciliado"; }
+    if (diff > EPS){ estatus="EXCEDENTE"; tipo = tieneAnexo ? "Overage" : "Unregistered"; }
+    else if (diff < -EPS){ estatus="FALTANTE"; tipo="Shortage"; }
+    else { estatus="CONCILIADO"; tipo="Reconciled"; }
     pct = tieneAnexo ? Math.abs(diff)/r.anexo : (Math.abs(diff)>EPS ? Infinity : 0);
   }
   // severidad
   let sev = null;
   if (estatus==="FALTANTE"){
-    sev = pct>=0.9 ? "CRÍTICO" : pct>=0.5 ? "ALTO" : pct>=0.2 ? "MEDIO" : "BAJO";
+    sev = pct>=0.9 ? "CRITICAL" : pct>=0.5 ? "HIGH" : pct>=0.2 ? "MEDIUM" : "LOW";
   } else if (estatus==="EXCEDENTE"){
-    sev = (!tieneAnexo || pct>=1) ? "CRÍTICO" : pct>=0.5 ? "ALTO" : pct>=0.2 ? "MEDIO" : "BAJO";
-  } else if (estatus==="CONCILIADO"){ sev="BAJO"; }
+    sev = (!tieneAnexo || pct>=1) ? "CRITICAL" : pct>=0.5 ? "HIGH" : pct>=0.2 ? "MEDIUM" : "LOW";
+  } else if (estatus==="CONCILIADO"){ sev="LOW"; }
   // bandera: estatus original no coincide con recalculado
   const flagEstatus = r.estatusOrig && estatus!=="SIN DATOS" && r.estatusOrig!==estatus;
   // bandera UM: unidad de compra != unidad de sistema (cuando el sistema sí mapea)
@@ -568,26 +586,35 @@ function evHref(r){
 }
 function evCell(r){
   const live = !!CONFIG.evidenceBase;
-  return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidencia: ${r.parte}">${SVG_LINK}<span>Evidencia</span></a>`;
+  return `<a class="evlink" href="${evHref(r)}" ${live?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${r.parte}">${SVG_LINK}<span>Evidence</span></a>`;
 }
-window.demoEv=function(e){e.preventDefault(); alert("Modo demostración.\\nUsa “Configurar URL de evidencia (Drive)” para enlazar la carpeta de conteo de "+ "esta partida."); return false;};
+window.demoEv=function(e){e.preventDefault(); alert("Demo mode.\\nUse “Configure evidence URL” to link the count evidence folder for "+ "this line item."); return false;};
 
 /* ============================================================
    COLUMNAS  (sensible = oculto en Vista Cliente)
    ============================================================ */
+/* Orden por bloques: identidad → conteo físico (cantidades) →
+   conciliación vs. Anexo 24 (cantidades, bloque sensible contiguo) →
+   valuación (USD). Cada celda numérica lleva su unidad de medida. */
+const BANDS = {
+  id:  {label:"",                                      cls:"band-id"},
+  fis: {label:"Physical Count · quantities",           cls:"band-fis"},
+  conc:{label:"Reconciliation vs. Annex 24 · quantities", cls:"band-conc"},
+  usd: {label:"Valuation · US dollars (USD)",          cls:"band-usd"}
+};
 const COLS = [
-  {key:"no",     label:"No.",            cls:"",  sens:false, get:r=>`<span class="rowno">${r.no}</span>`},
-  {key:"parte",  label:"No. Parte SEER", cls:"",  sens:false, get:r=>`<a class="evlink parte" href="${evHref(r)}" ${CONFIG.evidenceBase?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidencia: ${r.parte}">${r.parte} ${SVG_LINK}</a>`, sort:r=>r.parte},
-  {key:"desc",   label:"Descripción",    cls:"",  sens:false, get:r=>`<span class="desc">${r.desc}</span>`, sort:r=>r.desc},
-  {key:"anexo",  label:"Saldo Anexo",    cls:"r", sens:true,  get:r=>numCell(r.anexo, r.umC), sort:r=>r.anexo},
-  {key:"sistema",label:"Sistema Master.",cls:"r", sens:true,  get:r=>r.sistema===null?dash(r.noMapeo?'#N/D':''):numCell(r.sistema, r.umM!=='#N/D'?r.umM:''), sort:r=>r.sistema??-1},
-  {key:"invLoc", label:"Inv. Locación",  cls:"r", sens:false, get:r=>r.invLoc===null?dash():numCell(r.invLoc,''), sort:r=>r.invLoc??-1},
-  {key:"invWip", label:"Inv. WIP",       cls:"r", sens:false, get:r=>r.invWip===null?dash():numCell(r.invWip,''), sort:r=>r.invWip??-1},
-  {key:"fisico", label:"Total Físico",   cls:"r", sens:false, get:r=>r.fisico===null?dash('sin conteo'):`<b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span>`, sort:r=>r.fisico??-1},
-  {key:"diff",   label:"Diferencia",     cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
-  {key:"estatus",label:"Estatus",        cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus},
-  {key:"valor",  label:"Valor Físico $", cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?-0.5:-1)},
-  {key:"sobrante", label:"Sobrante $ (col. M)", cls:"r", sens:true, get:r=>sobranteCell(r), sort:r=>r.sobranteDlls??(r.grupoObj?-0.5:-1)}
+  {key:"no",     label:"No.",             grp:"id",   cls:"",  sens:false, get:r=>`<span class="rowno">${r.no}</span>`},
+  {key:"parte",  label:"SEER Part No.",   grp:"id",   cls:"",  sens:false, get:r=>`<a class="evlink parte" href="${evHref(r)}" ${CONFIG.evidenceBase?'target="_blank" rel="noopener"':'onclick="return demoEv(event)"'} title="Evidence: ${r.parte}">${r.parte} ${SVG_LINK}</a>`, sort:r=>r.parte},
+  {key:"desc",   label:"Description",     grp:"id",   cls:"",  sens:false, get:r=>`<span class="desc">${r.desc}</span>`, sort:r=>r.desc},
+  {key:"invLoc", label:"Location Count",  sub:"qty counted in warehouse",  grp:"fis",  cls:"r", sens:false, get:r=>r.invLoc===null?dash():numCell(r.invLoc, r.umF), sort:r=>r.invLoc??-1},
+  {key:"invWip", label:"WIP Count",       sub:"qty in process",            grp:"fis",  cls:"r", sens:false, get:r=>r.invWip===null?dash():numCell(r.invWip, r.umF), sort:r=>r.invWip??-1},
+  {key:"fisico", label:"Total Physical Inventory", sub:"Location + WIP",   grp:"fis",  cls:"r", sens:false, get:r=>r.fisico===null?dash('not counted'):`<b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span>`, sort:r=>r.fisico??-1},
+  {key:"anexo",  label:"Annex 24 Balance (SEER)", sub:"active imported qty",      grp:"conc", cls:"r", sens:true,  get:r=>numCell(r.anexo, r.umC), sort:r=>r.anexo},
+  {key:"sistema",label:"Masterpiece System",   sub:"qty per client ERP",   grp:"conc", cls:"r", sens:true,  get:r=>r.sistema===null?dash(r.noMapeo?'#N/D':''):numCell(r.sistema, r.umM!=='#N/D'?r.umM:''), sort:r=>r.sistema??-1},
+  {key:"diff",   label:"Difference",      sub:"Physical − Annex · in its UoM", grp:"conc", cls:"r", sens:true,  get:r=>diffCell(r), sort:r=>r.diff??0},
+  {key:"estatus",label:"Status",          sub:"result vs. Annex 24",       grp:"conc", cls:"",  sens:true,  get:r=>estatusCell(r), sort:r=>r.estatus},
+  {key:"valor",  label:"Physical Inventory Value", sub:"USD · col. L",     grp:"usd",  cls:"r", sens:false, get:r=>valorCell(r), sort:r=>r.valorFisico??(r.grupoObj?-0.5:-1)},
+  {key:"sobrante", label:"Annex 24 Shortage Balance",  sub:"USD · col. M", grp:"usd",  cls:"r", sens:true, get:r=>sobranteCell(r), sort:r=>r.sobranteDlls??(r.grupoObj?-0.5:-1)}
 ];
 function numCell(v,um){ return v===null?dash():`<span class="num">${fmt(v)}</span>${um?`<span class="sub-um">${um}</span>`:""}`; }
 function dash(t){ return `<span class="dash">${t||"—"}</span>`; }
@@ -595,26 +622,26 @@ function diffCell(r){
   if (r.diff===null) return dash();
   const c = r.diff<0?"neg":r.diff>0?"pos":"";
   const s = r.diff>0?"+":"";
-  return `<span class="num ${c}">${s}${fmt(r.diff)}</span>`;
+  return `<span class="num ${c}">${s}${fmt(r.diff)}</span><span class="sub-um">${r.umF||""}</span>`;
 }
 function estatusCell(r){
   const map={FALTANTE:"b-falt",EXCEDENTE:"b-exc",CONCILIADO:"b-ok","SIN DATOS":"b-nd"};
-  const lbl={FALTANTE:"Faltante",EXCEDENTE:"Excedente",CONCILIADO:"Conciliado","SIN DATOS":"Sin datos"};
+  const lbl={FALTANTE:"Shortage",EXCEDENTE:"Overage",CONCILIADO:"Reconciled","SIN DATOS":"No data"};
   let html=`<span class="badge ${map[r.estatus]}">${lbl[r.estatus]}</span>`;
-  if (r.flagEstatus) html+=`<span class="flagtag" title="El estatus original del archivo (${r.estatusOrig}) no coincide con el recálculo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>corregido</span>`;
+  if (r.flagEstatus) html+=`<span class="flagtag" title="The original status in the file (${r.estatusOrig}) does not match the recalculation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>corrected</span>`;
   return html;
 }
 function valorCell(r){
-  if (r.grupoObj) return `<span class="grptag" title="Celda combinada en Hoja 1: el valor de ${r.grupoObj.partes.join(" + ")} es ${fmtMoneyExact(r.grupoObj.valor)} y se reporta una sola vez en el subtotal del grupo para no duplicar la suma.">grupo ${r.grupoObj.id}</span>`;
+  if (r.grupoObj) return `<span class="grptag" title="Merged cell in Sheet 1: the value of ${r.grupoObj.partes.join(" + ")} is ${fmtMoneyExact(r.grupoObj.valor)} and is reported once in the group subtotal to avoid double-counting.">group ${r.grupoObj.id}</span>`;
   if (r.valorFisico===null) return dash();
   return `<b class="num">${fmtMoney(r.valorFisico)}</b>`;
 }
 
 function sobranteCell(r){
-  if (r.grupoObj) return `<span class="grptag" title="Celda combinada en Hoja 1: el saldo sobrante de ${r.grupoObj.partes.join(" + ")} es ${fmtMoneyExact(r.grupoObj.sobrante)} y se reporta una sola vez en el subtotal del grupo para no duplicar la suma.">grupo ${r.grupoObj.id}</span>`;
+  if (r.grupoObj) return `<span class="grptag" title="Merged cell in Sheet 1: the Annex 24 shortage balance of ${r.grupoObj.partes.join(" + ")} is ${fmtMoneyExact(r.grupoObj.sobrante)} and is reported once in the group subtotal to avoid double-counting.">group ${r.grupoObj.id}</span>`;
   if (r.sobranteDlls===null) return dash();
   if (r.sobranteDlls<=EPS) return `<b class="num">$0.00</b>`;
-  return `<b class="num neg" title="Liability aduanero: valor en Anexo 24 sin respaldo físico — candidato a cambio de régimen, retorno o reestructura.">${fmtMoneyExact(r.sobranteDlls)}</b>`;
+  return `<b class="num neg" title="Customs liability: Annex 24 value with no physical backing — candidate for regime change, return or Annex 24 restructuring.">${fmtMoneyExact(r.sobranteDlls)}</b>`;
 }
 
 /* ============================================================
@@ -646,11 +673,21 @@ function renderChips(){
 
 /* ---- render table ---- */
 function renderTable(){
+  const visAll = COLS.filter(c=>visible[c.key]);
+  // fila de bandas (grupos de columnas): identidad · conteo · conciliación · USD
+  const band=document.getElementById("invBand");
+  const runs=[]; visAll.forEach(c=>{
+    const last=runs[runs.length-1];
+    if(last && last.grp===c.grp) last.n++; else runs.push({grp:c.grp, n:1});
+  });
+  band.innerHTML = runs.map(b=>`<th class="bandth ${BANDS[b.grp].cls}" colspan="${b.n}">${BANDS[b.grp].label}</th>`).join("");
+  // encabezados de columna (etiqueta + sub-etiqueta descriptiva)
   const head=document.getElementById("invHead");
-  head.innerHTML = COLS.filter(c=>visible[c.key]).map(c=>{
+  head.innerHTML = visAll.map((c,i)=>{
     const sorted = sortKey===c.key?" sorted":"";
     const arr = sortKey===c.key ? (sortDir>0?"▲":"▼") : "";
-    return `<th class="${c.cls}${c.sens?" sensitive":""}${sorted}" data-key="${c.key}">${c.label}<span class="arr">${arr}</span></th>`;
+    const gstart = i>0 && visAll[i-1].grp!==c.grp ? " gstart" : "";
+    return `<th class="${c.cls}${c.sens?" sensitive":""}${sorted}${gstart}" data-key="${c.key}">${c.label}<span class="arr">${arr}</span>${c.sub?`<span class="thsub">${c.sub}</span>`:""}</th>`;
   }).join("");
   head.querySelectorAll("th").forEach(th=>{
     th.onclick=()=>{ const k=th.dataset.key; if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=1;} renderTable(); };
@@ -665,7 +702,10 @@ function renderTable(){
 
   const body=document.getElementById("invBody");
   const visCols = COLS.filter(c=>visible[c.key]);
-  const rowHtml = r=>"<tr>"+visCols.map(c=>`<td class="${c.cls}${c.sens?' sx':''}">${c.get(r)}</td>`).join("")+"</tr>";
+  const rowHtml = r=>"<tr>"+visCols.map((c,i)=>{
+    const gstart = i>0 && visCols[i-1].grp!==c.grp ? " gstart" : "";
+    return `<td class="${c.cls}${c.sens?' sx':''}${gstart}">${c.get(r)}</td>`;
+  }).join("")+"</tr>";
   // subtotal de grupo (celda combinada Hoja 1): se inserta tras la última fila visible del grupo
   const lastIdx = {};
   rows.forEach((r,i)=>{ if(r.grupoObj) lastIdx[r.grupoObj.id]=i; });
@@ -673,7 +713,7 @@ function renderTable(){
     let h = rowHtml(r);
     GRUPOS.forEach(g=>{
       if(lastIdx[g.id]===i){
-        h += `<tr class="grouprow"><td colspan="${visCols.length}"><span class="gr-l">Σ Valor grupo <b>${g.id}</b> · ${g.partes.join(" + ")} <i>(celda combinada — materiales idénticos/similares, se suma una sola vez)</i></span><span class="gr-v num">Valor ${fmtMoneyExact(g.valor)}${visible.sobrante?` &nbsp;·&nbsp; Sobrante <span class="neg">${fmtMoneyExact(g.sobrante)}</span>`:""}</span></td></tr>`;
+        h += `<tr class="grouprow"><td colspan="${visCols.length}"><span class="gr-l">Σ Group <b>${g.id}</b> · ${g.partes.join(" + ")} <i>(merged cell — identical/similar materials, added once)</i></span><span class="gr-v num">Value ${fmtMoneyExact(g.valor)}${visible.sobrante?` &nbsp;·&nbsp; Annex Shortage <span class="neg">${fmtMoneyExact(g.sobrante)}</span>`:""}</span></td></tr>`;
       }
     });
     return h;
@@ -691,27 +731,25 @@ function renderInvKpis(){
   const enWip = DATA.filter(r=>r.invWip>EPS).length;
   const sinExist = DATA.filter(r=>r.contado && r.fisico<=EPS).length;
   const saldoCards =
-      card("Saldo Anexo (SEER)", fmtMoneyExact(SALDOS.anexo), "valor USD registrado","k-crit money")
-    + card("Saldo Inv. Físico", fmtMoneyExact(SALDOS.fisico), "valor USD del conteo","k-ok money")
-    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), "anexo sin respaldo físico","k-falt money");
+      card("Annex 24 Balance (SEER)", fmtMoneyExact(SALDOS.anexo), "registered USD value","k-crit money")
+    + card("Physical Inventory Balance", fmtMoneyExact(SALDOS.fisico), "USD value of the count","k-ok money")
+    + card("Annex 24 Shortage Balance", fmtMoneyExact(SALDOS.sobrante), "annex value with no physical backing","k-falt money");
   if (clientView){
-    host.innerHTML = card("Partidas inventariadas", DATA.length, "partidas activas")
-      + card("Con existencia física", conExist, "encontradas en piso/WIP","k-ok")
-      + card("En proceso (WIP)", enWip, "con material en línea")
-      + card("Sin existencia", sinExist, "contadas en cero","k-flag")
+    host.innerHTML = card("Line Items Counted", DATA.length, "active line items")
+      + card("With Physical Stock", conExist, "found on floor/WIP","k-ok")
+      + card("In Process (WIP)", enWip, "material on the line")
+      + card("No Stock on Hand", sinExist, "counted at zero","k-flag")
       + saldoCards;
   } else {
     const falt = DATA.filter(r=>r.estatus==="FALTANTE").length;
     const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
-    const crit = DATA.filter(r=>r.sev==="CRÍTICO").length;
+    const crit = DATA.filter(r=>r.sev==="CRITICAL").length;
     const conDif = falt+exc;
-    const sobranteM = card("Σ Sobrante col. M", fmtMoneyExact(SUMA_SOBRANTE_M),
-      "liability por partida — difiere $7,302.49 del B25 (≈ CHIPCARD), ver nota","k-falt money");
-    host.innerHTML = card("Con diferencia", conDif, "vs. saldo del anexo","k-crit")
-      + card("Faltantes", falt, "físico < anexo","k-falt")
-      + card("Excedentes", exc, "físico > anexo","k-exc")
-      + card("Críticas", crit, "≥90% var o no registrado","k-crit")
-      + saldoCards + sobranteM;
+    host.innerHTML = card("With Variance", conDif, "vs. annex balance","k-crit")
+      + card("Shortages", falt, "physical < annex","k-falt")
+      + card("Overages", exc, "physical > annex","k-exc")
+      + card("Critical", crit, "≥90% variance or unregistered","k-crit")
+      + saldoCards;
   }
 }
 /* ---- Documentos del proyecto ---- */
@@ -727,9 +765,9 @@ function renderDocs(){
   if(!host) return;
   host.innerHTML = DOCS.map(d=>{
     let ver = "";
-    if (d.tipo==="pptx") ver = `<a class="cfgbtn primary" href="${viewerUrl(d.file)}" target="_blank" rel="noopener">${SVG_EYE} Ver presentación</a>`;
-    else if (d.pdf)      ver = `<a class="cfgbtn primary" href="${docUrl(d.pdf)}" target="_blank" rel="noopener">${SVG_EYE} Ver PDF</a>`;
-    const dlLabel = d.tipo==="word" ? "Descargar reporte (Word)" : "Descargar PPTX";
+    if (d.tipo==="pptx") ver = `<a class="cfgbtn primary" href="${viewerUrl(d.file)}" target="_blank" rel="noopener">${SVG_EYE} View deck</a>`;
+    else if (d.pdf)      ver = `<a class="cfgbtn primary" href="${docUrl(d.pdf)}" target="_blank" rel="noopener">${SVG_EYE} View PDF</a>`;
+    const dlLabel = d.tipo==="word" ? "Download report (Word)" : "Download PPTX";
     return `<div class="doccard">
       <div class="dc-k">${d.k}</div>
       <h4>${d.titulo}</h4>
@@ -781,9 +819,9 @@ document.getElementById("search").addEventListener("input",e=>{query=e.target.va
 
 /* ---- evidencia config ---- */
 document.getElementById("cfgEvidence").onclick=()=>{
-  const v=prompt("Pega la URL de la carpeta de evidencia (Digizen / Drive).\\n\\nEj: https://digizen.tacna.net/index.php/s/XXXX", CONFIG.evidenceBase);
+  const v=prompt("Paste the evidence folder URL (Digizen / Drive).\\n\\nE.g.: https://digizen.tacna.net/index.php/s/XXXX", CONFIG.evidenceBase);
   if (v!==null){ CONFIG.evidenceBase=v.trim();
-    document.getElementById("evState").textContent = CONFIG.evidenceBase? "Evidencia enlazada → "+CONFIG.evidenceBase : "Modo demostración — pega la carpeta para activar los enlaces.";
+    document.getElementById("evState").textContent = CONFIG.evidenceBase? "Evidence linked → "+CONFIG.evidenceBase : "Demo mode — paste the folder URL to activate the links.";
     renderTable(); renderRisk();
   }
 };
@@ -791,44 +829,44 @@ document.getElementById("cfgEvidence").onclick=()=>{
 /* ============================================================
    PANEL RIESGOS
    ============================================================ */
-const SEVRANK={"CRÍTICO":0,"ALTO":1,"MEDIO":2,"BAJO":3};
+const SEVRANK={"CRITICAL":0,"HIGH":1,"MEDIUM":2,"LOW":3};
 function renderRiskKpis(){
   const risks = DATA.filter(r=>r.sev && r.estatus!=="CONCILIADO" && r.estatus!=="SIN DATOS");
-  const crit = risks.filter(r=>r.sev==="CRÍTICO").length;
+  const crit = risks.filter(r=>r.sev==="CRITICAL").length;
   const falt = DATA.filter(r=>r.estatus==="FALTANTE").length;
   const exc = DATA.filter(r=>r.estatus==="EXCEDENTE").length;
-  const noReg = DATA.filter(r=>r.tipo==="No registrado").length;
+  const noReg = DATA.filter(r=>r.tipo==="Unregistered").length;
   const flags = DATA.filter(r=>r.flagEstatus).length + DATA.filter(r=>r.flagUM).length + DATA.filter(r=>r.noMapeo).length;
   const cobertura = Math.round(DATA.filter(r=>r.fisico>EPS).length/DATA.filter(r=>r.anexo>EPS||r.fisico>EPS).length*100);
   const pctSobrante = Math.round(SALDOS.sobrante/SALDOS.anexo*100);
   document.getElementById("riskKpis").innerHTML =
-      card("Partidas en riesgo", risks.length, "con diferencia material","k-crit")
-    + card("Críticas", crit, "exposición aduanera alta","k-crit")
-    + card("Faltantes / Excedentes", falt+" / "+exc, "contra anexo","k-falt")
-    + card("Material no registrado", noReg, "anexo 0 con existencia","k-exc")
-    + card("Saldo Sobrante", fmtMoneyExact(SALDOS.sobrante), pctSobrante+"% del valor del anexo sin respaldo físico","k-falt money")
-    + card("Banderas de calidad", flags, "estatus, UM y sin mapeo","k-flag");
+      card("Line Items at Risk", risks.length, "with material variance","k-crit")
+    + card("Critical", crit, "high customs exposure","k-crit")
+    + card("Shortages / Overages", falt+" / "+exc, "vs. annex","k-falt")
+    + card("Unregistered Material", noReg, "zero annex balance with stock on hand","k-exc")
+    + card("Annex 24 Shortage Balance", fmtMoneyExact(SALDOS.sobrante), pctSobrante+"% of annex value with no physical backing","k-falt money")
+    + card("Data Quality Flags", flags, "status, UoM and unmapped","k-flag");
   document.getElementById("riskCount").textContent = risks.length;
   document.getElementById("exFalt").textContent = falt;
   document.getElementById("exExc").textContent = exc;
   // pills críticos
-  const pills = DATA.filter(r=>r.sev==="CRÍTICO").sort((a,b)=>(b.pct===Infinity?9e9:b.pct)-(a.pct===Infinity?9e9:a.pct));
-  document.getElementById("critPills").innerHTML = pills.map(r=>`<span class="pill">${r.parte} · ${r.tipo==="No registrado"?"no registrado":fmtPct(r.pct)}</span>`).join("");
+  const pills = DATA.filter(r=>r.sev==="CRITICAL").sort((a,b)=>(b.pct===Infinity?9e9:b.pct)-(a.pct===Infinity?9e9:a.pct));
+  document.getElementById("critPills").innerHTML = pills.map(r=>`<span class="pill">${r.parte} · ${r.tipo==="Unregistered"?"unregistered":fmtPct(r.pct)}</span>`).join("");
 }
 function renderRisk(){
   renderRiskKpis();
   const risks = DATA.filter(r=>r.sev && r.estatus!=="SIN DATOS" && r.estatus!=="CONCILIADO")
     .sort((a,b)=> (SEVRANK[a.sev]-SEVRANK[b.sev]) || ((b.pct===Infinity?9e9:b.pct)-(a.pct===Infinity?9e9:a.pct)));
-  const sevcls={"CRÍTICO":"sev-crit","ALTO":"sev-alto","MEDIO":"sev-medio","BAJO":"sev-bajo"};
+  const sevcls={"CRITICAL":"sev-crit","HIGH":"sev-alto","MEDIUM":"sev-medio","LOW":"sev-bajo"};
   document.getElementById("riskBody").innerHTML = risks.map(r=>`<tr>
     <td><span class="rowno">${r.no}</span></td>
     <td class="parte">${r.parte}</td>
     <td><span class="desc">${r.desc}</span></td>
     <td class="r">${numCell(r.anexo, r.umC)}</td>
-    <td class="r"><b class="num">${fmt(r.fisico)}</b></td>
+    <td class="r"><b class="num">${fmt(r.fisico)}</b><span class="sub-um">${r.umF}</span></td>
     <td class="r">${diffCell(r)}</td>
     <td class="r pct ${r.diff<0?'neg':'pos'}">${fmtPct(r.pct)}</td>
-    <td><span class="badge ${r.estatus==='FALTANTE'?'b-falt':r.tipo==='No registrado'?'b-exc':'b-exc'}">${r.tipo}</span></td>
+    <td><span class="badge ${r.estatus==='FALTANTE'?'b-falt':r.tipo==='Unregistered'?'b-exc':'b-exc'}">${r.tipo}</span></td>
     <td><span class="sev ${sevcls[r.sev]}">${r.sev}</span></td>
     <td class="r">${valorCell(r)}</td>
     <td>${evCell(r)}</td>
@@ -839,16 +877,16 @@ function renderRisk(){
   const umFlags = DATA.filter(r=>r.flagUM);
   const noMap = DATA.filter(r=>r.noMapeo);
   document.getElementById("qgrid").innerHTML =
-    qcard("01","Estatus mal etiquetado", estatusFlags.map(r=>[`${r.parte}`, `archivo: ${r.estatusOrig} → real: ${r.estatus}`]),
-          "El signo de la diferencia no correspondía a la etiqueta del archivo original.")
-  + qcard("02","Unidad de medida inconsistente", umFlags.map(r=>[`${r.parte}`, `${r.umC} vs ${r.umM}`]),
-          "La unidad de compra/anexo no coincide con la del sistema: impide descargar BOM y conciliar.")
-  + qcard("03","Sin mapeo en sistema (#N/D)", noMap.map(r=>[`${r.parte}`, "no reconocida"]),
-          "El ERP no reconoce la clave: la partida queda fuera de cualquier descargo automático.");
+    qcard("01","Mislabeled status", estatusFlags.map(r=>[`${r.parte}`, `file: ${r.estatusOrig} → actual: ${r.estatus}`]),
+          "The sign of the difference did not match the label in the original file.")
+  + qcard("02","Inconsistent unit of measure", umFlags.map(r=>[`${r.parte}`, `${r.umC} vs ${r.umM}`]),
+          "The purchase/annex unit does not match the system unit: it prevents BOM discharge and reconciliation.")
+  + qcard("03","Not mapped in system (#N/D)", noMap.map(r=>[`${r.parte}`, "not recognized"]),
+          "The ERP does not recognize the part number: the item is excluded from any automatic discharge.");
   syncTopScroll();
 }
 function qcard(n,title,items,note){
-  const lis = items.length? items.map(([k,v])=>`<li><code>${k}</code><span class="v">${v}</span></li>`).join("") : `<li style="color:var(--muted)">Sin hallazgos</li>`;
+  const lis = items.length? items.map(([k,v])=>`<li><code>${k}</code><span class="v">${v}</span></li>`).join("") : `<li style="color:var(--muted)">No findings</li>`;
   return `<div class="qcard"><div class="qh"><span class="qn">${n}</span><h4>${title}</h4></div><ul>${lis}</ul><p style="font-size:11.5px;color:var(--muted);margin:10px 0 0;line-height:1.4">${note}</p></div>`;
 }
 
@@ -873,7 +911,8 @@ document.getElementById("brandName").textContent=CONFIG.cliente;
 if (CONFIG.logoUrl){ document.getElementById("brandMark").innerHTML = `<img src="${CONFIG.logoUrl}" alt="TACNA">`; }
 document.getElementById("brandSub").textContent=CONFIG.entidad;
 document.getElementById("metaDate").textContent=CONFIG.fechaConteo;
-document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidencia enlazada → "+CONFIG.evidenceBase) : "Modo demostración — pega la carpeta para activar los enlaces.";
+document.getElementById("metaSku").textContent=DATA.length;
+document.getElementById("evState").textContent = CONFIG.evidenceBase ? ("Evidence linked → "+CONFIG.evidenceBase) : "Demo mode — paste the folder URL to activate the links.";
 bindTopScroll("invTop","invScroll"); bindTopScroll("riskTop","riskScroll");
 renderChips(); renderTable(); renderRisk(); renderDocs(); syncTopScroll();
 </script>
